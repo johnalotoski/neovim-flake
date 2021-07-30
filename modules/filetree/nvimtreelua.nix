@@ -121,7 +121,8 @@ in {
     ];
 
     vim.nnoremap = {
-      "<leader>n" = "<cmd>NvimTreeToggle<cr>";
+      "<leader>pt" = "<cmd>NvimTreeToggle<cr>";
+      "<leader>ft" = "<cmd>NvimTreeToggle<cr>";
     };
 
     vim.globals = {

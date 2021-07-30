@@ -12,39 +12,164 @@
     };
 
     # Vim plugins
-    gruvbox = { url = "github:morhetz/gruvbox"; flake = false; };
-    nord-vim = { url = "github:arcticicestudio/nord-vim"; flake = false; };
-    vim-startify = { url = "github:mhinz/vim-startify"; flake = false; };
-    lightline-vim = { url = "github:itchyny/lightline.vim"; flake = false; };
-    nvim-lspconfig = { url = "github:neovim/nvim-lspconfig"; flake = false; };
-    completion-nvim = { url = "github:nvim-lua/completion-nvim"; flake = false; };
-    vim-nix = { url = "github:LnL7/vim-nix"; flake = false; };
-    nvim-dap = { url = "github:mfussenegger/nvim-dap"; flake = false; };
-    nvim-telescope = { url = "github:nvim-telescope/telescope.nvim"; flake = false; };
-    telescope-dap = { url = "github:nvim-telescope/telescope-dap.nvim"; flake = false; };
-    popup-nvim = { url = "github:nvim-lua/popup.nvim"; flake = false; };
-    plenary-nvim = { url = "github:nvim-lua/plenary.nvim"; flake = false; };
-    nvim-web-devicons = { url = "github:kyazdani42/nvim-web-devicons"; flake = false; };
-    nvim-tree-lua = { url = "github:kyazdani42/nvim-tree.lua"; flake = false; };
-    vimagit = { url = "github:jreybert/vimagit"; flake = false; };
-    fugitive = { url = "github:tpope/vim-fugitive"; flake = false; };
-    nvim-lightbulb = { url = "github:kosayoda/nvim-lightbulb"; flake = false; };
-    nvim-treesitter = { url = "github:nvim-treesitter/nvim-treesitter"; flake = false;};
-    nvim-treesitter-context = { url = "github:romgrk/nvim-treesitter-context"; flake = false;};
-    rnix-lsp.url = github:nix-community/rnix-lsp;
-    barbar-nvim = { url = "github:romgrk/barbar.nvim"; flake = false; };
-    editorconfig-vim = { url = "github:editorconfig/editorconfig-vim"; flake = false; };
-    indentline = { url = "github:Yggdroot/indentLine"; flake = false; };
-    indent-blankline-nvim = { url = "github:lukas-reineke/indent-blankline.nvim"; flake = false; };
-    nvim-blame-line = { url = "github:tveskag/nvim-blame-line"; flake = false; };
-    nvim-dap-virtual-text = { url = "github:theHamsta/nvim-dap-virtual-text"; flake = false; };
-    vim-cursorword = { url = "github:itchyny/vim-cursorword"; flake = false; };
-    vim-dadbod = { url = "github:tpope/vim-dadbod"; flake = false; };
-    vim-dadbod-ui = { url = "github:kristijanhusak/vim-dadbod-ui"; flake = false; };
-    vim-hexokinase = { url = "github:RRethy/vim-hexokinase"; flake = false; };
-    vim-which-key = { url = "github:liuchengxu/vim-which-key"; flake = false; };
-    vim-test = { url = "github:vim-test/vim-test"; flake = false; };
-    vim-floaterm = { url = "github:voldikss/vim-floaterm"; flake = false; };
+    gruvbox = {
+      url = "github:morhetz/gruvbox";
+      flake = false;
+    };
+    nord-vim = {
+      url = "github:arcticicestudio/nord-vim";
+      flake = false;
+    };
+    vim-startify = {
+      url = "github:mhinz/vim-startify";
+      flake = false;
+    };
+    lightline-vim = {
+      url = "github:itchyny/lightline.vim";
+      flake = false;
+    };
+    nvim-lspconfig = {
+      # url = "github:neovim/nvim-lspconfig";
+      url = "github:manveru/nvim-lspconfig";
+      flake = false;
+    };
+    completion-nvim = {
+      url = "github:nvim-lua/completion-nvim";
+      flake = false;
+    };
+    vim-nix = {
+      url = "github:LnL7/vim-nix";
+      flake = false;
+    };
+    nvim-dap = {
+      url = "github:mfussenegger/nvim-dap";
+      flake = false;
+    };
+    nvim-telescope = {
+      url = "github:nvim-telescope/telescope.nvim";
+      flake = false;
+    };
+    telescope-dap = {
+      url = "github:nvim-telescope/telescope-dap.nvim";
+      flake = false;
+    };
+    popup-nvim = {
+      url = "github:nvim-lua/popup.nvim";
+      flake = false;
+    };
+    plenary-nvim = {
+      url = "github:nvim-lua/plenary.nvim";
+      flake = false;
+    };
+    nvim-web-devicons = {
+      url = "github:kyazdani42/nvim-web-devicons";
+      flake = false;
+    };
+    nvim-tree-lua = {
+      url = "github:kyazdani42/nvim-tree.lua";
+      flake = false;
+    };
+    vimagit = {
+      url = "github:jreybert/vimagit";
+      flake = false;
+    };
+    fugitive = {
+      url = "github:tpope/vim-fugitive";
+      flake = false;
+    };
+    nvim-lightbulb = {
+      url = "github:kosayoda/nvim-lightbulb";
+      flake = false;
+    };
+    nvim-treesitter = {
+      url = "github:nvim-treesitter/nvim-treesitter";
+      flake = false;
+    };
+    nvim-treesitter-context = {
+      url = "github:romgrk/nvim-treesitter-context";
+      flake = false;
+    };
+    rnix-lsp.url = "github:nix-community/rnix-lsp";
+    barbar-nvim = {
+      url = "github:romgrk/barbar.nvim";
+      flake = false;
+    };
+    editorconfig-vim = {
+      url = "github:editorconfig/editorconfig-vim";
+      flake = false;
+    };
+    indent-blankline-nvim = {
+      url = "github:lukas-reineke/indent-blankline.nvim";
+      flake = false;
+    };
+    nvim-blame-line = {
+      url = "github:tveskag/nvim-blame-line";
+      flake = false;
+    };
+    nvim-dap-virtual-text = {
+      url = "github:theHamsta/nvim-dap-virtual-text";
+      flake = false;
+    };
+    vim-cursorword = {
+      url = "github:itchyny/vim-cursorword";
+      flake = false;
+    };
+    vim-dadbod = {
+      url = "github:tpope/vim-dadbod";
+      flake = false;
+    };
+    vim-dadbod-ui = {
+      url = "github:kristijanhusak/vim-dadbod-ui";
+      flake = false;
+    };
+    vim-hexokinase = {
+      url = "github:RRethy/vim-hexokinase";
+      flake = false;
+    };
+    which-key-nvim = {
+      url = "github:folke/which-key.nvim";
+      flake = false;
+    };
+    vim-test = {
+      url = "github:vim-test/vim-test";
+      flake = false;
+    };
+    vim-floaterm = {
+      url = "github:voldikss/vim-floaterm";
+      flake = false;
+    };
+    vim-crystal = {
+      url = "github:vim-crystal/vim-crystal";
+      flake = false;
+    };
+    nvim-jqx = {
+      url = "github:gennaro-tedesco/nvim-jqx";
+      flake = false;
+    };
+    format-nvim = {
+      url = "github:lukas-reineke/format.nvim";
+      flake = false;
+    };
+    vim-cue = {
+      url = "github:jjo/vim-cue";
+      flake = false;
+    };
+    vim-mint = {
+      url = "github:IrenejMarc/vim-mint";
+      flake = false;
+    };
+    vim-surround = {
+      url = "github:tpope/vim-surround";
+      flake = false;
+    };
+    wilder-nvim = {
+      url = "github:gelguy/wilder.nvim";
+      flake = false;
+    };
+    vim-abolish = {
+      url = "github:tpope/vim-abolish";
+      flake = false;
+    };
   };
 
   outputs = { nixpkgs, flake-utils, neovim, ... }@inputs:
@@ -66,23 +191,30 @@
           "nvim-tree-lua"
           "telescope-dap"
           "vimagit"
-          "fugitive" 
+          "fugitive"
           "nvim-lightbulb"
           "nvim-treesitter"
           "nvim-treesitter-context"
           "barbar-nvim"
           "editorconfig-vim"
           "indent-blankline-nvim"
-          "indentline"
           "nvim-blame-line"
           "nvim-dap-virtual-text"
           "vim-cursorword"
           "vim-dadbod"
           "vim-dadbod-ui"
           "vim-hexokinase"
-          "vim-which-key"
+          "which-key-nvim"
           "vim-test"
           "vim-floaterm"
+          "vim-crystal"
+          "nvim-jqx"
+          "format-nvim"
+          "vim-cue"
+          "vim-mint"
+          "vim-surround"
+          "wilder-nvim"
+          "vim-abolish"
         ];
 
         pluginOverlay = lib.buildPluginOverlay;
@@ -95,6 +227,19 @@
             (final: prev: {
               neovim-nightly = neovim.defaultPackage.${system};
               rnix-lsp = inputs.rnix-lsp.defaultPackage.${system};
+              efm-langserver = prev.buildGoModule rec {
+                pname = "efm-langserver";
+                version = "0.0.36";
+                vendorSha256 =
+                  "sha256-tca+1SRrFyvU8ttHmfMFiGXd1A8rQSEWm1Mc2qp0EfI=";
+                src = prev.fetchFromGitHub {
+                  owner = "mattn";
+                  repo = pname;
+                  rev = "v${version}";
+                  sha256 =
+                    "sha256-X2z49KmJiKh1QtcDBZcqNiMhq5deVamS47w6gyVq7Oo=";
+                };
+              };
             })
           ];
         };
@@ -102,8 +247,7 @@
         lib = import ./lib { inherit pkgs inputs plugins; };
 
         neovimBuilder = lib.neovimBuilder;
-      in
-      rec {
+      in rec {
         inherit neovimBuilder pkgs;
 
         apps = {
@@ -117,52 +261,68 @@
 
         defaultPackage = packages.neovimWT;
 
-
         overlay = (self: super: {
           inherit neovimBuilder;
           neovimWT = packages.neovimWT;
-	  neovimPlugins = pkgs.neovimPlugins;
+          neovimPlugins = pkgs.neovimPlugins;
         });
 
         packages.neovimWT = neovimBuilder {
-          config = {
-	          vim.viAlias = true;
-	          vim.vimAlias = true;
-            vim.dashboard.startify.enable = true;
-            vim.dashboard.startify.customHeader = [ "NIXOS NEOVIM CONFIG" ];
-            vim.theme.nord.enable = true;
-            vim.disableArrows = true;
-            vim.statusline.lightline.enable = true;
-            vim.lsp.enable = true;
-            vim.lsp.bash = true;
-            vim.lsp.go = true;
-            vim.lsp.nix = true;
-            vim.lsp.python = true;
-            vim.lsp.ruby = true;
-            vim.lsp.rust = true;
-            vim.lsp.terraform = true;
-            vim.lsp.typescript = true;
-            vim.lsp.vimscript = true;
-            vim.lsp.yaml = true;
-            vim.lsp.docker = true;
-            vim.lsp.tex = true;
-            vim.lsp.css = true;
-            vim.lsp.html = true;
-            vim.lsp.json = true;
-            vim.lsp.clang = true;
-            vim.lsp.cmake = true;
-            vim.lsp.lightbulb = true;
-            vim.lsp.variableDebugPreviews = true;
-            vim.fuzzyfind.telescope.enable = true;
-            vim.filetree.nvimTreeLua.enable = true;
-            vim.git.enable = true;
-            vim.tabbar.barbar.enable = true;
-            vim.formatting.editorConfig.enable = true;
-            vim.editor.indentGuide = true;
-            vim.editor.underlineCurrentWord = true;
-            vim.database.enable = true;
-            vim.test.enable = true;
+          config.vim = {
+            dashboard.startify.customHeader = [ "Welcome to NeoVim" ];
+            dashboard.startify.enable = true;
+            database.enable = true;
+            disableArrows = true;
 
+            editor = {
+              surround = true;
+              colourPreview = true;
+              whichKey = true;
+              floaterm = true;
+              wilder = true;
+              abolish = true;
+            };
+
+            filetree.nvimTreeLua.enable = true;
+            formatting.editorConfig.enable = true;
+            fuzzyfind.telescope.enable = true;
+            statusline.lightline.enable = true;
+            tabbar.barbar.enable = true;
+            test.enable = true;
+            theme.gruvbox.enable = true;
+            viAlias = true;
+            vimAlias = true;
+
+            git = {
+              enable = true;
+              blameLine = false;
+            };
+
+            lsp = {
+              bash = true;
+              clang = true;
+              cmake = true;
+              crystal = true;
+              css = true;
+              docker = true;
+              enable = true;
+              go = true;
+              html = true;
+              json = true;
+              lightbulb = true;
+              mint = true;
+              nix = true;
+              python = true;
+              ruby = true;
+              rust = true;
+              shellcheck = true;
+              terraform = true;
+              tex = true;
+              typescript = true;
+              variableDebugPreviews = true;
+              vimscript = true;
+              yaml = true;
+            };
           };
         };
       });

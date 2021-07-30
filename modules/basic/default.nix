@@ -1,9 +1,8 @@
-{ pkgs, lib, config, ...}:
+{ pkgs, lib, config, ... }:
 with lib;
 with builtins;
 
-let
-  cfg = config.vim;
+let cfg = config.vim;
 in {
   options.vim = {
     colourTerm = mkOption {
@@ -19,14 +18,15 @@ in {
     };
 
     hideSearchHighlight = mkOption {
-      default = true;
+      default = false;
       description = "Hide search highlight so it doesn't stay highlighted";
       type = types.bool;
     };
 
     scrollOffset = mkOption {
       default = 8;
-      description = "Start scrolling this number of lines from the top or bottom of the page.";
+      description =
+        "Start scrolling this number of lines from the top or bottom of the page.";
       type = types.int;
     };
 
@@ -50,20 +50,23 @@ in {
 
     useSystemClipboard = mkOption {
       default = true;
-      description = "Make use of the clipboard for default yank and paste operations. Don't use * and +";
+      description =
+        "Make use of the clipboard for default yank and paste operations. Don't use * and +";
       type = types.bool;
     };
 
     mouseSupport = mkOption {
       default = "a";
-      description = "Set modes for mouse support. a - all, n - normal, v - visual, i - insert, c - command";
+      description =
+        "Set modes for mouse support. a - all, n - normal, v - visual, i - insert, c - command";
       type = types.str;
     };
 
     lineNumberMode = mkOption {
       default = "relNumber";
-      description = "How line numbers are displayed. none, relative, number, relNumber";
-      type = with types; enum ["relative" "number" "relNumber" "none"];
+      description =
+        "How line numbers are displayed. none, relative, number, relNumber";
+      type = with types; enum [ "relative" "number" "relNumber" "none" ];
     };
 
     preventJunkFiles = mkOption {
@@ -92,7 +95,8 @@ in {
 
     updateTime = mkOption {
       default = 300;
-      description = "The number of milliseconds till Cursor Hold event is fired";
+      description =
+        "The number of milliseconds till Cursor Hold event is fired";
       type = types.int;
     };
 
@@ -110,7 +114,8 @@ in {
 
     mapTimeout = mkOption {
       default = 500;
-      description = "Timeout in ms that neovim will wait for mapped action to complete";
+      description =
+        "Timeout in ms that neovim will wait for mapped action to complete";
       type = types.int;
     };
 
@@ -128,31 +133,22 @@ in {
 
   };
 
-  config = (
-    let 
-      writeIf = cond: msg: if cond then msg else "";
-    in {
-    
-    vim.nmap = if (cfg.disableArrows) then {
+  config = {
+    vim.nmap = optionalAttrs cfg.disableArrows {
       "<up>" = "<nop>";
       "<down>" = "<nop>";
       "<left>" = "<nop>";
       "<right>" = "<nop>";
-    } else {};
+    };
 
-    vim.imap = if (cfg.disableArrows) then {
+    vim.imap = optionalAttrs cfg.disableArrows {
       "<up>" = "<nop>";
       "<down>" = "<nop>";
       "<left>" = "<nop>";
       "<right>" = "<nop>";
-    } else {};
-
-    vim.nnoremap = if (cfg.mapLeaderSpace) then {
-      "<space>" = "<nop>";
-    } else {};
+    };
 
     vim.configRC = ''
-
       "Settings that are set for everything
       set encoding=utf-8
       set mouse=${cfg.mouseSupport}
@@ -165,81 +161,48 @@ in {
       set shortmess+=c
       set tm=${toString cfg.mapTimeout}
       set hidden
-
-      ${writeIf cfg.splitBelow ''
-        set splitbelow
-      ''}
-
-      ${writeIf cfg.splitRight ''
-        set splitright
-      ''}
-
-      ${writeIf cfg.showSignColumn ''
-        set signcolumn=yes
-      ''}
-
-      ${writeIf cfg.autoIndent ''
-        set ai
-      ''}
-            
-      ${writeIf cfg.preventJunkFiles ''
+      set autoread
+      set wildmenu
+      set backup
+      set undofile
+      set undolevels=1000
+      ${optionalString cfg.splitBelow "set splitbelow"}
+      ${optionalString cfg.splitRight "set splitright"}
+      ${optionalString cfg.showSignColumn "set signcolumn=yes"}
+      ${optionalString cfg.autoIndent "set autoindent"}
+      ${optionalString cfg.useSystemClipboard "set clipboard+=unnamedplus"}
+      ${optionalString cfg.syntaxHighlighting "syntax on"}
+      ${optionalString (cfg.wordWrap == false) "set nowrap"}
+      ${optionalString cfg.preventJunkFiles ''
         set noswapfile
         set nobackup
         set nowritebackup
       ''}
-
-      ${writeIf (cfg.bell == "none") ''
-        set noerrorbells
-        set novisualbell
-      ''}
-
-      ${writeIf (cfg.bell == "on") ''
-        set novisualbell
-      ''}
-
-      ${writeIf (cfg.bell == "visual") ''
-        set noerrorbells
-      ''}
-
-      ${writeIf (cfg.lineNumberMode == "relative") ''
-        set relativenumber
-      ''}
-
-      ${writeIf (cfg.lineNumberMode == "number") ''
-        set number
-      ''}
-
-      ${writeIf (cfg.lineNumberMode == "relNumber") ''
-        set number relativenumber
-      ''}
-
-      ${writeIf cfg.useSystemClipboard ''
-        set clipboard+=unnamedplus
-      ''}
-
-      ${writeIf cfg.mapLeaderSpace ''
+      ${optionalString cfg.mapLeaderSpace ''
         let mapleader=" "
         let maplocalleader=" "
       ''}
-
-      ${writeIf cfg.syntaxHighlighting ''
-        syntax on 
-      ''}
-
-      ${writeIf (cfg.wordWrap == false) ''
-        set nowrap
-      ''}
-
-      ${writeIf cfg.hideSearchHighlight ''
+      ${optionalString cfg.hideSearchHighlight ''
         set nohlsearch
         set incsearch
       ''}
-
-      ${writeIf cfg.colourTerm ''
+      ${optionalString cfg.colourTerm ''
         set termguicolors
         set t_Co=256
       ''}
-
+      ${{
+        visual = "set noerrorbells";
+        on = "set novisualbell";
+        none = ''
+          set noerrorbells
+          set novisualbell
+        '';
+      }.${cfg.bell} or ""}
+      ${{
+        relative = "set relativenumber";
+        number = "set number";
+        relNumber = "set number relativenumber";
+      }.${cfg.lineNumberMode} or ""}
     '';
-  });
+  };
 }
