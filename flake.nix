@@ -30,7 +30,7 @@
     };
     nvim-lspconfig = {
       # url = "github:neovim/nvim-lspconfig";
-      url = "github:manveru/nvim-lspconfig";
+      url = "github:manveru/nvim-lspconfig/mint";
       flake = false;
     };
     completion-nvim = {
