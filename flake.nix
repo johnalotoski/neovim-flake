@@ -1,5 +1,5 @@
 {
-  description = "Wil Taylor's NeoVim config";
+  description = "Manverus' NeoVim config";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -259,15 +259,15 @@
 
         defaultApp = apps.nvim;
 
-        defaultPackage = packages.neovimWT;
+        defaultPackage = packages.neovim;
 
         overlay = (self: super: {
           inherit neovimBuilder;
-          neovimWT = packages.neovimWT;
+          neovim = packages.neovim;
           neovimPlugins = pkgs.neovimPlugins;
         });
 
-        packages.neovimWT = neovimBuilder {
+        packages.neovim = neovimBuilder {
           config.vim = {
             dashboard.startify.customHeader = [ "Welcome to NeoVim" ];
             dashboard.startify.enable = true;

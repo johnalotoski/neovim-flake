@@ -7,11 +7,11 @@ this config.
 # How to use
 Clone the repo and run the following from the directory:
 ```
-nix run .#
+nix run
 ```
 or
 ```
-nix run github:wiltaylor/neovim-flake#.
+nix run github:manveru/neovim-flake
 ```
 
 # How to update plugins

@@ -1,22 +1,16 @@
-{ pkgs, lib ? pkgs.lib, ...}:
+{ pkgs, lib ? pkgs.lib, ... }:
 
 { config }:
 let
   neovimPlugins = pkgs.neovimPlugins;
 
   vimOptions = lib.evalModules {
-    modules = [
-      { imports = [../modules]; }
-      config 
-    ];
+    modules = [ { imports = [ ../modules ]; } config ];
 
-    specialArgs = {
-      inherit pkgs; 
-    };
+    specialArgs = { inherit pkgs; };
   };
 
   vim = vimOptions.config.vim;
-
 in pkgs.wrapNeovim pkgs.neovim-nightly {
   viAlias = true;
   vimAlias = true;
@@ -28,5 +22,4 @@ in pkgs.wrapNeovim pkgs.neovim-nightly {
       opt = vim.optPlugins;
     };
   };
-
 }

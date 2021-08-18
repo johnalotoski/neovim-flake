@@ -35,6 +35,20 @@ in {
     vim.configRC = ''
       "let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla'"
 
+      function s:MkNonExDir(file, buf)
+        if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
+          let dir=fnamemodify(a:file, ':h')
+          if !isdirectory(dir)
+            call mkdir(dir, 'p')
+          endif
+        endif
+      endfunction
+
+      augroup BWCCreateDir
+        autocmd!
+        autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
+      augroup END
+
       ${optionalString cfg.wilder ''
         call wilder#enable_cmdline_enter()
         set wildcharm=<Tab>
