@@ -274,6 +274,8 @@
             database.enable = true;
             disableArrows = true;
 
+            cnoremap = { "3636" = "<c-u>undo<CR>"; };
+
             editor = {
               surround = true;
               colourPreview = true;
