@@ -11,6 +11,8 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
+    statix.url = "github:NerdyPepper/statix";
+
     # Vim plugins
     gruvbox = {
       url = "github:morhetz/gruvbox";
@@ -29,8 +31,7 @@
       flake = false;
     };
     nvim-lspconfig = {
-      # url = "github:neovim/nvim-lspconfig";
-      url = "github:manveru/nvim-lspconfig/mint";
+      url = "github:neovim/nvim-lspconfig";
       flake = false;
     };
     completion-nvim = {
@@ -225,6 +226,7 @@
           overlays = [
             pluginOverlay
             (final: prev: {
+              statix = inputs.statix.defaultPackage.${system};
               neovim-nightly = neovim.defaultPackage.${system};
               rnix-lsp = inputs.rnix-lsp.defaultPackage.${system};
               efm-langserver = prev.buildGoModule rec {
