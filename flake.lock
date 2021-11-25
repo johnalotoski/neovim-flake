@@ -558,6 +558,7 @@
         "vim-dadbod": "vim-dadbod",
         "vim-dadbod-ui": "vim-dadbod-ui",
         "vim-floaterm": "vim-floaterm",
+        "vim-go": "vim-go",
         "vim-hexokinase": "vim-hexokinase",
         "vim-mint": "vim-mint",
         "vim-nix": "vim-nix",
@@ -729,6 +730,22 @@
       "original": {
         "owner": "voldikss",
         "repo": "vim-floaterm",
+        "type": "github"
+      }
+    },
+    "vim-go": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1636390121,
+        "narHash": "sha256-KDbg65w8Oc/ODLa3wS9ctcpDdKH0aOyCi+VRr+WfpbE=",
+        "owner": "fatih",
+        "repo": "vim-go",
+        "rev": "96b74acc8747d667247fd8d30eb15f6b44778f6f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fatih",
+        "repo": "vim-go",
         "type": "github"
       }
     },

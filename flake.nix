@@ -171,6 +171,10 @@
       url = "github:tpope/vim-abolish";
       flake = false;
     };
+    vim-go = {
+      url = "github:fatih/vim-go";
+      flake = false;
+    };
   };
 
   outputs = { nixpkgs, flake-utils, neovim, ... }@inputs:
@@ -216,6 +220,7 @@
           "vim-surround"
           "wilder-nvim"
           "vim-abolish"
+          "vim-go"
         ];
 
         pluginOverlay = lib.buildPluginOverlay;
@@ -226,9 +231,9 @@
           overlays = [
             pluginOverlay
             (final: prev: {
-              statix = inputs.statix.defaultPackage.${system};
-              neovim-nightly = neovim.defaultPackage.${system};
-              rnix-lsp = inputs.rnix-lsp.defaultPackage.${system};
+              statix = inputs.statix.defaultPackage."${system}";
+              neovim-nightly = neovim.defaultPackage."${system}";
+              rnix-lsp = inputs.rnix-lsp.defaultPackage."${system}";
               efm-langserver = prev.buildGoModule rec {
                 pname = "efm-langserver";
                 version = "0.0.36";
@@ -248,7 +253,7 @@
 
         lib = import ./lib { inherit pkgs inputs plugins; };
 
-        neovimBuilder = lib.neovimBuilder;
+        inherit (lib) neovimBuilder;
       in rec {
         inherit neovimBuilder pkgs;
 
@@ -263,11 +268,11 @@
 
         defaultPackage = packages.neovim;
 
-        overlay = (self: super: {
+        overlay = self: super: {
           inherit neovimBuilder;
-          neovim = packages.neovim;
-          neovimPlugins = pkgs.neovimPlugins;
-        });
+          inherit (packages) neovim;
+          inherit (pkgs) neovimPlugins;
+        };
 
         packages.neovim = neovimBuilder {
           config.vim = {

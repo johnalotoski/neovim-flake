@@ -52,6 +52,7 @@ in {
       nvim-jqx
       vim-cue
       vim-mint
+      vim-go
     ];
 
     vim.configRC = ''
