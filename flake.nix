@@ -6,12 +6,12 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     neovim = {
-      url = "github:neovim/neovim?dir=contrib";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:neovim/neovim/v0.6.0?dir=contrib";
       inputs.flake-utils.follows = "flake-utils";
     };
 
-    statix.url = "github:NerdyPepper/statix";
+    statix.url =
+      "github:NerdyPepper/statix/cef2deec580acda72e0575b47b6415e5421736a7";
 
     # Vim plugins
     gruvbox = {
