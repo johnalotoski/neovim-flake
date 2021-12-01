@@ -292,7 +292,7 @@
               abolish = true;
             };
 
-            filetree.nvimTreeLua.enable = true;
+            filetree.nvimTreeLua = { enable = true; };
             formatting.editorConfig.enable = true;
             fuzzyfind.telescope.enable = true;
             statusline.lightline.enable = true;
