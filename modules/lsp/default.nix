@@ -19,18 +19,19 @@ in {
     docker = mkEnableOption "Enable docker support";
     go = mkEnableOption "Enable Go Language Support";
     html = mkEnableOption "Enable html support";
+    idris2 = mkEnableOption "Enable Idris2 Support";
     json = mkEnableOption "Enable JSON";
+    mint = mkEnableOption "Enable Mint support";
     nix = mkEnableOption "Enable NIX Language Support";
     python = mkEnableOption "Enable Python Support";
     ruby = mkEnableOption "Enable Ruby Support";
     rust = mkEnableOption "Enable Rust Support";
+    shellcheck = mkEnableOption "Enable Shellcheck support";
     terraform = mkEnableOption "Enable Terraform Support";
     tex = mkEnableOption "Enable tex support";
     typescript = mkEnableOption "Enable Typescript/Javascript Support";
     vimscript = mkEnableOption "Enable Vim Script Support";
     yaml = mkEnableOption "Enable yaml support";
-    mint = mkEnableOption "Enable Mint support";
-    shellcheck = mkEnableOption "Enable Shellcheck support";
 
     lightbulb = mkEnableOption "Enable Light Bulb";
     variableDebugPreviews = mkEnableOption "Enable variable previews";
@@ -380,6 +381,10 @@ in {
           cmd = {'mint', 'ls'};
           filetypes = {'mint'};
         }
+      ''}
+
+      ${optionalString cfg.idris2 ''
+        lspconfig.idris2_lsp.setup{}
       ''}
     '';
   };

@@ -175,52 +175,57 @@
       url = "github:fatih/vim-go";
       flake = false;
     };
+    nvim-idris2 = {
+      url = "github:ShinKage/nvim-idris2";
+      flake = false;
+    };
   };
 
   outputs = { nixpkgs, flake-utils, neovim, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
         plugins = [
-          "gruvbox"
-          "nord-vim"
-          "vim-startify"
-          "lightline-vim"
-          "nvim-lspconfig"
+          "barbar-nvim"
           "completion-nvim"
-          "vim-nix"
-          "nvim-dap"
-          "nvim-telescope"
-          "popup-nvim"
-          "plenary-nvim"
-          "nvim-web-devicons"
-          "nvim-tree-lua"
-          "telescope-dap"
-          "vimagit"
+          "editorconfig-vim"
+          "format-nvim"
           "fugitive"
+          "gruvbox"
+          "indent-blankline-nvim"
+          "lightline-vim"
+          "nord-vim"
+          "nvim-blame-line"
+          "nvim-dap"
+          "nvim-dap-virtual-text"
+          "nvim-idris2"
+          "nvim-jqx"
           "nvim-lightbulb"
+          "nvim-lspconfig"
+          "nvim-telescope"
+          "nvim-tree-lua"
           "nvim-treesitter"
           "nvim-treesitter-context"
-          "barbar-nvim"
-          "editorconfig-vim"
-          "indent-blankline-nvim"
-          "nvim-blame-line"
-          "nvim-dap-virtual-text"
+          "nvim-web-devicons"
+          "plenary-nvim"
+          "popup-nvim"
+          "telescope-dap"
+          "vim-abolish"
+          "vimagit"
+          "vim-crystal"
+          "vim-cue"
           "vim-cursorword"
           "vim-dadbod"
           "vim-dadbod-ui"
-          "vim-hexokinase"
-          "which-key-nvim"
-          "vim-test"
           "vim-floaterm"
-          "vim-crystal"
-          "nvim-jqx"
-          "format-nvim"
-          "vim-cue"
-          "vim-mint"
-          "vim-surround"
-          "wilder-nvim"
-          "vim-abolish"
           "vim-go"
+          "vim-hexokinase"
+          "vim-mint"
+          "vim-nix"
+          "vim-startify"
+          "vim-surround"
+          "vim-test"
+          "which-key-nvim"
+          "wilder-nvim"
         ];
 
         pluginOverlay = lib.buildPluginOverlay;
@@ -317,6 +322,7 @@
               enable = true;
               go = true;
               html = true;
+              idris2 = true;
               json = true;
               lightbulb = true;
               mint = true;
