@@ -6,7 +6,7 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     neovim = {
-      url = "github:neovim/neovim/v0.6.0?dir=contrib";
+      url = "github:neovim/neovim/v0.6.1?dir=contrib";
       inputs.flake-utils.follows = "flake-utils";
     };
 
