@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "LuaSnip": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641135061,
+        "narHash": "sha256-jzjwYHKLU2J7eNm4I7YIuJG7jDFO6uCbl8dk4tLbTAs=",
+        "owner": "L3MON4D3",
+        "repo": "LuaSnip",
+        "rev": "ed0140696fa99ea072bc485c87d22a396c477db3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "L3MON4D3",
+        "repo": "LuaSnip",
+        "type": "github"
+      }
+    },
     "barbar-nvim": {
       "flake": false,
       "locked": {
@@ -16,19 +32,83 @@
         "type": "github"
       }
     },
-    "completion-nvim": {
+    "cmp-buffer": {
       "flake": false,
       "locked": {
-        "lastModified": 1634068787,
-        "narHash": "sha256-6um9dye0MLY8K8AAsDksCpy1KbMNSdMuj+zKteSAxR4=",
-        "owner": "nvim-lua",
-        "repo": "completion-nvim",
-        "rev": "87b0f86da3dffef63b42845049c648b5d90f1c4d",
+        "lastModified": 1641254550,
+        "narHash": "sha256-LXNckOkSqRMFWJhBaPUm8el0SgTS2XPvg3N8CEwHLHw=",
+        "owner": "hrsh7th",
+        "repo": "cmp-buffer",
+        "rev": "f83773e2f433a923997c5faad7ea689ec24d1785",
         "type": "github"
       },
       "original": {
-        "owner": "nvim-lua",
-        "repo": "completion-nvim",
+        "owner": "hrsh7th",
+        "repo": "cmp-buffer",
+        "type": "github"
+      }
+    },
+    "cmp-cmdline": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1638355837,
+        "narHash": "sha256-BkMvtwkLnT0tnLn9F+vt3vtmAQOBVFwFC3YF7ZsE8Hs=",
+        "owner": "hrsh7th",
+        "repo": "cmp-cmdline",
+        "rev": "29ca81a6f0f288e6311b3377d9d9684d22eac2ec",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hrsh7th",
+        "repo": "cmp-cmdline",
+        "type": "github"
+      }
+    },
+    "cmp-nvim-lsp": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641318246,
+        "narHash": "sha256-xrtqZGKT0MjapdlWooAFGUyfiDMdqmJ/mB4LA1YuX2E=",
+        "owner": "hrsh7th",
+        "repo": "cmp-nvim-lsp",
+        "rev": "b4251f0fca1daeb6db5d60a23ca81507acf858c2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hrsh7th",
+        "repo": "cmp-nvim-lsp",
+        "type": "github"
+      }
+    },
+    "cmp-path": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640869280,
+        "narHash": "sha256-d82E/Vl4a/WGAVKWuPYXjZO/jVo+7aKp05JaRoA6dgU=",
+        "owner": "hrsh7th",
+        "repo": "cmp-path",
+        "rev": "4d58224e315426e5ac4c5b218ca86cab85f80c79",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hrsh7th",
+        "repo": "cmp-path",
+        "type": "github"
+      }
+    },
+    "cmp_luasnip": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641154010,
+        "narHash": "sha256-vkDOW0882wG22z1s4npjGPUJyHd5boW8KWDIoy+WrjI=",
+        "owner": "saadparwaiz1",
+        "repo": "cmp_luasnip",
+        "rev": "d6f837f4e8fe48eeae288e638691b91b97d1737f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "saadparwaiz1",
+        "repo": "cmp_luasnip",
         "type": "github"
       }
     },
@@ -360,6 +440,22 @@
         "type": "github"
       }
     },
+    "nvim-cmp": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641095082,
+        "narHash": "sha256-G9K+drH+atN0h/1Xuzg+JzP0nnZht5ogS0LFrHVc9kU=",
+        "owner": "hrsh7th",
+        "repo": "nvim-cmp",
+        "rev": "1b94aacada96d2a33fef2ecf87748b27a2f50630",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hrsh7th",
+        "repo": "nvim-cmp",
+        "type": "github"
+      }
+    },
     "nvim-dap": {
       "flake": false,
       "locked": {
@@ -590,8 +686,13 @@
     },
     "root": {
       "inputs": {
+        "LuaSnip": "LuaSnip",
         "barbar-nvim": "barbar-nvim",
-        "completion-nvim": "completion-nvim",
+        "cmp-buffer": "cmp-buffer",
+        "cmp-cmdline": "cmp-cmdline",
+        "cmp-nvim-lsp": "cmp-nvim-lsp",
+        "cmp-path": "cmp-path",
+        "cmp_luasnip": "cmp_luasnip",
         "editorconfig-vim": "editorconfig-vim",
         "flake-utils": "flake-utils",
         "format-nvim": "format-nvim",
@@ -603,6 +704,7 @@
         "nixpkgs": "nixpkgs_2",
         "nord-vim": "nord-vim",
         "nvim-blame-line": "nvim-blame-line",
+        "nvim-cmp": "nvim-cmp",
         "nvim-dap": "nvim-dap",
         "nvim-dap-virtual-text": "nvim-dap-virtual-text",
         "nvim-idris2": "nvim-idris2",

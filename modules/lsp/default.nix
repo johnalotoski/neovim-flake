@@ -40,7 +40,6 @@ in {
   config = mkIf cfg.enable {
     vim.startPlugins = with pkgs.neovimPlugins; [
       nvim-lspconfig
-      completion-nvim
       nvim-dap
       (if cfg.nix then vim-nix else null)
       telescope-dap
@@ -49,6 +48,14 @@ in {
       nvim-treesitter
       nvim-treesitter-context
       vim-crystal
+
+      cmp-buffer
+      cmp-cmdline
+      cmp_luasnip
+      cmp-nvim-lsp
+      cmp-path
+      LuaSnip
+      nvim-cmp
 
       nvim-jqx
       vim-cue
@@ -62,15 +69,13 @@ in {
       inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
       " Set completeopt to have a better completion experience
-      set completeopt=menuone,noinsert,noselect
-
-      imap <silent> <c-p> <Plug>(completion_trigger)
-      imap <tab> <Plug>(completion_smart_tab)
-      imap <s-tab> <Plug>(completion_smart_s_tab)
+      set completeopt=menu,menuone,noselect
 
       ${optionalString cfg.variableDebugPreviews ''
         let g:dap_virtual_text = v:true
       ''}
+
+      autocmd CursorHold,CursorHoldI * lua vim.diagnostic.get(0, {focusable=false, border='single'})
     '';
 
     vim.nnoremap = {
@@ -150,6 +155,99 @@ in {
       vim.cmd [[set foldlevel=10]]
       vim.cmd [[set foldexpr=nvim_treesitter#foldexpr()]]
 
+      -- Setup nvim-cmp.
+      local cmp = require('cmp')
+      local luasnip = require('luasnip')
+
+      local has_words_before = function()
+        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+      end
+
+      cmp.setup({
+        snippet = {
+          -- REQUIRED - you must specify a snippet engine
+          expand = function(args)
+            -- vim.fn["vsnip#anonymous"](args.body)
+            luasnip.lsp_expand(args.body)
+            -- require('snippy').expand_snippet(args.body)
+            -- vim.fn["UltiSnips#Anon"](args.body)
+          end,
+        },
+        mapping = {
+          ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+          ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+          ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+          ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+          ['<C-e>'] = cmp.mapping({
+            i = cmp.mapping.abort(),
+            c = cmp.mapping.close(),
+          }),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+
+          ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            elseif has_words_before() then
+              cmp.complete()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+
+          ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+        },
+        sources = cmp.config.sources({
+          { name = 'nvim_lsp' },
+          -- { name = 'vsnip' },
+          { name = 'luasnip' },
+          -- { name = 'ultisnips' },
+          -- { name = 'snippy' },
+        }, {
+          { name = 'buffer' },
+        })
+      })
+
+      -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+      cmp.setup.cmdline('/', {
+        sources = {
+          { name = 'buffer' }
+        }
+      })
+
+      -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+      cmp.setup.cmdline(':', {
+        sources = cmp.config.sources({
+          { name = 'path' }
+        }, {
+          { name = 'cmdline' }
+        })
+      })
+
+      -- Setup lspconfig.
+      local capabilities = require('cmp_nvim_lsp').update_capabilities(
+        vim.lsp.protocol.make_client_capabilities()
+      )
+
+
+      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+        vim.lsp.handlers.hover, {
+          border = "single",
+          focusable = false,
+          close_events = {"CursorMoved", "CursorMovedI", "BufHidden", "BufLeave", "InsertCharPre"},
+        }
+      )
+
       ${optionalString cfg.lightbulb ''
         require('nvim-lightbulb').update_lightbulb {
           sign = {
@@ -176,20 +274,21 @@ in {
 
       ${optionalString cfg.crystal ''
         lspconfig.crystalline.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {"/run/current-system/sw/bin/crystalline"}
         }
       ''}
 
       ${optionalString cfg.bash ''
         lspconfig.bashls.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {"${pkgs.nodePackages.bash-language-server}/bin/bash-language-server", "start"}
         }
       ''}
 
       ${optionalString cfg.shellcheck ''
         lspconfig.efm.setup{
+          capabilities = capabilities;
           cmd = {"${pkgs.efm-langserver}/bin/efm-langserver"};
           init_options = {
             documentFormatting = true,
@@ -215,115 +314,116 @@ in {
       ''}
 
       ${optionalString cfg.go ''
-         lspconfig.gopls.setup{
-           on_attach = require('completion').on_attach;
-           cmd = {"${pkgs.gopls}/bin/gopls"}
-         }
+        lspconfig.gopls.setup{
+          capabilities = capabilities;
+          cmd = {"${pkgs.gopls}/bin/gopls"}
+        }
 
-         dap.adapters.go = function(callback, config)
-           local handle
-           local pid_or_err
-           local port = 38697
-           handle, pid_or_err =
-             vim.loop.spawn(
-             "dlv",
-             {
-               args = {"dap", "-l", "127.0.0.1:" .. port},
-               detached = true
-             },
-             function(code)
-               handle:close()
-               print("Delve exited with exit code: " .. code)
-             end
-           )
-           -- Wait 100ms for delve to start
-           vim.defer_fn(
-             function()
-               --dap.repl.open()
-               callback({type = "server", host = "127.0.0.1", port = port})
-             end,
-             100)
+        dap.adapters.go = function(callback, config)
+          local handle
+          local pid_or_err
+          local port = 38697
+          handle, pid_or_err =
+            vim.loop.spawn(
+            "dlv",
+            {
+              args = {"dap", "-l", "127.0.0.1:" .. port},
+              detached = true
+            },
+            function(code)
+              handle:close()
+              print("Delve exited with exit code: " .. code)
+            end
+          )
+          -- Wait 100ms for delve to start
+          vim.defer_fn(
+            function()
+              --dap.repl.open()
+              callback({type = "server", host = "127.0.0.1", port = port})
+            end,
+            100)
 
 
-           --callback({type = "server", host = "127.0.0.1", port = port})
-         end
-         -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
-         dap.configurations.go = {
-           {
-             type = "go",
-             name = "Debug",
-             request = "launch",
-             program = "${"$"}{workspaceFolder}"
-           },
-           {
-             type = "go",
-             name = "Debug test", -- configuration for debugging test files
-             request = "launch",
-             mode = "test",
-             program = "${"$"}{workspaceFolder}"
-           },
+          --callback({type = "server", host = "127.0.0.1", port = port})
+        end
+
+        -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
+        dap.configurations.go = {
+          {
+            type = "go",
+            name = "Debug",
+            request = "launch",
+            program = "${"$"}{workspaceFolder}"
+          },
+          {
+            type = "go",
+            name = "Debug test", -- configuration for debugging test files
+            request = "launch",
+            mode = "test",
+            program = "${"$"}{workspaceFolder}"
+          },
         }
       ''}
 
       ${optionalString cfg.nix ''
         lspconfig.rnix.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {"${pkgs.rnix-lsp}/bin/rnix-lsp"}
         }
       ''}
 
       ${optionalString cfg.ruby ''
         lspconfig.solargraph.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.solargraph}/bin/solargraph', 'stdio'}
         }
       ''}
 
       ${optionalString cfg.rust ''
         lspconfig.rust_analyzer.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.rust-analyzer}/bin/rust-analyzer'}
         }
       ''}
 
       ${optionalString cfg.terraform ''
         lspconfig.terraformls.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.terraform-ls}/bin/terraform-ls', 'serve' }
         }
       ''}
 
       ${optionalString cfg.typescript ''
         lspconfig.tsserver.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.nodePackages.typescript-language-server}/bin/typescript-language-server', '--stdio' }
         }
       ''}
 
       ${optionalString cfg.vimscript ''
         lspconfig.vimls.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.nodePackages.vim-language-server}/bin/vim-language-server', '--stdio' }
         }
       ''}
 
       ${optionalString cfg.yaml ''
         lspconfig.yamlls.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.nodePackages.yaml-language-server}/bin/yaml-language-server', '--stdio' }
         }
       ''}
 
       ${optionalString cfg.docker ''
         lspconfig.dockerls.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.nodePackages.dockerfile-language-server-nodejs}/bin/docker-language-server', '--stdio' }
         }
       ''}
 
       ${optionalString cfg.css ''
         lspconfig.cssls.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.nodePackages.vscode-css-languageserver-bin}/bin/css-languageserver', '--stdio' };
           filetypes = { "css", "scss", "less" };
         }
@@ -331,7 +431,7 @@ in {
 
       ${optionalString cfg.html ''
         lspconfig.html.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.nodePackages.vscode-html-languageserver-bin}/bin/html-languageserver', '--stdio' };
           filetypes = { "html", "css", "javascript" };
         }
@@ -339,7 +439,7 @@ in {
 
       ${optionalString cfg.json ''
         lspconfig.jsonls.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.nodePackages.vscode-json-languageserver-bin}/bin/json-languageserver', '--stdio' };
           filetypes = { "html", "css", "javascript" };
         }
@@ -347,14 +447,14 @@ in {
 
       ${optionalString cfg.tex ''
         lspconfig.texlab.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.texlab}/bin/texlab'}
         }
       ''}
 
       ${optionalString cfg.clang ''
         lspconfig.clangd.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.clang-tools}/bin/clangd', '--background-index'};
           filetypes = { "c", "cpp", "objc", "objcpp" };
         }
@@ -362,7 +462,7 @@ in {
 
       ${optionalString cfg.cmake ''
         lspconfig.cmake.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'${pkgs.cmake-language-server}/bin/cmake-language-server'};
           filetypes = { "cmake"};
         }
@@ -370,21 +470,23 @@ in {
 
       ${optionalString cfg.python ''
         lspconfig.pyright.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {"${pkgs.nodePackages.pyright}/bin/pyright-langserver", "--stdio"}
         }
       ''}
 
       ${optionalString cfg.mint ''
         lspconfig.mint.setup{
-          on_attach = require('completion').on_attach;
+          capabilities = capabilities;
           cmd = {'mint', 'ls'};
           filetypes = {'mint'};
         }
       ''}
 
       ${optionalString cfg.idris2 ''
-        lspconfig.idris2_lsp.setup{}
+        lspconfig.idris2_lsp.setup{
+          capabilities = capabilities;
+        }
       ''}
     '';
   };

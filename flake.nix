@@ -34,10 +34,6 @@
       url = "github:neovim/nvim-lspconfig";
       flake = false;
     };
-    completion-nvim = {
-      url = "github:nvim-lua/completion-nvim";
-      flake = false;
-    };
     vim-nix = {
       url = "github:LnL7/vim-nix";
       flake = false;
@@ -179,6 +175,34 @@
       url = "github:ShinKage/nvim-idris2";
       flake = false;
     };
+    cmp-nvim-lsp = {
+      url = "github:hrsh7th/cmp-nvim-lsp";
+      flake = false;
+    };
+    cmp-buffer = {
+      url = "github:hrsh7th/cmp-buffer";
+      flake = false;
+    };
+    cmp-path = {
+      url = "github:hrsh7th/cmp-path";
+      flake = false;
+    };
+    cmp-cmdline = {
+      url = "github:hrsh7th/cmp-cmdline";
+      flake = false;
+    };
+    nvim-cmp = {
+      url = "github:hrsh7th/nvim-cmp";
+      flake = false;
+    };
+    LuaSnip = {
+      url = "github:L3MON4D3/LuaSnip";
+      flake = false;
+    };
+    cmp_luasnip = {
+      url = "github:saadparwaiz1/cmp_luasnip";
+      flake = false;
+    };
   };
 
   outputs = { nixpkgs, flake-utils, neovim, ... }@inputs:
@@ -186,15 +210,21 @@
       let
         plugins = [
           "barbar-nvim"
-          "completion-nvim"
+          "cmp-buffer"
+          "cmp-cmdline"
+          "cmp_luasnip"
+          "cmp-nvim-lsp"
+          "cmp-path"
           "editorconfig-vim"
           "format-nvim"
           "fugitive"
           "gruvbox"
           "indent-blankline-nvim"
           "lightline-vim"
+          "LuaSnip"
           "nord-vim"
           "nvim-blame-line"
+          "nvim-cmp"
           "nvim-dap"
           "nvim-dap-virtual-text"
           "nvim-idris2"
