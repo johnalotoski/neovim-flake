@@ -314,7 +314,7 @@
             dashboard.startify.customHeader = [ "Welcome to NeoVim" ];
             dashboard.startify.enable = true;
             database.enable = true;
-            disableArrows = true;
+            disableArrows = false;
 
             cnoremap = { "3636" = "<c-u>undo<CR>"; };
 
