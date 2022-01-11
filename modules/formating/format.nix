@@ -15,7 +15,7 @@
         rust = {{ cmd = {"rustfmt --edition 2018"} }},
         cue = {{ cmd = {"${pkgs.cue}/bin/cue fmt"} }},
         mint = {{ cmd = {"mint format"} }},
-        nix = {{ cmd = {"${pkgs.statix}/bin/statix fix", "${pkgs.nixfmt}/bin/nixfmt"} }},
+        nix = {{ cmd = {"${pkgs.statix}/bin/statix fix", "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt"} }},
         crystal = {{ cmd = {"crystal tool format"} }},
         vim = {{
           cmd = {"luafmt -w replace"},
