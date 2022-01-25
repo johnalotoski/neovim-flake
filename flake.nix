@@ -203,6 +203,10 @@
       url = "github:saadparwaiz1/cmp_luasnip";
       flake = false;
     };
+    lsp_signature = {
+      url = "github:ray-x/lsp_signature.nvim";
+      flake = false;
+    };
   };
 
   outputs = { nixpkgs, flake-utils, neovim, ... }@inputs:
@@ -221,6 +225,7 @@
           "gruvbox"
           "indent-blankline-nvim"
           "lightline-vim"
+          "lsp_signature"
           "LuaSnip"
           "nord-vim"
           "nvim-blame-line"
