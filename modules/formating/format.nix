@@ -21,6 +21,7 @@
             "${pkgs.treefmt}/bin/treefmt",
           }
         }},
+        rego = {{ cmd = {"${pkgs.treefmt}/bin/treefmt"} }},
         crystal = {{ cmd = {"crystal tool format"} }},
         vim = {{
           cmd = {"luafmt -w replace"},
