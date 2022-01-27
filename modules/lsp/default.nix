@@ -32,6 +32,7 @@ in {
     typescript = mkEnableOption "Enable Typescript/Javascript Support";
     vimscript = mkEnableOption "Enable Vim Script Support";
     yaml = mkEnableOption "Enable yaml support";
+    rego = mkEnableOption "Enable rego support";
 
     lightbulb = mkEnableOption "Enable Light Bulb";
     variableDebugPreviews = mkEnableOption "Enable variable previews";
@@ -293,6 +294,21 @@ in {
       vim.diagnostic.config({ virtual_text = { format = diagnostic_foramt }, severity_sort = true })
 
       vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]]
+
+      ${optionalString cfg.rego ''
+        local configs = require('lspconfig.configs')
+        local util = require('lspconfig.util')
+        if not configs.regols then
+          configs.regols = {
+            default_config = {
+              cmd = {'${pkgs.regols}/bin/regols'};
+              filetypes = { 'rego' };
+              root_dir = util.root_pattern(".git");
+            }
+          }
+        end
+        lspconfig.regols.setup{}
+      ''}
 
       ${optionalString cfg.lightbulb ''
         require('nvim-lightbulb').update_lightbulb {

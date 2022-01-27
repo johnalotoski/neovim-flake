@@ -274,6 +274,7 @@
               statix = inputs.statix.defaultPackage."${system}";
               neovim-nightly = neovim.defaultPackage."${system}";
               rnix-lsp = inputs.rnix-lsp.defaultPackage."${system}";
+
               efm-langserver = prev.buildGoModule rec {
                 pname = "efm-langserver";
                 version = "0.0.36";
@@ -285,6 +286,20 @@
                   rev = "v${version}";
                   sha256 =
                     "sha256-X2z49KmJiKh1QtcDBZcqNiMhq5deVamS47w6gyVq7Oo=";
+                };
+              };
+
+              regols = prev.buildGoModule rec {
+                pname = "regols";
+                version = "0.0.2";
+                vendorSha256 =
+                  "sha256-JtZBhTXjFRcm+7oJii0eoJRyVJV+O0ad2xL3TDe+5Yo=";
+                src = prev.fetchFromGitHub {
+                  owner = "kitagry";
+                  repo = pname;
+                  rev = "v${version}";
+                  sha256 =
+                    "sha256-jvauExMtX6kizR/X4AkxY9neLXPRtV6sflQKiATzTb0=";
                 };
               };
             })
@@ -360,6 +375,7 @@
               idris2 = true;
               json = true;
               lightbulb = true;
+              rego = true;
               mint = true;
               nix = true;
               python = true;
