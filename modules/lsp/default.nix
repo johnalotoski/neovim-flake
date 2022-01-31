@@ -495,7 +495,7 @@ in {
         lspconfig.html.setup{
           capabilities = capabilities;
           cmd = {'${pkgs.nodePackages.vscode-html-languageserver-bin}/bin/html-languageserver', '--stdio' };
-          filetypes = { "html", "css", "javascript" };
+          filetypes = { "html" };
         }
       ''}
 
@@ -503,7 +503,7 @@ in {
         lspconfig.jsonls.setup{
           capabilities = capabilities;
           cmd = {'${pkgs.nodePackages.vscode-json-languageserver-bin}/bin/json-languageserver', '--stdio' };
-          filetypes = { "html", "css", "javascript" };
+          filetypes = { "json" };
         }
       ''}
 
