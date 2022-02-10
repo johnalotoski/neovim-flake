@@ -275,7 +275,7 @@
               neovim-nightly = neovim.defaultPackage."${system}";
               rnix-lsp = inputs.rnix-lsp.defaultPackage."${system}";
 
-              efm-langserver = prev.buildGoModule rec {
+              efm-langserver = prev.buildGo118Module rec {
                 pname = "efm-langserver";
                 version = "0.0.36";
                 vendorSha256 =
@@ -289,9 +289,9 @@
                 };
               };
 
-              regols = prev.buildGoModule rec {
+              regols = prev.buildGo118Module rec {
                 pname = "regols";
-                version = "0.0.2";
+                version = "0.1.0";
                 vendorSha256 =
                   "sha256-JtZBhTXjFRcm+7oJii0eoJRyVJV+O0ad2xL3TDe+5Yo=";
                 src = prev.fetchFromGitHub {
@@ -299,7 +299,7 @@
                   repo = pname;
                   rev = "v${version}";
                   sha256 =
-                    "sha256-jvauExMtX6kizR/X4AkxY9neLXPRtV6sflQKiATzTb0=";
+                    "sha256-2MTetTWHJAiSWPcEFJ/p0xptAWDKNXwTq68RywUO+Ls=";
                 };
               };
             })
