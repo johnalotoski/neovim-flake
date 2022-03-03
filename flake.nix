@@ -10,9 +10,6 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
-    statix.url =
-      "github:NerdyPepper/statix/cef2deec580acda72e0575b47b6415e5421736a7";
-
     # Vim plugins
     gruvbox = {
       url = "github:morhetz/gruvbox";
@@ -143,8 +140,8 @@
       url = "github:gennaro-tedesco/nvim-jqx";
       flake = false;
     };
-    format-nvim = {
-      url = "github:lukas-reineke/format.nvim";
+    formatter-nvim = {
+      url = "github:mhartington/formatter.nvim";
       flake = false;
     };
     vim-cue = {
@@ -220,7 +217,7 @@
           "cmp-nvim-lsp"
           "cmp-path"
           "editorconfig-vim"
-          "format-nvim"
+          "formatter-nvim"
           "fugitive"
           "gruvbox"
           "indent-blankline-nvim"
