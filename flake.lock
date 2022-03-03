@@ -159,22 +159,6 @@
         "type": "github"
       }
     },
-    "fugitive": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1637870037,
-        "narHash": "sha256-KqlTzV16zPBghOSfxf6flip13j/Z3BV2Hw8XV1kJn5I=",
-        "owner": "tpope",
-        "repo": "vim-fugitive",
-        "rev": "5a24c2527584e4e61a706ad7ecb3514ac7031307",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tpope",
-        "repo": "vim-fugitive",
-        "type": "github"
-      }
-    },
     "gruvbox": {
       "flake": false,
       "locked": {
@@ -630,7 +614,6 @@
         "editorconfig-vim": "editorconfig-vim",
         "flake-utils": "flake-utils",
         "formatter-nvim": "formatter-nvim",
-        "fugitive": "fugitive",
         "gruvbox": "gruvbox",
         "indent-blankline-nvim": "indent-blankline-nvim",
         "lightline-vim": "lightline-vim",
@@ -654,6 +637,7 @@
         "plenary-nvim": "plenary-nvim",
         "popup-nvim": "popup-nvim",
         "rnix-lsp": "rnix-lsp",
+        "splice": "splice",
         "telescope-dap": "telescope-dap",
         "vim-abolish": "vim-abolish",
         "vim-crystal": "vim-crystal",
@@ -672,6 +656,22 @@
         "vimagit": "vimagit",
         "which-key-nvim": "which-key-nvim",
         "wilder-nvim": "wilder-nvim"
+      }
+    },
+    "splice": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1579049083,
+        "narHash": "sha256-a9fyf5wsajCG84+aHsCnhNpf5v20ZXEoFgdxA0V+AS4=",
+        "owner": "sjl",
+        "repo": "splice.vim",
+        "rev": "815a28e687fdf78b67e9b9cd4c21277bbe658873",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sjl",
+        "repo": "splice.vim",
+        "type": "github"
       }
     },
     "telescope-dap": {

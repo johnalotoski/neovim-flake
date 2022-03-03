@@ -67,10 +67,6 @@
       url = "github:jreybert/vimagit";
       flake = false;
     };
-    fugitive = {
-      url = "github:tpope/vim-fugitive";
-      flake = false;
-    };
     nvim-lightbulb = {
       url = "github:kosayoda/nvim-lightbulb";
       flake = false;
@@ -204,6 +200,10 @@
       url = "github:ray-x/lsp_signature.nvim";
       flake = false;
     };
+    splice = {
+      url = "github:sjl/splice.vim";
+      flake = false;
+    };
   };
 
   outputs = { nixpkgs, flake-utils, neovim, ... }@inputs:
@@ -218,7 +218,6 @@
           "cmp-path"
           "editorconfig-vim"
           "formatter-nvim"
-          "fugitive"
           "gruvbox"
           "indent-blankline-nvim"
           "lightline-vim"
@@ -240,6 +239,7 @@
           "nvim-web-devicons"
           "plenary-nvim"
           "popup-nvim"
+          "splice"
           "telescope-dap"
           "vim-abolish"
           "vimagit"

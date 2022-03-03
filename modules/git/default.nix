@@ -18,7 +18,7 @@ in {
     vim.nnoremap = { "<leader>g" = "<cmd>MagitOnly<cr>"; };
 
     vim.startPlugins = with pkgs.neovimPlugins;
-      [ vimagit fugitive ] ++ (optional cfg.blameLine nvim-blame-line);
+      [ vimagit splice ] ++ (optional cfg.blameLine nvim-blame-line);
 
     vim.configRC = optionalString cfg.blameLine ''
       autocmd BufEnter * EnableBlameLine
