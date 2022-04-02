@@ -10,7 +10,13 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
+    rnix-lsp.url = "github:nix-community/rnix-lsp";
+
     # Vim plugins
+    vim-nickel = {
+      url = "github:nickel-lang/vim-nickel";
+      flake = false;
+    };
     gruvbox = {
       url = "github:morhetz/gruvbox";
       flake = false;
@@ -79,7 +85,6 @@
       url = "github:romgrk/nvim-treesitter-context";
       flake = false;
     };
-    rnix-lsp.url = "github:nix-community/rnix-lsp";
     barbar-nvim = {
       url = "github:romgrk/barbar.nvim";
       flake = false;
@@ -206,187 +211,189 @@
     };
   };
 
-  outputs = { nixpkgs, flake-utils, neovim, ... }@inputs:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        plugins = [
-          "barbar-nvim"
-          "cmp-buffer"
-          "cmp-cmdline"
-          "cmp_luasnip"
-          "cmp-nvim-lsp"
-          "cmp-path"
-          "editorconfig-vim"
-          "formatter-nvim"
-          "gruvbox"
-          "indent-blankline-nvim"
-          "lightline-vim"
-          "lsp_signature"
-          "LuaSnip"
-          "nord-vim"
-          "nvim-blame-line"
-          "nvim-cmp"
-          "nvim-dap"
-          "nvim-dap-virtual-text"
-          "nvim-idris2"
-          "nvim-jqx"
-          "nvim-lightbulb"
-          "nvim-lspconfig"
-          "nvim-telescope"
-          "nvim-tree-lua"
-          "nvim-treesitter"
-          "nvim-treesitter-context"
-          "nvim-web-devicons"
-          "plenary-nvim"
-          "popup-nvim"
-          "splice"
-          "telescope-dap"
-          "vim-abolish"
-          "vimagit"
-          "vim-crystal"
-          "vim-cue"
-          "vim-cursorword"
-          "vim-dadbod"
-          "vim-dadbod-ui"
-          "vim-floaterm"
-          "vim-go"
-          "vim-hexokinase"
-          "vim-mint"
-          "vim-nix"
-          "vim-startify"
-          "vim-surround"
-          "vim-test"
-          "which-key-nvim"
-          "wilder-nvim"
+  outputs = {
+    nixpkgs,
+    flake-utils,
+    neovim,
+    ...
+  } @ inputs:
+    flake-utils.lib.eachDefaultSystem (system: let
+      plugins = [
+        "barbar-nvim"
+        "cmp-buffer"
+        "cmp-cmdline"
+        "cmp_luasnip"
+        "cmp-nvim-lsp"
+        "cmp-path"
+        "editorconfig-vim"
+        "formatter-nvim"
+        "gruvbox"
+        "indent-blankline-nvim"
+        "lightline-vim"
+        "lsp_signature"
+        "LuaSnip"
+        "nord-vim"
+        "nvim-blame-line"
+        "nvim-cmp"
+        "nvim-dap"
+        "nvim-dap-virtual-text"
+        "nvim-idris2"
+        "nvim-jqx"
+        "nvim-lightbulb"
+        "nvim-lspconfig"
+        "nvim-telescope"
+        "nvim-tree-lua"
+        "nvim-treesitter"
+        "nvim-treesitter-context"
+        "nvim-web-devicons"
+        "plenary-nvim"
+        "popup-nvim"
+        "splice"
+        "telescope-dap"
+        "vim-abolish"
+        "vimagit"
+        "vim-crystal"
+        "vim-cue"
+        "vim-cursorword"
+        "vim-dadbod"
+        "vim-dadbod-ui"
+        "vim-floaterm"
+        "vim-go"
+        "vim-hexokinase"
+        "vim-mint"
+        "vim-nickel"
+        "vim-nix"
+        "vim-startify"
+        "vim-surround"
+        "vim-test"
+        "which-key-nvim"
+        "wilder-nvim"
+      ];
+
+      pluginOverlay = lib.buildPluginOverlay;
+
+      pkgs = import nixpkgs {
+        inherit system;
+        config = {allowUnfree = true;};
+        overlays = [
+          pluginOverlay
+          (final: prev: {
+            statix = inputs.statix.defaultPackage."${system}";
+            neovim-nightly = neovim.defaultPackage."${system}";
+            rnix-lsp = inputs.rnix-lsp.defaultPackage."${system}";
+
+            efm-langserver = prev.buildGoModule rec {
+              pname = "efm-langserver";
+              version = "0.0.36";
+              vendorSha256 = "sha256-tca+1SRrFyvU8ttHmfMFiGXd1A8rQSEWm1Mc2qp0EfI=";
+              src = prev.fetchFromGitHub {
+                owner = "mattn";
+                repo = pname;
+                rev = "v${version}";
+                sha256 = "sha256-X2z49KmJiKh1QtcDBZcqNiMhq5deVamS47w6gyVq7Oo=";
+              };
+            };
+
+            regols = prev.buildGoModule rec {
+              pname = "regols";
+              version = "0.1.0";
+              vendorSha256 = "sha256-JtZBhTXjFRcm+7oJii0eoJRyVJV+O0ad2xL3TDe+5Yo=";
+              src = prev.fetchFromGitHub {
+                owner = "kitagry";
+                repo = pname;
+                rev = "v${version}";
+                sha256 = "sha256-2MTetTWHJAiSWPcEFJ/p0xptAWDKNXwTq68RywUO+Ls=";
+              };
+            };
+          })
         ];
+      };
 
-        pluginOverlay = lib.buildPluginOverlay;
+      lib = import ./lib {inherit pkgs inputs plugins;};
 
-        pkgs = import nixpkgs {
-          inherit system;
-          config = { allowUnfree = true; };
-          overlays = [
-            pluginOverlay
-            (final: prev: {
-              statix = inputs.statix.defaultPackage."${system}";
-              neovim-nightly = neovim.defaultPackage."${system}";
-              rnix-lsp = inputs.rnix-lsp.defaultPackage."${system}";
+      inherit (lib) neovimBuilder;
+    in rec {
+      inherit neovimBuilder pkgs;
 
-              efm-langserver = prev.buildGoModule rec {
-                pname = "efm-langserver";
-                version = "0.0.36";
-                vendorSha256 =
-                  "sha256-tca+1SRrFyvU8ttHmfMFiGXd1A8rQSEWm1Mc2qp0EfI=";
-                src = prev.fetchFromGitHub {
-                  owner = "mattn";
-                  repo = pname;
-                  rev = "v${version}";
-                  sha256 =
-                    "sha256-X2z49KmJiKh1QtcDBZcqNiMhq5deVamS47w6gyVq7Oo=";
-                };
-              };
-
-              regols = prev.buildGoModule rec {
-                pname = "regols";
-                version = "0.1.0";
-                vendorSha256 =
-                  "sha256-JtZBhTXjFRcm+7oJii0eoJRyVJV+O0ad2xL3TDe+5Yo=";
-                src = prev.fetchFromGitHub {
-                  owner = "kitagry";
-                  repo = pname;
-                  rev = "v${version}";
-                  sha256 =
-                    "sha256-2MTetTWHJAiSWPcEFJ/p0xptAWDKNXwTq68RywUO+Ls=";
-                };
-              };
-            })
-          ];
+      apps = {
+        nvim = {
+          type = "app";
+          program = "${defaultPackage}/bin/nvim";
         };
+      };
 
-        lib = import ./lib { inherit pkgs inputs plugins; };
+      defaultApp = apps.nvim;
 
-        inherit (lib) neovimBuilder;
-      in rec {
-        inherit neovimBuilder pkgs;
+      defaultPackage = packages.neovim;
 
-        apps = {
-          nvim = {
-            type = "app";
-            program = "${defaultPackage}/bin/nvim";
+      overlay = self: super: {
+        inherit neovimBuilder;
+        inherit (packages) neovim;
+        inherit (pkgs) neovimPlugins;
+      };
+
+      packages.neovim = neovimBuilder {
+        config.vim = {
+          dashboard.startify.customHeader = ["Welcome to NeoVim"];
+          dashboard.startify.enable = true;
+          database.enable = true;
+          disableArrows = false;
+
+          cnoremap = {"3636" = "<c-u>undo<CR>";};
+
+          editor = {
+            surround = true;
+            colourPreview = true;
+            whichKey = true;
+            floaterm = true;
+            wilder = true;
+            abolish = true;
+          };
+
+          filetree.nvimTreeLua = {enable = true;};
+          formatting.editorConfig.enable = true;
+          fuzzyfind.telescope.enable = true;
+          statusline.lightline.enable = true;
+          tabbar.barbar.enable = true;
+          test.enable = true;
+          theme.gruvbox.enable = true;
+          viAlias = true;
+          vimAlias = true;
+
+          git = {
+            enable = true;
+            blameLine = false;
+          };
+
+          lsp = {
+            bash = true;
+            clang = true;
+            cmake = true;
+            crystal = true;
+            css = true;
+            docker = true;
+            enable = true;
+            go = true;
+            html = true;
+            idris2 = true;
+            json = true;
+            lightbulb = true;
+            rego = true;
+            mint = true;
+            nickel = true;
+            nix = true;
+            python = true;
+            ruby = true;
+            rust = true;
+            shellcheck = true;
+            terraform = true;
+            tex = true;
+            typescript = true;
+            variableDebugPreviews = true;
+            vimscript = true;
+            yaml = true;
           };
         };
-
-        defaultApp = apps.nvim;
-
-        defaultPackage = packages.neovim;
-
-        overlay = self: super: {
-          inherit neovimBuilder;
-          inherit (packages) neovim;
-          inherit (pkgs) neovimPlugins;
-        };
-
-        packages.neovim = neovimBuilder {
-          config.vim = {
-            dashboard.startify.customHeader = [ "Welcome to NeoVim" ];
-            dashboard.startify.enable = true;
-            database.enable = true;
-            disableArrows = false;
-
-            cnoremap = { "3636" = "<c-u>undo<CR>"; };
-
-            editor = {
-              surround = true;
-              colourPreview = true;
-              whichKey = true;
-              floaterm = true;
-              wilder = true;
-              abolish = true;
-            };
-
-            filetree.nvimTreeLua = { enable = true; };
-            formatting.editorConfig.enable = true;
-            fuzzyfind.telescope.enable = true;
-            statusline.lightline.enable = true;
-            tabbar.barbar.enable = true;
-            test.enable = true;
-            theme.gruvbox.enable = true;
-            viAlias = true;
-            vimAlias = true;
-
-            git = {
-              enable = true;
-              blameLine = false;
-            };
-
-            lsp = {
-              bash = true;
-              clang = true;
-              cmake = true;
-              crystal = true;
-              css = true;
-              docker = true;
-              enable = true;
-              go = true;
-              html = true;
-              idris2 = true;
-              json = true;
-              lightbulb = true;
-              rego = true;
-              mint = true;
-              nix = true;
-              python = true;
-              ruby = true;
-              rust = true;
-              shellcheck = true;
-              terraform = true;
-              tex = true;
-              typescript = true;
-              variableDebugPreviews = true;
-              vimscript = true;
-              yaml = true;
-            };
-          };
-        };
-      });
+      };
+    });
 }

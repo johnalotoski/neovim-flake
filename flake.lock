@@ -649,6 +649,7 @@
         "vim-go": "vim-go",
         "vim-hexokinase": "vim-hexokinase",
         "vim-mint": "vim-mint",
+        "vim-nickel": "vim-nickel",
         "vim-nix": "vim-nix",
         "vim-startify": "vim-startify",
         "vim-surround": "vim-surround",
@@ -862,6 +863,22 @@
       "original": {
         "owner": "IrenejMarc",
         "repo": "vim-mint",
+        "type": "github"
+      }
+    },
+    "vim-nickel": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1647439425,
+        "narHash": "sha256-eOxZECuK0yjtVc69+0CglSM54EesCSJ3xqwSEwrjI9I=",
+        "owner": "nickel-lang",
+        "repo": "vim-nickel",
+        "rev": "2f0f5f8ce2a8e719a5e39d7210ca914ae403374c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nickel-lang",
+        "repo": "vim-nickel",
         "type": "github"
       }
     },

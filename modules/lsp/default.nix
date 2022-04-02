@@ -1,13 +1,15 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 with lib;
-with builtins;
-
-let
+with builtins; let
   cfg = config.vim.lsp;
 
-  debugpy = pkgs.python3.withPackages (pyPkg: with pyPkg; [ debugpy ]);
+  debugpy = pkgs.python3.withPackages (pyPkg: with pyPkg; [debugpy]);
 in {
-
   options.vim.lsp = {
     enable = mkEnableOption "Enable lsp support";
 
@@ -23,6 +25,7 @@ in {
     json = mkEnableOption "Enable JSON";
     mint = mkEnableOption "Enable Mint support";
     nix = mkEnableOption "Enable NIX Language Support";
+    nickel = mkEnableOption "Enable Nickel Language Support";
     python = mkEnableOption "Enable Python Support";
     ruby = mkEnableOption "Enable Ruby Support";
     rust = mkEnableOption "Enable Rust Support";
@@ -42,14 +45,27 @@ in {
     vim.startPlugins = with pkgs.neovimPlugins; [
       nvim-lspconfig
       nvim-dap
-      (if cfg.nix then vim-nix else null)
+      (
+        if cfg.nix
+        then vim-nix
+        else null
+      )
       telescope-dap
-      (if cfg.lightbulb then nvim-lightbulb else null)
-      (if cfg.variableDebugPreviews then nvim-dap-virtual-text else null)
+      (
+        if cfg.lightbulb
+        then nvim-lightbulb
+        else null
+      )
+      (
+        if cfg.variableDebugPreviews
+        then nvim-dap-virtual-text
+        else null
+      )
       nvim-treesitter
       nvim-treesitter-context
       lsp_signature
       vim-crystal
+      vim-nickel
 
       cmp-buffer
       cmp-cmdline
@@ -81,19 +97,13 @@ in {
     vim.nnoremap = {
       "<f2>" = "<cmd>lua vim.lsp.buf.rename()<cr>";
       "<leader>lR" = "<cmd>lua vim.lsp.buf.rename()<cr>";
-      "<leader>lr" =
-        "<cmd>lua require('telescope.builtin').lsp_references()<CR>";
-      "<leader>lA" =
-        "<cmd>lua require('telescope.builtin').lsp_code_actions()<CR>";
+      "<leader>lr" = "<cmd>lua require('telescope.builtin').lsp_references()<CR>";
+      "<leader>lA" = "<cmd>lua require('telescope.builtin').lsp_code_actions()<CR>";
 
-      "<leader>lD" =
-        "<cmd>lua require('telescope.builtin').lsp_definitions()<cr>";
-      "<leader>lI" =
-        "<cmd>lua require('telescope.builtin').lsp_implementations()<cr>";
-      "<leader>le" =
-        "<cmd>lua require('telescope.builtin').lsp_document_diagnostics()<cr>";
-      "<leader>lE" =
-        "<cmd>lua require('telescope.builtin').lsp_workspace_diagnostics()<cr>";
+      "<leader>lD" = "<cmd>lua require('telescope.builtin').lsp_definitions()<cr>";
+      "<leader>lI" = "<cmd>lua require('telescope.builtin').lsp_implementations()<cr>";
+      "<leader>le" = "<cmd>lua require('telescope.builtin').lsp_document_diagnostics()<cr>";
+      "<leader>lE" = "<cmd>lua require('telescope.builtin').lsp_workspace_diagnostics()<cr>";
       "<leader>bk" = "<cmd>lua vim.lsp.buf.signature_help()<CR>";
       "<leader>bK" = "<cmd>lua vim.lsp.buf.hover()<CR>";
       "<leader>bf" = "<cmd>lua vim.lsp.buf.formatting()<CR>";
@@ -116,7 +126,7 @@ in {
       "<leader>df" = "<cmd>Telescope dap frames<cr>";
     };
 
-    vim.globals = { };
+    vim.globals = {};
 
     vim.luaConfigRC = ''
       local lspconfig = require('lspconfig')
@@ -334,10 +344,17 @@ in {
         }
       ''}
 
+      ${optionalString cfg.nickel ''
+        lspconfig.nickel_ls.setup{
+          capabilities = capabilities;
+          cmd = {"nls"}
+        }
+      ''}
+
       ${optionalString cfg.crystal ''
         lspconfig.crystalline.setup{
           capabilities = capabilities;
-          cmd = {"/run/current-system/sw/bin/crystalline"}
+          cmd = {"crystalline"}
         }
       ''}
 
