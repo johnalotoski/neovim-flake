@@ -395,7 +395,7 @@ in {
       ${optionalString cfg.go ''
         lspconfig.gopls.setup{
           capabilities = capabilities;
-          cmd = {"${pkgs.gopls}/bin/gopls"}
+          cmd = {"gopls"}
         }
 
         dap.adapters.go = function(callback, config)

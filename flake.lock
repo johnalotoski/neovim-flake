@@ -821,11 +821,11 @@
     "vim-go": {
       "flake": false,
       "locked": {
-        "lastModified": 1644356117,
-        "narHash": "sha256-IKGjSlwiVKyELwmXX0Mjd5YDaywT6RGXTT/Vr2JNG7w=",
+        "lastModified": 1650059130,
+        "narHash": "sha256-Sy2w/W/0QzeuFr5hOhZl4kJikhpJbuB3292YAF1AjlI=",
         "owner": "fatih",
         "repo": "vim-go",
-        "rev": "f7a4509fc1d1434daf922894f0aee140c9fa3f1a",
+        "rev": "687eb72bb6e84012ef2b0b2474175e46243e43b0",
         "type": "github"
       },
       "original": {
