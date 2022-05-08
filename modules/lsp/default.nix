@@ -461,7 +461,7 @@ in {
       ${optionalString cfg.rust ''
         lspconfig.rust_analyzer.setup{
           capabilities = capabilities;
-          cmd = {'${pkgs.rust-analyzer}/bin/rust-analyzer'}
+          cmd = {'rust-analyzer'}
         }
       ''}
 
