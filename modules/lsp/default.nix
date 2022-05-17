@@ -36,6 +36,7 @@ in {
     vimscript = mkEnableOption "Enable Vim Script Support";
     yaml = mkEnableOption "Enable yaml support";
     rego = mkEnableOption "Enable rego support";
+    zig = mkEnableOption "Enable zig support";
 
     lightbulb = mkEnableOption "Enable Light Bulb";
     variableDebugPreviews = mkEnableOption "Enable variable previews";
@@ -79,6 +80,7 @@ in {
       vim-cue
       vim-mint
       vim-go
+      zig-vim
     ];
 
     vim.configRC = ''
@@ -87,11 +89,13 @@ in {
       inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
       " Set completeopt to have a better completion experience
-      set completeopt=menu,menuone,noselect
+      set completeopt=menu,menuone,noinsert,noselect
 
       ${optionalString cfg.variableDebugPreviews ''
         let g:dap_virtual_text = v:true
       ''}
+
+      let g:completion_enable_auto_popup = 1
     '';
 
     vim.nnoremap = {
@@ -564,6 +568,12 @@ in {
 
       ${optionalString cfg.idris2 ''
         lspconfig.idris2_lsp.setup{
+          capabilities = capabilities;
+        }
+      ''}
+
+      ${optionalString cfg.zig ''
+        lspconfig.zls.setup{
           capabilities = capabilities;
         }
       ''}

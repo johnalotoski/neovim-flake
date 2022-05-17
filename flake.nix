@@ -13,6 +13,10 @@
     rnix-lsp.url = "github:nix-community/rnix-lsp";
 
     # Vim plugins
+    zig-vim = {
+      url = "github:ziglang/zig.vim";
+      flake = false;
+    };
     vim-nickel = {
       url = "github:nickel-lang/vim-nickel";
       flake = false;
@@ -268,6 +272,7 @@
         "vim-test"
         "which-key-nvim"
         "wilder-nvim"
+        "zig-vim"
       ];
 
       pluginOverlay = lib.buildPluginOverlay;
@@ -392,6 +397,7 @@
             variableDebugPreviews = true;
             vimscript = true;
             yaml = true;
+            zig = true;
           };
         };
       };

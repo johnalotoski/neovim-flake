@@ -112,6 +112,22 @@
         "type": "github"
       }
     },
+    "completion-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1634068787,
+        "narHash": "sha256-6um9dye0MLY8K8AAsDksCpy1KbMNSdMuj+zKteSAxR4=",
+        "owner": "nvim-lua",
+        "repo": "completion-nvim",
+        "rev": "87b0f86da3dffef63b42845049c648b5d90f1c4d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nvim-lua",
+        "repo": "completion-nvim",
+        "type": "github"
+      }
+    },
     "editorconfig-vim": {
       "flake": false,
       "locked": {
@@ -457,11 +473,11 @@
     "nvim-lspconfig": {
       "flake": false,
       "locked": {
-        "lastModified": 1640553754,
-        "narHash": "sha256-wTusL4mblgmU+nHHGuAKbRAIY0WvgXkjRKmvOXcGsxQ=",
+        "lastModified": 1652312283,
+        "narHash": "sha256-wgFcaepzZAEN6r7+v3AqeB1TW4ZnkZxqnv95MO7Iowg=",
         "owner": "neovim",
         "repo": "nvim-lspconfig",
-        "rev": "0d2fb782cac8a19df0c0d7715ad4cdab4c582e15",
+        "rev": "ce8a4d88f0ed1eed43369e90e024a7599490342a",
         "type": "github"
       },
       "original": {
@@ -611,6 +627,7 @@
         "cmp-nvim-lsp": "cmp-nvim-lsp",
         "cmp-path": "cmp-path",
         "cmp_luasnip": "cmp_luasnip",
+        "completion-nvim": "completion-nvim",
         "editorconfig-vim": "editorconfig-vim",
         "flake-utils": "flake-utils",
         "formatter-nvim": "formatter-nvim",
@@ -656,7 +673,8 @@
         "vim-test": "vim-test",
         "vimagit": "vimagit",
         "which-key-nvim": "which-key-nvim",
-        "wilder-nvim": "wilder-nvim"
+        "wilder-nvim": "wilder-nvim",
+        "zig-vim": "zig-vim"
       }
     },
     "splice": {
@@ -991,6 +1009,22 @@
       "original": {
         "owner": "gelguy",
         "repo": "wilder.nvim",
+        "type": "github"
+      }
+    },
+    "zig-vim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1651371644,
+        "narHash": "sha256-R+O+CjCx44SIoFlwanA05iMYky82i5WHV0UpU1vB1IE=",
+        "owner": "ziglang",
+        "repo": "zig.vim",
+        "rev": "1cb9cd521cab91e39cf162b50b7a095fd12361d3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ziglang",
+        "repo": "zig.vim",
         "type": "github"
       }
     }
