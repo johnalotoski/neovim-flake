@@ -6,8 +6,9 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     neovim = {
-      url = "github:neovim/neovim/v0.6.1?dir=contrib";
+      url = "github:neovim/neovim/v0.7.2?dir=contrib";
       inputs.flake-utils.follows = "flake-utils";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     rnix-lsp.url = "github:nix-community/rnix-lsp";
@@ -213,6 +214,10 @@
       url = "github:sjl/splice.vim";
       flake = false;
     };
+    vim-slim = {
+      url = "github:slim-template/vim-slim";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -267,6 +272,7 @@
         "vim-mint"
         "vim-nickel"
         "vim-nix"
+        "vim-slim"
         "vim-startify"
         "vim-surround"
         "vim-test"
@@ -383,11 +389,11 @@
             idris2 = true;
             json = true;
             lightbulb = true;
-            rego = true;
             mint = true;
             nickel = true;
             nix = true;
             python = true;
+            rego = true;
             ruby = true;
             rust = true;
             shellcheck = true;

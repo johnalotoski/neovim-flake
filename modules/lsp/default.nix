@@ -65,8 +65,6 @@ in {
       nvim-treesitter
       nvim-treesitter-context
       lsp_signature
-      vim-crystal
-      vim-nickel
 
       cmp-buffer
       cmp-cmdline
@@ -77,9 +75,12 @@ in {
       nvim-cmp
 
       nvim-jqx
+      vim-crystal
       vim-cue
-      vim-mint
       vim-go
+      vim-mint
+      vim-nickel
+      vim-slim
       zig-vim
     ];
 
