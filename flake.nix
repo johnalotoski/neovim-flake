@@ -14,6 +14,10 @@
     rnix-lsp.url = "github:nix-community/rnix-lsp";
 
     # Vim plugins
+    gleam-vim = {
+      url = "github:gleam-lang/gleam.vim";
+      flake = false;
+    };
     zig-vim = {
       url = "github:ziglang/zig.vim";
       flake = false;
@@ -227,71 +231,30 @@
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: let
-      plugins = [
-        "barbar-nvim"
-        "cmp-buffer"
-        "cmp-cmdline"
-        "cmp_luasnip"
-        "cmp-nvim-lsp"
-        "cmp-path"
-        "editorconfig-vim"
-        "formatter-nvim"
-        "gruvbox"
-        "indent-blankline-nvim"
-        "lightline-vim"
-        "lsp_signature"
-        "LuaSnip"
-        "nord-vim"
-        "nvim-blame-line"
-        "nvim-cmp"
-        "nvim-dap"
-        "nvim-dap-virtual-text"
-        "nvim-idris2"
-        "nvim-jqx"
-        "nvim-lightbulb"
-        "nvim-lspconfig"
-        "nvim-telescope"
-        "nvim-tree-lua"
-        "nvim-treesitter"
-        "nvim-treesitter-context"
-        "nvim-web-devicons"
-        "plenary-nvim"
-        "popup-nvim"
-        "splice"
-        "telescope-dap"
-        "vim-abolish"
-        "vimagit"
-        "vim-crystal"
-        "vim-cue"
-        "vim-cursorword"
-        "vim-dadbod"
-        "vim-dadbod-ui"
-        "vim-floaterm"
-        "vim-go"
-        "vim-hexokinase"
-        "vim-mint"
-        "vim-nickel"
-        "vim-nix"
-        "vim-slim"
-        "vim-startify"
-        "vim-surround"
-        "vim-test"
-        "which-key-nvim"
-        "wilder-nvim"
-        "zig-vim"
-      ];
+      plugins =
+        pkgs.lib.subtractLists
+        ["nixpkgs" "flake-utils" "neovim" "rnix-lsp"]
+        (builtins.attrNames inputs);
 
       pluginOverlay = lib.buildPluginOverlay;
 
       pkgs = import nixpkgs {
         inherit system;
-        config = {allowUnfree = true;};
+        # config = {allowUnfree = true;};
         overlays = [
           pluginOverlay
           (final: prev: {
             statix = inputs.statix.defaultPackage."${system}";
             neovim-nightly = neovim.defaultPackage."${system}";
             rnix-lsp = inputs.rnix-lsp.defaultPackage."${system}";
+            tsserver = prev.nodePackages.typescript-language-server;
+            vimls = prev.nodePackages.vim-language-server;
+            yamlls = prev.nodePackages.yaml-language-server;
+            dockerls = prev.nodePackages.dockerfile-language-server-nodejs;
+            cssls = prev.nodePackages.vscode-css-languageserver-bin;
+            htmlls = prev.nodePackages.vscode-html-languageserver-bin;
+            jsonls = prev.nodePackages.vscode-json-languageserver-bin;
+            bashls = prev.nodePackages.bash-language-server;
 
             efm-langserver = prev.buildGoModule rec {
               pname = "efm-langserver";

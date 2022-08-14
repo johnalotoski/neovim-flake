@@ -13,30 +13,31 @@ in {
   options.vim.lsp = {
     enable = mkEnableOption "Enable lsp support";
 
-    bash = mkEnableOption "Enable Bash Language Support";
+    bash = mkEnableOption "Enable Bash Support";
     clang = mkEnableOption "Enable C/C++ with clang";
     cmake = mkEnableOption "Enable CMake";
     crystal = mkEnableOption "Enable Crystal";
-    css = mkEnableOption "Enable css support";
-    docker = mkEnableOption "Enable docker support";
+    css = mkEnableOption "Enable CSS support";
+    docker = mkEnableOption "Enable Docker support";
+    gleam = mkEnableOption " Enable Gleam";
     go = mkEnableOption "Enable Go Language Support";
-    html = mkEnableOption "Enable html support";
+    html = mkEnableOption "Enable HTML support";
     idris2 = mkEnableOption "Enable Idris2 Support";
     json = mkEnableOption "Enable JSON";
     mint = mkEnableOption "Enable Mint support";
-    nix = mkEnableOption "Enable NIX Language Support";
     nickel = mkEnableOption "Enable Nickel Language Support";
+    nix = mkEnableOption "Enable Nix Language Support";
     python = mkEnableOption "Enable Python Support";
+    rego = mkEnableOption "Enable rego support";
     ruby = mkEnableOption "Enable Ruby Support";
     rust = mkEnableOption "Enable Rust Support";
     shellcheck = mkEnableOption "Enable Shellcheck support";
     terraform = mkEnableOption "Enable Terraform Support";
-    tex = mkEnableOption "Enable tex support";
+    tex = mkEnableOption "Enable TeX support";
     typescript = mkEnableOption "Enable Typescript/Javascript Support";
     vimscript = mkEnableOption "Enable Vim Script Support";
-    yaml = mkEnableOption "Enable yaml support";
-    rego = mkEnableOption "Enable rego support";
-    zig = mkEnableOption "Enable zig support";
+    yaml = mkEnableOption "Enable YAML support";
+    zig = mkEnableOption "Enable Zig support";
 
     lightbulb = mkEnableOption "Enable Light Bulb";
     variableDebugPreviews = mkEnableOption "Enable variable previews";
@@ -82,6 +83,7 @@ in {
       vim-nickel
       vim-slim
       zig-vim
+      gleam-vim
     ];
 
     vim.configRC = ''
@@ -103,12 +105,12 @@ in {
       "<f2>" = "<cmd>lua vim.lsp.buf.rename()<cr>";
       "<leader>lR" = "<cmd>lua vim.lsp.buf.rename()<cr>";
       "<leader>lr" = "<cmd>lua require('telescope.builtin').lsp_references()<CR>";
-      "<leader>lA" = "<cmd>lua require('telescope.builtin').lsp_code_actions()<CR>";
+      "<leader>lA" = "<cmd>lua vim.lsp.buf.code_action()<CR>";
 
       "<leader>lD" = "<cmd>lua require('telescope.builtin').lsp_definitions()<cr>";
       "<leader>lI" = "<cmd>lua require('telescope.builtin').lsp_implementations()<cr>";
-      "<leader>le" = "<cmd>lua require('telescope.builtin').lsp_document_diagnostics()<cr>";
-      "<leader>lE" = "<cmd>lua require('telescope.builtin').lsp_workspace_diagnostics()<cr>";
+      "<leader>le" = "<cmd>lua require('telescope.builtin').diagnostics({bufnr=0})<cr>";
+      "<leader>lE" = "<cmd>lua require('telescope.builtin').diagnostics()<cr>";
       "<leader>bk" = "<cmd>lua vim.lsp.buf.signature_help()<CR>";
       "<leader>bK" = "<cmd>lua vim.lsp.buf.hover()<CR>";
       "<leader>bf" = "<cmd>lua vim.lsp.buf.formatting()<CR>";
@@ -139,6 +141,21 @@ in {
 
       vim.lsp.set_log_level("debug")
 
+      local merge = function(a, b)
+        local merged = {}
+        for k, v in pairs(a) do merged[k] = v end
+        for k, v in pairs(b) do merged[k] = v end
+        return merged
+      end
+
+      local setup = function(name, args)
+        return lspconfig[name].setup(merge({capabilities = capabilities}, (args or {})))
+      end
+
+      local setup_cmd = function(name, cmd)
+        return setup(name, { cmd = cmd })
+      end
+
       --Tree sitter config
       require('nvim-treesitter.configs').setup {
         highlight = {
@@ -149,7 +166,7 @@ in {
           enable = true,
           extended_mode = true,
         },
-         autotag = {
+        autotag = {
           enable = true,
         },
         context_commentstring = {
@@ -179,7 +196,7 @@ in {
         return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
       end
 
-      cmp.setup({
+      cmp.setup {
         snippet = {
           -- REQUIRED - you must specify a snippet engine
           expand = function(args)
@@ -222,7 +239,7 @@ in {
             end
           end, { "i", "s" }),
         },
-        sources = cmp.config.sources({
+        sources = cmp.config.sources {
           { name = 'nvim_lsp' },
           -- { name = 'vsnip' },
           { name = 'luasnip' },
@@ -230,8 +247,8 @@ in {
           -- { name = 'snippy' },
         }, {
           { name = 'buffer' },
-        })
-      })
+        }
+      }
 
       -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
       cmp.setup.cmdline('/', {
@@ -262,7 +279,7 @@ in {
         }
       )
 
-      require("lsp_signature").setup({})
+      require("lsp_signature").setup {}
 
       vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
         vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -322,7 +339,8 @@ in {
             }
           }
         end
-        lspconfig.regols.setup{}
+
+        setup("regols", {})
       ''}
 
       ${optionalString cfg.lightbulb ''
@@ -339,7 +357,6 @@ in {
           virtual_text = {
             enable = false,
             text = "💡",
-
           },
           status_text = {
             enabled = false,
@@ -350,29 +367,19 @@ in {
       ''}
 
       ${optionalString cfg.nickel ''
-        lspconfig.nickel_ls.setup{
-          capabilities = capabilities;
-          cmd = {"nls"}
-        }
+        setup("nickel_ls")
       ''}
 
       ${optionalString cfg.crystal ''
-        lspconfig.crystalline.setup{
-          capabilities = capabilities;
-          cmd = {"crystalline"}
-        }
+        setup("crystalline")
       ''}
 
       ${optionalString cfg.bash ''
-        lspconfig.bashls.setup{
-          capabilities = capabilities;
-          cmd = {"${pkgs.nodePackages.bash-language-server}/bin/bash-language-server", "start"}
-        }
+        setup_cmd("bashls", {"${pkgs.bashls}/bin/bash-language-server", "start"})
       ''}
 
       ${optionalString cfg.shellcheck ''
-        lspconfig.efm.setup{
-          capabilities = capabilities;
+        setup("efm", {
           cmd = {"${pkgs.efm-langserver}/bin/efm-langserver"};
           init_options = {
             documentFormatting = true,
@@ -394,21 +401,17 @@ in {
               }
             }
           }
-        }
+        })
       ''}
 
       ${optionalString cfg.go ''
-        lspconfig.gopls.setup{
-          capabilities = capabilities;
-          cmd = {"gopls"}
-        }
+        setup("gopls")
 
         dap.adapters.go = function(callback, config)
           local handle
           local pid_or_err
           local port = 38697
-          handle, pid_or_err =
-            vim.loop.spawn(
+          handle, pid_or_err = vim.loop.spawn(
             "dlv",
             {
               args = {"dap", "-l", "127.0.0.1:" .. port},
@@ -450,133 +453,79 @@ in {
       ''}
 
       ${optionalString cfg.nix ''
-        lspconfig.rnix.setup{
-          capabilities = capabilities;
-          cmd = {"${pkgs.rnix-lsp}/bin/rnix-lsp"}
-        }
+        setup_cmd("rnix", {"${pkgs.rnix-lsp}/bin/rnix-lsp"})
       ''}
 
       ${optionalString cfg.ruby ''
-        lspconfig.solargraph.setup{
-          capabilities = capabilities;
-          cmd = {'${pkgs.solargraph}/bin/solargraph', 'stdio'}
-        }
+        setup_cmd("solargraph", {'${pkgs.solargraph}/bin/solargraph', 'stdio'})
       ''}
 
       ${optionalString cfg.rust ''
-        lspconfig.rust_analyzer.setup{
-          capabilities = capabilities;
-          cmd = {'rust-analyzer'}
-        }
+        setup("rust_analyzer")
       ''}
 
       ${optionalString cfg.terraform ''
-        lspconfig.terraformls.setup{
-          capabilities = capabilities;
-          cmd = {'${pkgs.terraform-ls}/bin/terraform-ls', 'serve' }
-        }
+        setup_cmd("terraformls", {'${pkgs.terraform-ls}/bin/terraform-ls', 'serve'})
       ''}
 
       ${optionalString cfg.typescript ''
-        lspconfig.tsserver.setup{
-          capabilities = capabilities;
-          cmd = {'${pkgs.nodePackages.typescript-language-server}/bin/typescript-language-server', '--stdio' }
-        }
+        setup_cmd("tsserver", {'${pkgs.tsserver}/bin/typescript-language-server', '--stdio'})
       ''}
 
       ${optionalString cfg.vimscript ''
-        lspconfig.vimls.setup{
-          capabilities = capabilities;
-          cmd = {'${pkgs.nodePackages.vim-language-server}/bin/vim-language-server', '--stdio' }
-        }
+        setup_cmd("vimls", {'${pkgs.vimls}/bin/vim-language-server', '--stdio'})
       ''}
 
       ${optionalString cfg.yaml ''
-        lspconfig.yamlls.setup{
-          capabilities = capabilities;
-          cmd = {'${pkgs.nodePackages.yaml-language-server}/bin/yaml-language-server', '--stdio' }
-        }
+        setup_cmd("yamlls", {'${pkgs.yamlls}/bin/yaml-language-server', '--stdio'})
       ''}
 
       ${optionalString cfg.docker ''
-        lspconfig.dockerls.setup{
-          capabilities = capabilities;
-          cmd = {'${pkgs.nodePackages.dockerfile-language-server-nodejs}/bin/docker-language-server', '--stdio' }
-        }
+        setup_cmd("dockerls", {'${pkgs.dockerls}/bin/docker-language-server', '--stdio'})
       ''}
 
       ${optionalString cfg.css ''
-        lspconfig.cssls.setup{
-          capabilities = capabilities;
-          cmd = {'${pkgs.nodePackages.vscode-css-languageserver-bin}/bin/css-languageserver', '--stdio' };
-          filetypes = { "css", "scss", "less" };
-        }
+        setup_cmd("cssls", {'${pkgs.cssls}/bin/css-languageserver', '--stdio'})
       ''}
 
       ${optionalString cfg.html ''
-        lspconfig.html.setup{
-          capabilities = capabilities;
-          cmd = {'${pkgs.nodePackages.vscode-html-languageserver-bin}/bin/html-languageserver', '--stdio' };
-          filetypes = { "html" };
-        }
+        setup_cmd("html", {'${pkgs.htmlls}/bin/html-languageserver', '--stdio'})
       ''}
 
       ${optionalString cfg.json ''
-        lspconfig.jsonls.setup{
-          capabilities = capabilities;
-          cmd = {'${pkgs.nodePackages.vscode-json-languageserver-bin}/bin/json-languageserver', '--stdio' };
-          filetypes = { "json" };
-        }
+        setup_cmd("jsonls", {'${pkgs.jsonls}/bin/json-languageserver', '--stdio'})
       ''}
 
       ${optionalString cfg.tex ''
-        lspconfig.texlab.setup{
-          capabilities = capabilities;
-          cmd = {'${pkgs.texlab}/bin/texlab'}
-        }
+        setup_cmd("texlab", {'${pkgs.texlab}/bin/texlab'})
       ''}
 
       ${optionalString cfg.clang ''
-        lspconfig.clangd.setup{
-          capabilities = capabilities;
-          cmd = {'${pkgs.clang-tools}/bin/clangd', '--background-index'};
-          filetypes = { "c", "cpp", "objc", "objcpp" };
-        }
+        setup_cmd("clangd", {'${pkgs.clang-tools}/bin/clangd', '--background-index'})
       ''}
 
       ${optionalString cfg.cmake ''
-        lspconfig.cmake.setup{
-          capabilities = capabilities;
-          cmd = {'${pkgs.cmake-language-server}/bin/cmake-language-server'};
-          filetypes = { "cmake"};
-        }
+        setup_cmd("cmake", {'${pkgs.cmake-language-server}/bin/cmake-language-server'})
       ''}
 
       ${optionalString cfg.python ''
-        lspconfig.pyright.setup{
-          capabilities = capabilities;
-          cmd = {"${pkgs.nodePackages.pyright}/bin/pyright-langserver", "--stdio"}
-        }
+        setup_cmd("pyright", {"${pkgs.nodePackages.pyright}/bin/pyright-langserver", "--stdio"})
       ''}
 
       ${optionalString cfg.mint ''
-        lspconfig.mint.setup{
-          capabilities = capabilities;
-          cmd = {'mint', 'ls'};
-          filetypes = {'mint'};
-        }
+        setup("mint")
       ''}
 
       ${optionalString cfg.idris2 ''
-        lspconfig.idris2_lsp.setup{
-          capabilities = capabilities;
-        }
+        setup("idris2_lsp")
       ''}
 
       ${optionalString cfg.zig ''
-        lspconfig.zls.setup{
-          capabilities = capabilities;
-        }
+        setup("zls")
+      ''}
+
+      ${optionalString cfg.gleam ''
+        setup("gleam")
       ''}
     '';
   };
