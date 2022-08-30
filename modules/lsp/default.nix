@@ -9,6 +9,47 @@ with builtins; let
   cfg = config.vim.lsp;
 
   debugpy = pkgs.python3.withPackages (pyPkg: with pyPkg; [debugpy]);
+
+  treesitter-languages = [
+    "bash"
+    "c"
+    "cpp"
+    "css"
+    "dockerfile"
+    "dot"
+    "eex"
+    "elixir"
+    "erlang"
+    "gleam"
+    "go"
+    "gomod"
+    "graphql"
+    "hcl"
+    "heex"
+    "html"
+    "http"
+    "java"
+    "javascript"
+    "json"
+    "lua"
+    "make"
+    "markdown"
+    "nix"
+    "perl"
+    "php"
+    "python"
+    "racket"
+    "regex"
+    "ruby"
+    "rust"
+    "scss"
+    "sql"
+    "toml"
+    "typescript"
+    "vim"
+    "yaml"
+    "zig"
+  ];
 in {
   options.vim.lsp = {
     enable = mkEnableOption "Enable lsp support";
@@ -19,6 +60,7 @@ in {
     crystal = mkEnableOption "Enable Crystal";
     css = mkEnableOption "Enable CSS support";
     docker = mkEnableOption "Enable Docker support";
+    elixir = mkEnableOption "Enable Elixir support";
     gleam = mkEnableOption " Enable Gleam";
     go = mkEnableOption "Enable Go Language Support";
     html = mkEnableOption "Enable HTML support";
@@ -38,53 +80,40 @@ in {
     vimscript = mkEnableOption "Enable Vim Script Support";
     yaml = mkEnableOption "Enable YAML support";
     zig = mkEnableOption "Enable Zig support";
-
     lightbulb = mkEnableOption "Enable Light Bulb";
     variableDebugPreviews = mkEnableOption "Enable variable previews";
   };
 
   config = mkIf cfg.enable {
-    vim.startPlugins = with pkgs.neovimPlugins; [
-      nvim-lspconfig
-      nvim-dap
-      (
-        if cfg.nix
-        then vim-nix
-        else null
-      )
-      telescope-dap
-      (
-        if cfg.lightbulb
-        then nvim-lightbulb
-        else null
-      )
-      (
-        if cfg.variableDebugPreviews
-        then nvim-dap-virtual-text
-        else null
-      )
-      nvim-treesitter
-      nvim-treesitter-context
-      lsp_signature
-
-      cmp-buffer
-      cmp-cmdline
-      cmp_luasnip
-      cmp-nvim-lsp
-      cmp-path
-      LuaSnip
-      nvim-cmp
-
-      nvim-jqx
-      vim-crystal
-      vim-cue
-      vim-go
-      vim-mint
-      vim-nickel
-      vim-slim
-      zig-vim
-      gleam-vim
-    ];
+    vim.startPlugins = with pkgs.neovimPlugins;
+      [
+        nvim-treesitter
+        nvim-treesitter-context
+        cmp-buffer
+        cmp-cmdline
+        cmp_luasnip
+        cmp-nvim-lsp
+        cmp-path
+        lsp_signature
+        LuaSnip
+        nvim-cmp
+        nvim-dap
+        nvim-jqx
+        nvim-lspconfig
+        telescope-dap
+        vim-cue
+        vim-slim
+      ]
+      ++ (lib.optional cfg.lightbulb nvim-lightbulb)
+      ++ (lib.optional cfg.variableDebugPreviews nvim-dap-virtual-text)
+      ++ (lib.optional cfg.nix vim-nix)
+      ++ (lib.optional cfg.crystal vim-crystal)
+      ++ (lib.optional cfg.elixir elixir-nvim)
+      ++ (lib.optional cfg.gleam gleam-vim)
+      ++ (lib.optional cfg.go vim-go)
+      ++ (lib.optional cfg.mint vim-mint)
+      ++ (lib.optional cfg.nickel vim-nickel)
+      ++ (lib.optional cfg.zig zig-vim);
 
     vim.configRC = ''
       " Use <Tab> and <S-Tab> to navigate through popup menu
@@ -139,7 +168,7 @@ in {
       local lspconfig = require('lspconfig')
       local dap = require('dap')
 
-      vim.lsp.set_log_level("debug")
+      -- vim.lsp.set_log_level("debug")
 
       local merge = function(a, b)
         local merged = {}
@@ -158,6 +187,10 @@ in {
 
       --Tree sitter config
       require('nvim-treesitter.configs').setup {
+        ensure_installed = {
+          ${builtins.concatStringsSep ", " (map (s: ''"${s}"'') treesitter-languages)}
+        },
+        auto_install = true,
         highlight = {
           enable = true,
           disable = {},
@@ -526,6 +559,11 @@ in {
 
       ${optionalString cfg.gleam ''
         setup("gleam")
+      ''}
+
+      ${optionalString cfg.elixir ''
+        require("elixir").setup()
+        setup_cmd("elixirls", {"${pkgs.elixirls}/language_server.sh"})
       ''}
     '';
   };

@@ -14,6 +14,10 @@
     rnix-lsp.url = "github:nix-community/rnix-lsp";
 
     # Vim plugins
+    elixir-nvim = {
+      url = "github:mhanberg/elixir.nvim";
+      flake = false;
+    };
     gleam-vim = {
       url = "github:gleam-lang/gleam.vim";
       flake = false;
@@ -279,6 +283,12 @@
                 sha256 = "sha256-2MTetTWHJAiSWPcEFJ/p0xptAWDKNXwTq68RywUO+Ls=";
               };
             };
+
+            elixirls = prev.fetchzip {
+              url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.11.0/elixir-ls.zip";
+              hash = "sha256-Q1c+HMK9mhIX4bK9OddfckiR3gpxu9bITI5ED8FCHmI=";
+              stripRoot = false;
+            };
           })
         ];
       };
@@ -346,6 +356,7 @@
             crystal = true;
             css = true;
             docker = true;
+            elixir = true;
             enable = true;
             go = true;
             html = true;
