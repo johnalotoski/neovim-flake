@@ -52,36 +52,36 @@ with builtins; let
   ];
 in {
   options.vim.lsp = {
-    enable = mkEnableOption "Enable lsp support";
+    enable = mkEnableOption "LSP support";
 
-    bash = mkEnableOption "Enable Bash Support";
-    clang = mkEnableOption "Enable C/C++ with clang";
-    cmake = mkEnableOption "Enable CMake";
-    crystal = mkEnableOption "Enable Crystal";
-    css = mkEnableOption "Enable CSS support";
-    docker = mkEnableOption "Enable Docker support";
-    elixir = mkEnableOption "Enable Elixir support";
-    gleam = mkEnableOption " Enable Gleam";
-    go = mkEnableOption "Enable Go Language Support";
-    html = mkEnableOption "Enable HTML support";
-    idris2 = mkEnableOption "Enable Idris2 Support";
-    json = mkEnableOption "Enable JSON";
-    mint = mkEnableOption "Enable Mint support";
-    nickel = mkEnableOption "Enable Nickel Language Support";
-    nix = mkEnableOption "Enable Nix Language Support";
-    python = mkEnableOption "Enable Python Support";
-    rego = mkEnableOption "Enable rego support";
-    ruby = mkEnableOption "Enable Ruby Support";
-    rust = mkEnableOption "Enable Rust Support";
-    shellcheck = mkEnableOption "Enable Shellcheck support";
-    terraform = mkEnableOption "Enable Terraform Support";
-    tex = mkEnableOption "Enable TeX support";
-    typescript = mkEnableOption "Enable Typescript/Javascript Support";
-    vimscript = mkEnableOption "Enable Vim Script Support";
-    yaml = mkEnableOption "Enable YAML support";
-    zig = mkEnableOption "Enable Zig support";
-    lightbulb = mkEnableOption "Enable Light Bulb";
-    variableDebugPreviews = mkEnableOption "Enable variable previews";
+    bash = mkEnableOption "Bash Support";
+    clang = mkEnableOption "C/C++ with clang";
+    cmake = mkEnableOption "CMake";
+    crystal = mkEnableOption "Crystal";
+    css = mkEnableOption "CSS support";
+    docker = mkEnableOption "Docker support";
+    elixir = mkEnableOption "Elixir support";
+    gleam = mkEnableOption "Gleam";
+    go = mkEnableOption "Go Language Support";
+    html = mkEnableOption "HTML support";
+    idris2 = mkEnableOption "Idris2 Support";
+    json = mkEnableOption "JSON";
+    mint = mkEnableOption "Mint support";
+    nickel = mkEnableOption "Nickel Language Support";
+    nix = mkEnableOption "Nix Language Support";
+    python = mkEnableOption "Python Support";
+    rego = mkEnableOption "rego support";
+    ruby = mkEnableOption "Ruby Support";
+    rust = mkEnableOption "Rust Support";
+    shellcheck = mkEnableOption "Shellcheck support";
+    terraform = mkEnableOption "Terraform Support";
+    tex = mkEnableOption "TeX support";
+    typescript = mkEnableOption "Typescript/Javascript Support";
+    vimscript = mkEnableOption "Vim Script Support";
+    yaml = mkEnableOption "YAML support";
+    zig = mkEnableOption "Zig support";
+    lightbulb = mkEnableOption "Light Bulb";
+    variableDebugPreviews = mkEnableOption "variable previews";
   };
 
   config = mkIf cfg.enable {

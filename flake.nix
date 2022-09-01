@@ -293,7 +293,18 @@
         ];
       };
 
-      lib = import ./lib {inherit pkgs inputs plugins;};
+      lib = import ./lib {
+        inherit pkgs plugins;
+        inputs =
+          inputs
+          // {
+            nvim-lspconfig = pkgs.applyPatches {
+              name = "nvim-lspconfig-patched";
+              src = inputs.nvim-lspconfig;
+              patches = [./gleam.diff];
+            };
+          };
+      };
 
       inherit (lib) neovimBuilder;
     in rec {
@@ -350,6 +361,8 @@
           };
 
           lsp = {
+            enable = true;
+
             bash = true;
             clang = true;
             cmake = true;
@@ -357,7 +370,7 @@
             css = true;
             docker = true;
             elixir = true;
-            enable = true;
+            gleam = true;
             go = true;
             html = true;
             idris2 = true;
