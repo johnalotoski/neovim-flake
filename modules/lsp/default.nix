@@ -486,7 +486,7 @@ in {
       ''}
 
       ${optionalString cfg.nix ''
-        setup_cmd("rnix", {"${pkgs.rnix-lsp}/bin/rnix-lsp"})
+        setup_cmd("nil_ls", {"${pkgs.nil}/bin/nil"})
       ''}
 
       ${optionalString cfg.ruby ''

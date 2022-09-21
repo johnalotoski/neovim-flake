@@ -11,7 +11,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    rnix-lsp.url = "github:nix-community/rnix-lsp";
+    nil.url = "github:oxalica/nil";
 
     # Vim plugins
     elixir-nvim = {
@@ -237,7 +237,7 @@
     flake-utils.lib.eachDefaultSystem (system: let
       plugins =
         pkgs.lib.subtractLists
-        ["nixpkgs" "flake-utils" "neovim" "rnix-lsp"]
+        ["nixpkgs" "flake-utils" "neovim" "nil"]
         (builtins.attrNames inputs);
 
       pluginOverlay = lib.buildPluginOverlay;
@@ -250,7 +250,7 @@
           (final: prev: {
             statix = inputs.statix.defaultPackage."${system}";
             neovim-nightly = neovim.defaultPackage."${system}";
-            rnix-lsp = inputs.rnix-lsp.defaultPackage."${system}";
+            inherit (inputs.nil.packages."${system}") nil;
             tsserver = prev.nodePackages.typescript-language-server;
             vimls = prev.nodePackages.vim-language-server;
             yamlls = prev.nodePackages.yaml-language-server;
