@@ -24,6 +24,9 @@
         filetype = {
           crystal = treefmt,
           cue = treefmt,
+          elixir = treefmt,
+          erlang = treefmt,
+          gleam = treefmt,
           go = treefmt,
           javascript = treefmt,
           lua = treefmt,
@@ -33,8 +36,6 @@
           ruby = treefmt,
           rust = treefmt,
           vim = treefmt,
-          erlang = treefmt,
-          gleam = treefmt,
         }
       })
     '';
