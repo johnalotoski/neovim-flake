@@ -563,6 +563,15 @@ in {
         require("elixir").setup()
         setup_cmd("elixirls", {"${pkgs.elixirls}/language_server.sh"})
       ''}
+
+        ${builtins.concatStringsSep "\n\n" (map (
+        feat: ''
+          vim.api.nvim_create_autocmd({ "BufEnter"}, {
+              pattern = { "*" },
+              command = "TSBufEnable ${feat}",
+          })
+        ''
+      ) ["highlight" "indent" "incremental_selection"])}
     '';
   };
 }
