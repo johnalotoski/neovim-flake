@@ -8,8 +8,6 @@ with lib;
 with builtins; let
   cfg = config.vim.lsp;
 
-  debugpy = pkgs.python3.withPackages (pyPkg: with pyPkg; [debugpy]);
-
   treesitter-languages = [
     "bash"
     "c"
@@ -248,7 +246,7 @@ in {
             i = cmp.mapping.abort(),
             c = cmp.mapping.close(),
           }),
-          ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+          ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
