@@ -185,13 +185,18 @@ in {
 
       --Tree sitter config
       require('nvim-treesitter.configs').setup {
+        parser_install_dir = vim.env.HOME .. "/.local/share/nvim/site/parser",
+        additional_vim_regex_highlighting = false,
         ensure_installed = {
-          ${builtins.concatStringsSep ", " (map (s: ''"${s}"'') treesitter-languages)}
+          ${builtins.concatStringsSep ", " (map (s: ''"${s}"'') treesitter-languages)},
         },
         auto_install = true,
         highlight = {
           enable = true,
           disable = {},
+        },
+        indent = {
+          enable = true,
         },
         rainbow = {
           enable = true,
@@ -560,7 +565,13 @@ in {
       ''}
 
       ${optionalString cfg.elixir ''
-        require("elixir").setup()
+        local elixir = require("elixir")
+        elixir.setup({
+          settings = elixir.settings({
+            fetchDeps = true,
+            suggestSpecs = true,
+          })
+        })
         setup_cmd("elixirls", {"${pkgs.elixirls}/language_server.sh"})
       ''}
 
