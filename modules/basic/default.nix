@@ -1,8 +1,12 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 with lib;
-with builtins;
-
-let cfg = config.vim;
+with builtins; let
+  cfg = config.vim;
 in {
   options.vim = {
     colourTerm = mkOption {
@@ -25,8 +29,7 @@ in {
 
     scrollOffset = mkOption {
       default = 8;
-      description =
-        "Start scrolling this number of lines from the top or bottom of the page.";
+      description = "Start scrolling this number of lines from the top or bottom of the page.";
       type = types.int;
     };
 
@@ -50,23 +53,20 @@ in {
 
     useSystemClipboard = mkOption {
       default = true;
-      description =
-        "Make use of the clipboard for default yank and paste operations. Don't use * and +";
+      description = "Make use of the clipboard for default yank and paste operations. Don't use * and +";
       type = types.bool;
     };
 
     mouseSupport = mkOption {
       default = "a";
-      description =
-        "Set modes for mouse support. a - all, n - normal, v - visual, i - insert, c - command";
+      description = "Set modes for mouse support. a - all, n - normal, v - visual, i - insert, c - command";
       type = types.str;
     };
 
     lineNumberMode = mkOption {
       default = "relNumber";
-      description =
-        "How line numbers are displayed. none, relative, number, relNumber";
-      type = with types; enum [ "relative" "number" "relNumber" "none" ];
+      description = "How line numbers are displayed. none, relative, number, relNumber";
+      type = with types; enum ["relative" "number" "relNumber" "none"];
     };
 
     preventJunkFiles = mkOption {
@@ -95,8 +95,7 @@ in {
 
     updateTime = mkOption {
       default = 300;
-      description =
-        "The number of milliseconds till Cursor Hold event is fired";
+      description = "The number of milliseconds till Cursor Hold event is fired";
       type = types.int;
     };
 
@@ -109,13 +108,12 @@ in {
     bell = mkOption {
       default = "none";
       description = "Set how bells are handled. Options: on, visual or none";
-      type = types.enum [ "none" "visual" "on" ];
+      type = types.enum ["none" "visual" "on"];
     };
 
     mapTimeout = mkOption {
       default = 500;
-      description =
-        "Timeout in ms that neovim will wait for mapped action to complete";
+      description = "Timeout in ms that neovim will wait for mapped action to complete";
       type = types.int;
     };
 
@@ -130,7 +128,6 @@ in {
       description = "New splits will open to the right";
       type = types.bool;
     };
-
   };
 
   config = {
@@ -166,6 +163,8 @@ in {
       set backup
       set undofile
       set undolevels=1000
+      set ignorecase
+      set smartcase
       ${optionalString cfg.splitBelow "set splitbelow"}
       ${optionalString cfg.splitRight "set splitright"}
       ${optionalString cfg.showSignColumn "set signcolumn=yes"}
@@ -191,18 +190,22 @@ in {
         set t_Co=256
       ''}
       ${{
-        visual = "set noerrorbells";
-        on = "set novisualbell";
-        none = ''
-          set noerrorbells
-          set novisualbell
-        '';
-      }.${cfg.bell} or ""}
+          visual = "set noerrorbells";
+          on = "set novisualbell";
+          none = ''
+            set noerrorbells
+            set novisualbell
+          '';
+        }
+        .${cfg.bell}
+        or ""}
       ${{
-        relative = "set relativenumber";
-        number = "set number";
-        relNumber = "set number relativenumber";
-      }.${cfg.lineNumberMode} or ""}
+          relative = "set relativenumber";
+          number = "set number";
+          relNumber = "set number relativenumber";
+        }
+        .${cfg.lineNumberMode}
+        or ""}
     '';
   };
 }
