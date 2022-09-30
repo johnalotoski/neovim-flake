@@ -7,6 +7,7 @@
 
     neovim = {
       url = "github:neovim/neovim/v0.7.2?dir=contrib";
+      # url = "github:neovim/neovim/4dc4cf346755375e49410e16635c00a602b26c36?dir=contrib";
       inputs.flake-utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -91,7 +92,7 @@
       flake = false;
     };
     nvim-treesitter = {
-      url = "github:nvim-treesitter/nvim-treesitter";
+      url = "github:nvim-treesitter/nvim-treesitter/288137b42c2b712bfc5c933cbb62545ad71d4cd9";
       flake = false;
     };
     nvim-treesitter-context = {
