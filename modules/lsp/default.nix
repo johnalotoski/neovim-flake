@@ -118,9 +118,6 @@ in {
       inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
       inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-      " Set completeopt to have a better completion experience
-      set completeopt=menu,menuone,noinsert,noselect
-
       ${optionalString cfg.variableDebugPreviews ''
         let g:dap_virtual_text = v:true
       ''}
@@ -232,58 +229,80 @@ in {
         return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
       end
 
+      vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
+
       cmp.setup {
         snippet = {
-          -- REQUIRED - you must specify a snippet engine
           expand = function(args)
-            -- vim.fn["vsnip#anonymous"](args.body)
             luasnip.lsp_expand(args.body)
-            -- require('snippy').expand_snippet(args.body)
-            -- vim.fn["UltiSnips#Anon"](args.body)
           end,
         },
         mapping = {
-          ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-          ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-          ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-          ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-          ['<C-e>'] = cmp.mapping({
-            i = cmp.mapping.abort(),
-            c = cmp.mapping.close(),
-          }),
-          ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-
-          ["<Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
-            elseif has_words_before() then
-              cmp.complete()
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-e>'] = cmp.mapping.abort(),
+          ['<CR>'] = cmp.mapping.confirm({ select = false }),
+          ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
+          ['<C-p>'] = cmp.mapping.select_prev_item(select_opts),
+          ['<Down>'] = cmp.mapping.select_next_item(select_opts),
+          ['<C-n>'] = cmp.mapping.select_next_item(select_opts),
+          ['<C-d>'] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(1) then
+              luasnip.jump(1)
             else
               fallback()
             end
-          end, { "i", "s" }),
-
-          ["<S-Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
+          end, {'i', 's'}),
+          ['<C-b>'] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(-1) then
               luasnip.jump(-1)
             else
               fallback()
             end
-          end, { "i", "s" }),
+          end, {'i', 's'}),
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            local col = vim.fn.col('.') - 1
+
+            if cmp.visible() then
+              cmp.select_next_item(select_opts)
+            elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+              fallback()
+            else
+              cmp.complete()
+            end
+          end, {'i', 's'}),
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item(select_opts)
+            else
+              fallback()
+            end
+          end, {'i', 's'}),
         },
         sources = cmp.config.sources {
-          { name = 'nvim_lsp' },
-          -- { name = 'vsnip' },
-          { name = 'luasnip' },
-          -- { name = 'ultisnips' },
-          -- { name = 'snippy' },
-        }, {
-          { name = 'buffer' },
-        }
+          { name = 'path' },
+          { name = 'nvim_lsp', keyword_length = 3 },
+          { name = 'luasnip', keyword_length = 3 },
+          { name = 'buffer', keyword_length = 3 },
+        },
+        window = {
+          documentation = cmp.config.window.bordered()
+        },
+        formatting = {
+          fields = {'menu', 'abbr', 'kind'},
+          format = function(entry, item)
+            local menu_icon = {
+              nvim_lsp = 'λ',
+              luasnip = '⋗',
+              buffer = 'Ω',
+              path = '🖫',
+            }
+
+            item.menu = menu_icon[entry.source.name]
+            return item
+          end,
+        },
       }
 
       -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
@@ -307,12 +326,14 @@ in {
         vim.lsp.protocol.make_client_capabilities()
       )
 
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-        vim.lsp.handlers.hover, {
-          border = "single",
-          focusable = false,
-          close_events = {"CursorMoved", "CursorMovedI", "BufHidden", "BufLeave", "InsertCharPre"},
-        }
+      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+        vim.lsp.handlers.hover,
+        {border = 'rounded'}
+      )
+
+      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+        vim.lsp.handlers.signature_help,
+        {border = 'rounded'}
       )
 
       require("lsp_signature").setup {}
