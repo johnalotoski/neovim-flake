@@ -373,6 +373,7 @@
             elixir = true;
             gleam = true;
             go = true;
+            haskell = true;
             html = true;
             idris2 = true;
             json = true;

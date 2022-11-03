@@ -47,6 +47,7 @@ with builtins; let
     "vim"
     "yaml"
     "zig"
+    "haskell"
   ];
 in {
   options.vim.lsp = {
@@ -61,6 +62,7 @@ in {
     elixir = mkEnableOption "Elixir support";
     gleam = mkEnableOption "Gleam";
     go = mkEnableOption "Go Language Support";
+    haskell = mkEnableOption "Haskell support";
     html = mkEnableOption "HTML support";
     idris2 = mkEnableOption "Idris2 Support";
     json = mkEnableOption "JSON";
@@ -547,6 +549,10 @@ in {
 
       ${optionalString cfg.html ''
         setup_cmd("html", {'${pkgs.htmlls}/bin/html-languageserver', '--stdio'})
+      ''}
+
+      ${optionalString cfg.haskell ''
+        setup("hls")
       ''}
 
       ${optionalString cfg.json ''
