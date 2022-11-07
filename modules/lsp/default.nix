@@ -47,7 +47,6 @@ with builtins; let
     "vim"
     "yaml"
     "zig"
-    "haskell"
   ];
 in {
   options.vim.lsp = {
