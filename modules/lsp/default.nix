@@ -149,13 +149,13 @@ in {
       "<f11>" = "<cmd>lua require('dap').step_into()<cr>";
       "<f12>" = "<cmd>lua require('dap').step_out()<cr>";
       "<f5>" = "<cmd>lua require('dap').continue()<cr>";
-      "<leader>b" = "<cmd>lua require('dap').toggle_breakpoint()<cr>";
       "<f9>" = "<cmd>lua require('dap').repl.open()";
 
       "<leader>dc" = "<cmd>Telescope dap commands<cr>";
       "<leader>db" = "<cmd>Telescope dap list_breakpoints<cr>";
       "<leader>dv" = "<cmd>Telescope dap variables<cr>";
       "<leader>df" = "<cmd>Telescope dap frames<cr>";
+      "<leader>dt" = "<cmd>lua require('dap').toggle_breakpoint()<cr>";
     };
 
     vim.globals = {};

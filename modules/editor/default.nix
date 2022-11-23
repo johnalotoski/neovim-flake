@@ -1,8 +1,12 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 with lib;
-with builtins;
-
-let cfg = config.vim.editor;
+with builtins; let
+  cfg = config.vim.editor;
 in {
   options.vim.editor = {
     indentGuide = mkEnableOption "Enable indent guides";
@@ -22,7 +26,7 @@ in {
       ++ (optional cfg.whichKey which-key-nvim)
       ++ (optional cfg.floaterm vim-floaterm)
       ++ (optional cfg.surround vim-surround)
-      ++ (optionals cfg.wilder [ wilder-nvim ])
+      ++ (optional cfg.wilder wilder-nvim)
       ++ (optional cfg.abolish vim-abolish);
 
     vim.nnoremap = {
@@ -82,7 +86,7 @@ in {
               \   'highlighter': s:highlighters,
               \ }),
               \ }))
-                      ''}
+      ''}
     '';
 
     vim.luaConfigRC = ''
