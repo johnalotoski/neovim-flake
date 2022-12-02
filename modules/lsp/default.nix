@@ -7,47 +7,6 @@
 with lib;
 with builtins; let
   cfg = config.vim.lsp;
-
-  treesitter-languages = [
-    "bash"
-    "c"
-    "cpp"
-    "css"
-    "dockerfile"
-    "dot"
-    "eex"
-    "elixir"
-    "erlang"
-    "gleam"
-    "go"
-    "gomod"
-    "graphql"
-    "hcl"
-    "heex"
-    "html"
-    "http"
-    "java"
-    "javascript"
-    "json"
-    "lua"
-    "make"
-    "markdown"
-    "nix"
-    "perl"
-    "php"
-    "python"
-    "racket"
-    "regex"
-    "ruby"
-    "rust"
-    "scss"
-    "sql"
-    "toml"
-    "typescript"
-    "vim"
-    "yaml"
-    "zig"
-  ];
 in {
   options.vim.lsp = {
     enable = mkEnableOption "LSP support";
@@ -86,8 +45,10 @@ in {
   config = mkIf cfg.enable {
     vim.startPlugins = with pkgs.neovimPlugins;
       [
-        nvim-treesitter
-        nvim-treesitter-context
+        pkgs.vimPlugins.nvim-treesitter.withAllGrammars
+
+        # nvim-treesitter
+        # nvim-treesitter-context
         cmp-buffer
         cmp-cmdline
         cmp_luasnip
@@ -185,10 +146,8 @@ in {
       require('nvim-treesitter.configs').setup {
         parser_install_dir = vim.env.HOME .. "/.local/share/nvim/site/parser",
         additional_vim_regex_highlighting = false,
-        ensure_installed = {
-          ${builtins.concatStringsSep ", " (map (s: ''"${s}"'') treesitter-languages)},
-        },
-        auto_install = true,
+        auto_install = false,
+        sync_install = true,
         highlight = {
           enable = true,
           disable = {},
