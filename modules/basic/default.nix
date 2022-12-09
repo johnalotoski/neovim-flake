@@ -128,6 +128,17 @@ in {
       description = "New splits will open to the right";
       type = types.bool;
     };
+
+    virtualedit = mkOption {
+      default = "none";
+      description = ''
+        Virtual editing means that the cursor can be positioned where there is
+        no actual character.  This can be halfway into a tab or beyond the end
+        of the line. Useful for selecting a rectangle in Visual mode and
+        editing a table.
+      '';
+      type = types.enum ["block" "insert" "all" "onemore" "none"];
+    };
   };
 
   config = {
@@ -171,7 +182,7 @@ in {
       ${optionalString cfg.autoIndent "set autoindent"}
       ${optionalString cfg.useSystemClipboard "set clipboard+=unnamedplus"}
       ${optionalString cfg.syntaxHighlighting "syntax on"}
-      ${optionalString (cfg.wordWrap == false) "set nowrap"}
+      ${optionalString (!cfg.wordWrap) "set nowrap"}
       ${optionalString cfg.preventJunkFiles ''
         set noswapfile
         set nobackup
@@ -206,6 +217,7 @@ in {
         }
         .${cfg.lineNumberMode}
         or ""}
+      set virtualedit=${cfg.virtualedit}
     '';
   };
 }

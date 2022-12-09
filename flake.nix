@@ -334,6 +334,7 @@
           dashboard.startify.enable = true;
           database.enable = true;
           disableArrows = false;
+          virtualedit = "all";
 
           cnoremap = {"3636" = "<c-u>undo<CR>";};
 
