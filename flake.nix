@@ -227,6 +227,10 @@
       url = "github:slim-template/vim-slim";
       flake = false;
     };
+    vim-just = {
+      url = "github:NoahTheDuke/vim-just";
+      flake = false;
+    };
   };
 
   outputs = {

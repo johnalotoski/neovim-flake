@@ -63,6 +63,7 @@ in {
         telescope-dap
         vim-cue
         vim-slim
+        vim-just
       ]
       ++ (lib.optional cfg.lightbulb nvim-lightbulb)
       ++ (lib.optional cfg.variableDebugPreviews nvim-dap-virtual-text)
