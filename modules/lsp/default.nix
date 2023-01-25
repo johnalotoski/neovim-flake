@@ -100,7 +100,7 @@ in {
       "<leader>lE" = "<cmd>lua require('telescope.builtin').diagnostics()<cr>";
       "<leader>bk" = "<cmd>lua vim.lsp.buf.signature_help()<CR>";
       "<leader>bK" = "<cmd>lua vim.lsp.buf.hover()<CR>";
-      "<leader>bf" = "<cmd>lua vim.lsp.buf.formatting()<CR>";
+      "<leader>bf" = "<cmd>lua vim.lsp.buf.format({ async = true })<CR>";
 
       "[d" = "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>";
       "]d" = "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>";
