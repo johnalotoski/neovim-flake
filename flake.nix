@@ -7,7 +7,6 @@
 
     neovim = {
       url = "github:neovim/neovim/v0.8.2?dir=contrib";
-      # url = "github:neovim/neovim/4dc4cf346755375e49410e16635c00a602b26c36?dir=contrib";
       inputs.flake-utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -231,6 +230,10 @@
       url = "github:NoahTheDuke/vim-just";
       flake = false;
     };
+    no-neck-pain = {
+      url = "github:shortcuts/no-neck-pain.nvim";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -299,16 +302,7 @@
       };
 
       lib = import ./lib {
-        inherit pkgs plugins;
-        inputs =
-          inputs
-          // {
-            nvim-lspconfig = pkgs.applyPatches {
-              name = "nvim-lspconfig-patched";
-              src = inputs.nvim-lspconfig;
-              patches = [./gleam.diff];
-            };
-          };
+        inherit pkgs plugins inputs;
       };
 
       inherit (lib) neovimBuilder;
@@ -330,6 +324,10 @@
         inherit neovimBuilder;
         inherit (packages) neovim;
         inherit (pkgs) neovimPlugins;
+      };
+
+      devShells.default = pkgs.mkShell {
+        nativeBuildInputs = [pkgs.treefmt pkgs.alejandra];
       };
 
       packages.neovim = neovimBuilder {

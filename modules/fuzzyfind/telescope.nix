@@ -1,8 +1,11 @@
-{ pkgs, lib, config, ...}:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 with lib;
-with builtins;
-
-let
+with builtins; let
   cfg = config.vim.fuzzyfind.telescope;
 in {
   options.vim.fuzzyfind.telescope = {

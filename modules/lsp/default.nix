@@ -56,14 +56,15 @@ in {
         cmp-path
         lsp_signature
         LuaSnip
+        no-neck-pain
         nvim-cmp
         nvim-dap
         nvim-jqx
         nvim-lspconfig
         telescope-dap
         vim-cue
-        vim-slim
         vim-just
+        vim-slim
       ]
       ++ (lib.optional cfg.lightbulb nvim-lightbulb)
       ++ (lib.optional cfg.variableDebugPreviews nvim-dap-virtual-text)

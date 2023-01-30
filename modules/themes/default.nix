@@ -1,7 +1,11 @@
-{ pkgs, config, lib, ...}:
 {
-  imports = [ 
-    ./gruvbox.nix 
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
+  imports = [
+    ./gruvbox.nix
     ./nord.nix
   ];
 }

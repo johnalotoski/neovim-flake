@@ -1,13 +1,33 @@
-{ pkgs, config, lib, ...}:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 with lib;
-with builtins;
-
-let
+with builtins; let
   cfg = config.vim.theme.gruvbox;
   gruvboxPallet = [
-    "bg" "red" "green" "yellow" "blue" "purple" "aqua" "gray" 
-    "orange" "bg0" "bg1" "bg2" "bg3" "bg4"
-    "fg0" "fg1" "fg2" "fg3" "fg4" "none"
+    "bg"
+    "red"
+    "green"
+    "yellow"
+    "blue"
+    "purple"
+    "aqua"
+    "gray"
+    "orange"
+    "bg0"
+    "bg1"
+    "bg2"
+    "bg3"
+    "bg4"
+    "fg0"
+    "fg1"
+    "fg2"
+    "fg3"
+    "fg4"
+    "none"
   ];
 in {
   options.vim.theme.gruvbox = {
@@ -52,19 +72,19 @@ in {
     contrastDark = mkOption {
       default = "medium";
       description = "The contrast when in dark mode. Can be soft, medium or hard";
-      type = types.enum [ "soft" "medium" "hard"];
+      type = types.enum ["soft" "medium" "hard"];
     };
 
     contrastLight = mkOption {
       default = "medium";
       description = "The contrast when in light mode. Can be soft, medium or hard";
-      type = types.enum [ "soft" "medium" "hard"];
+      type = types.enum ["soft" "medium" "hard"];
     };
 
     hlsCursor = mkOption {
       default = "orange";
       description = "Gruvbox pallet to assign to search highlight cursor";
-      type = types.enum gruvboxPallet; 
+      type = types.enum gruvboxPallet;
     };
 
     numberColumn = mkOption {
@@ -140,37 +160,44 @@ in {
     };
   };
 
-  config = mkIf (cfg.enable) 
-  (let
-    mkVimBool = val: if val then "1" else "0";
-    mkIfNotNone = val: if val == "none" then null else val;
-  in {
-    vim.configRC = ''
-      colorscheme gruvbox
-    '';
+  config =
+    mkIf (cfg.enable)
+    (let
+      mkVimBool = val:
+        if val
+        then "1"
+        else "0";
+      mkIfNotNone = val:
+        if val == "none"
+        then null
+        else val;
+    in {
+      vim.configRC = ''
+        colorscheme gruvbox
+      '';
 
-    vim.startPlugins = with pkgs.neovimPlugins; [gruvbox];
-    vim.globals = {
-      "gruvbox_bold" = mkVimBool cfg.bold;
-      "gruvbox_italic" = mkVimBool cfg.italic;
-      "gruvbox_transparent_bg" = mkVimBool cfg.transparentBackground;
-      "gruvbox_underline" = mkVimBool cfg.underline;
-      "gruvbox_undercurl" = mkVimBool cfg.undercurl;
-      "gruvbox_termcolors" = mkIfNotNone cfg.termColours;
-      "gruvbox_contrast_dark" = mkIfNotNone cfg.contrastDark;
-      "gruvbox_contrast_light" = mkIfNotNone cfg.contrastLight;
-      "gruvbox_hls_cursor" = mkIfNotNone cfg.hlsCursor;
-      "gruvbox_number_column" = mkIfNotNone cfg.numberColumn;
-      "gruvbox_sign_column" = mkIfNotNone cfg.signColumn;
-      "gruvbox_virt_split" = mkIfNotNone cfg.virticalSplit;
-      "gruvbox_italicize_comments" = mkVimBool cfg.italicComments;
-      "gruvbox_italicize_strings" = mkVimBool cfg.italicStrings;
-      "gruvbox_invert_selection" = mkVimBool cfg.invertSelected;
-      "gruvbox_invert_signs" = mkVimBool cfg.invertSigns;
-      "gruvbox_invert_ident_guides" = mkVimBool cfg.invertIdentGuides;
-      "gruvbox_invert_tabline" = mkVimBool cfg.invertTabline;
-      "gruvbox_improved_strings" = mkVimBool cfg.improvedStrings;
-      "gruvbox_improved_warnings" = mkVimBool cfg.improvedWarnings;
-    };
-  });
+      vim.startPlugins = with pkgs.neovimPlugins; [gruvbox];
+      vim.globals = {
+        "gruvbox_bold" = mkVimBool cfg.bold;
+        "gruvbox_italic" = mkVimBool cfg.italic;
+        "gruvbox_transparent_bg" = mkVimBool cfg.transparentBackground;
+        "gruvbox_underline" = mkVimBool cfg.underline;
+        "gruvbox_undercurl" = mkVimBool cfg.undercurl;
+        "gruvbox_termcolors" = mkIfNotNone cfg.termColours;
+        "gruvbox_contrast_dark" = mkIfNotNone cfg.contrastDark;
+        "gruvbox_contrast_light" = mkIfNotNone cfg.contrastLight;
+        "gruvbox_hls_cursor" = mkIfNotNone cfg.hlsCursor;
+        "gruvbox_number_column" = mkIfNotNone cfg.numberColumn;
+        "gruvbox_sign_column" = mkIfNotNone cfg.signColumn;
+        "gruvbox_virt_split" = mkIfNotNone cfg.virticalSplit;
+        "gruvbox_italicize_comments" = mkVimBool cfg.italicComments;
+        "gruvbox_italicize_strings" = mkVimBool cfg.italicStrings;
+        "gruvbox_invert_selection" = mkVimBool cfg.invertSelected;
+        "gruvbox_invert_signs" = mkVimBool cfg.invertSigns;
+        "gruvbox_invert_ident_guides" = mkVimBool cfg.invertIdentGuides;
+        "gruvbox_invert_tabline" = mkVimBool cfg.invertTabline;
+        "gruvbox_improved_strings" = mkVimBool cfg.improvedStrings;
+        "gruvbox_improved_warnings" = mkVimBool cfg.improvedWarnings;
+      };
+    });
 }

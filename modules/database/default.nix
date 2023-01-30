@@ -1,8 +1,11 @@
-{ pkgs, config, lib, ...}:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 with lib;
-with builtins;
-
-let
+with builtins; let
   cfg = config.vim.database;
 in {
   options.vim.database = {
@@ -10,7 +13,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    vim.startPlugins = with pkgs.neovimPlugins; [ 
+    vim.startPlugins = with pkgs.neovimPlugins; [
       vim-dadbod-ui
       vim-dadbod
     ];

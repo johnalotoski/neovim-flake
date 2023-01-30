@@ -334,17 +334,33 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1669834992,
-        "narHash": "sha256-YnhZGHgb4C3Q7DSGisO/stc50jFb9F/MzHeKS4giotg=",
+        "lastModified": 1674971084,
+        "narHash": "sha256-YxBWj2t75Jun+NJUwr2vvtcfLwvGcazSo+pnNxpt+tU=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "596a8e828c5dfa504f91918d0fa4152db3ab5502",
+        "rev": "22c4a7a4796a91c297a7e59078a84ec29515f86e",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "ref": "nixos-22.11",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "no-neck-pain": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1675029460,
+        "narHash": "sha256-dK0Jf/aJoy9IDD1seGTxkaFfY2pw67k0gV+O5UpmluM=",
+        "owner": "shortcuts",
+        "repo": "no-neck-pain.nvim",
+        "rev": "0dd69f6e5e7402e55ddf0af153883e1e903404f5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shortcuts",
+        "repo": "no-neck-pain.nvim",
         "type": "github"
       }
     },
@@ -479,11 +495,11 @@
     "nvim-lspconfig": {
       "flake": false,
       "locked": {
-        "lastModified": 1661273242,
-        "narHash": "sha256-S3lWT2afPbTq6ioLipfAg/6bEMn/MR6wZQ0KeFw4E5k=",
+        "lastModified": 1674808305,
+        "narHash": "sha256-pPFhBx3peiJVxsaBl3L6h1b9ID+Zm62baQgCFapvddA=",
         "owner": "neovim",
         "repo": "nvim-lspconfig",
-        "rev": "2edcb5502350bb10774de2d79c1542509df097b9",
+        "rev": "1e988250a0f52a68ddb72905d623405d634e9c5d",
         "type": "github"
       },
       "original": {
@@ -625,6 +641,7 @@
         "neovim": "neovim",
         "nil": "nil",
         "nixpkgs": "nixpkgs_2",
+        "no-neck-pain": "no-neck-pain",
         "nord-vim": "nord-vim",
         "nvim-blame-line": "nvim-blame-line",
         "nvim-cmp": "nvim-cmp",
@@ -742,11 +759,11 @@
     "vim-crystal": {
       "flake": false,
       "locked": {
-        "lastModified": 1645277067,
-        "narHash": "sha256-5QEcofycxePFggvPiF+/pUdU/BFUDyqsWOj9S7gGl8E=",
+        "lastModified": 1662293922,
+        "narHash": "sha256-ev7At458NlNqq6HVo8u4JjUUYqmFq5uz+ABlsHkhNmA=",
         "owner": "vim-crystal",
         "repo": "vim-crystal",
-        "rev": "78226707cb7058d96c49c5ee785b137cf06ac26d",
+        "rev": "43e4d89c5d29b3a0d17dda5bd57eadda6fc614d4",
         "type": "github"
       },
       "original": {

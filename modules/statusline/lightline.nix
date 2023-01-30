@@ -1,8 +1,12 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 with lib;
-with builtins;
-
-let cfg = config.vim.statusline.lightline;
+with builtins; let
+  cfg = config.vim.statusline.lightline;
 in {
   options.vim.statusline.lightline = {
     enable = mkEnableOption "Enable lightline";
@@ -28,7 +32,7 @@ in {
 
   config = mkIf cfg.enable {
     vim = {
-      startPlugins = with pkgs.neovimPlugins; [ lightline-vim ];
+      startPlugins = with pkgs.neovimPlugins; [lightline-vim];
       globals.lightline = {
         colorscheme = cfg.theme;
         component_function.filename = "LightlineTruncatedFileName";

@@ -1,8 +1,11 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with builtins;
-let
+with builtins; let
   cfg = config.vim;
 
   wrapLuaConfig = luaConfig: ''
@@ -13,10 +16,10 @@ let
 
   mkMappingOption = it:
     mkOption ({
-      default = { };
-      type = with types; attrsOf (nullOr str);
-    } // it);
-
+        default = {};
+        type = with types; attrsOf (nullOr str);
+      }
+      // it);
 in {
   options.vim = {
     viAlias = mkOption {
@@ -45,24 +48,24 @@ in {
 
     startPlugins = mkOption {
       description = "List of plugins to startup";
-      default = [ ];
+      default = [];
       type = with types; listOf package;
     };
 
     optPlugins = mkOption {
       description = "List of plugins to optionally load";
-      default = [ ];
+      default = [];
       type = with types; listOf package;
     };
 
     globals = mkOption {
-      default = { };
+      default = {};
       description = "Set containing global variable values";
       type = types.attrs;
     };
 
     nnoremap =
-      mkMappingOption { description = "Defines 'Normal mode' mappings"; };
+      mkMappingOption {description = "Defines 'Normal mode' mappings";};
 
     inoremap = mkMappingOption {
       description = "Defines 'Insert and Replace mode' mappings";
@@ -73,22 +76,22 @@ in {
     };
 
     xnoremap =
-      mkMappingOption { description = "Defines 'Visual mode' mappings"; };
+      mkMappingOption {description = "Defines 'Visual mode' mappings";};
 
     snoremap =
-      mkMappingOption { description = "Defines 'Select mode' mappings"; };
+      mkMappingOption {description = "Defines 'Select mode' mappings";};
 
     cnoremap =
-      mkMappingOption { description = "Defines 'Command-line mode' mappings"; };
+      mkMappingOption {description = "Defines 'Command-line mode' mappings";};
 
     onoremap = mkMappingOption {
       description = "Defines 'Operator pending mode' mappings";
     };
 
     tnoremap =
-      mkMappingOption { description = "Defines 'Terminal mode' mappings"; };
+      mkMappingOption {description = "Defines 'Terminal mode' mappings";};
 
-    nmap = mkMappingOption { description = "Defines 'Normal mode' mappings"; };
+    nmap = mkMappingOption {description = "Defines 'Normal mode' mappings";};
 
     imap = mkMappingOption {
       description = "Defines 'Insert and Replace mode' mappings";
@@ -98,19 +101,19 @@ in {
       description = "Defines 'Visual and Select mode' mappings";
     };
 
-    xmap = mkMappingOption { description = "Defines 'Visual mode' mappings"; };
+    xmap = mkMappingOption {description = "Defines 'Visual mode' mappings";};
 
-    smap = mkMappingOption { description = "Defines 'Select mode' mappings"; };
+    smap = mkMappingOption {description = "Defines 'Select mode' mappings";};
 
     cmap =
-      mkMappingOption { description = "Defines 'Command-line mode' mappings"; };
+      mkMappingOption {description = "Defines 'Command-line mode' mappings";};
 
     omap = mkMappingOption {
       description = "Defines 'Operator pending mode' mappings";
     };
 
     tmap =
-      mkMappingOption { description = "Defines 'Terminal mode' mappings"; };
+      mkMappingOption {description = "Defines 'Terminal mode' mappings";};
   };
 
   config = let
@@ -120,12 +123,12 @@ in {
       (filterNonNull cfg.globals);
 
     matchCtrl = it: match "Ctrl-(.)(.*)" it;
-    mapKeybinding = it:
-      let groups = matchCtrl it;
-      in if groups == null then
-        it
-      else
-        "<C-${toUpper (head groups)}>${head (tail groups)}";
+    mapKeybinding = it: let
+      groups = matchCtrl it;
+    in
+      if groups == null
+      then it
+      else "<C-${toUpper (head groups)}>${head (tail groups)}";
     mapVimBinding = prefix: mappings:
       mapAttrsFlatten (name: value: "${prefix} ${mapKeybinding name} ${value}")
       (filterNonNull mappings);
@@ -147,34 +150,32 @@ in {
     cnoremap = mapVimBinding "cnoremap" config.vim.cnoremap;
     onoremap = mapVimBinding "onoremap" config.vim.onoremap;
     tnoremap = mapVimBinding "tnoremap" config.vim.tnoremap;
-
   in {
     vim.configRC = ''
       " Lua config from vim.luaConfigRC
       ${wrapLuaConfig cfg.luaConfigRC}
 
         ${
-          builtins.concatStringsSep "\n" (builtins.concatLists [
-            nmap
-            imap
-            vmap
-            xmap
-            smap
-            cmap
-            omap
-            tmap
-            nnoremap
-            inoremap
-            vnoremap
-            xnoremap
-            snoremap
-            cnoremap
-            onoremap
-            tnoremap
-            globalsScript
-          ])
-        }
+        builtins.concatStringsSep "\n" (builtins.concatLists [
+          nmap
+          imap
+          vmap
+          xmap
+          smap
+          cmap
+          omap
+          tmap
+          nnoremap
+          inoremap
+          vnoremap
+          xnoremap
+          snoremap
+          cnoremap
+          onoremap
+          tnoremap
+          globalsScript
+        ])
+      }
     '';
   };
-
 }

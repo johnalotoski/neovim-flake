@@ -1,11 +1,13 @@
-{ pkgs, config, lib, ...}:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 with lib;
-with builtins;
-
-let
+with builtins; let
   cfg = config.vim.theme.nord;
 in {
-
   options.vim.theme.nord = {
     enable = mkEnableOption "Enable nord theme";
 
@@ -33,7 +35,6 @@ in {
       type = types.bool;
     };
 
-
     bold = mkOption {
       default = true;
       description = "Enable bold text";
@@ -57,28 +58,30 @@ in {
       description = "Enable italics for comments";
       type = types.bool;
     };
-
   };
 
-  config = mkIf (cfg.enable) 
-  (let
-    mkVimBool = val: if val then "1" else "0";
-  in {
-    vim.configRC = ''
-      colorscheme nord
-    '';
+  config =
+    mkIf (cfg.enable)
+    (let
+      mkVimBool = val:
+        if val
+        then "1"
+        else "0";
+    in {
+      vim.configRC = ''
+        colorscheme nord
+      '';
 
-    vim.startPlugins = with pkgs.neovimPlugins; [nord-vim];
+      vim.startPlugins = with pkgs.neovimPlugins; [nord-vim];
 
-    vim.globals = {
-      "nord_cursor_line_number_background" = mkVimBool cfg.lineNumberBackgroundColoured;
-      "nord_uniform_status_line" = mkVimBool cfg.uniformStatusLine;
-      "nord_bold_vertical_split_line" = mkVimBool cfg.boldVerticalSplit;
-      "nord_bold" = mkVimBool cfg.bold;
-      "nord_italic" = mkVimBool cfg.italic;
-      "nord_italic_comments" = mkVimBool cfg.italicComments;
-      "nord_underline" = mkVimBool cfg.underline;
-    };
-  });
-
+      vim.globals = {
+        "nord_cursor_line_number_background" = mkVimBool cfg.lineNumberBackgroundColoured;
+        "nord_uniform_status_line" = mkVimBool cfg.uniformStatusLine;
+        "nord_bold_vertical_split_line" = mkVimBool cfg.boldVerticalSplit;
+        "nord_bold" = mkVimBool cfg.bold;
+        "nord_italic" = mkVimBool cfg.italic;
+        "nord_italic_comments" = mkVimBool cfg.italicComments;
+        "nord_underline" = mkVimBool cfg.underline;
+      };
+    });
 }

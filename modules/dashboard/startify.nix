@@ -1,11 +1,17 @@
-{pkgs, config, lib, ...}:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 with builtins;
-with lib;
-let
+with lib; let
   cfg = config.vim.dashboard.startify;
 
-  mkVimBool = val: if val then "1" else "0";
-
+  mkVimBool = val:
+    if val
+    then "1"
+    else "0";
 in {
   options.vim.dashboard.startify = {
     enable = mkEnableOption "Enable startify";
@@ -14,7 +20,7 @@ in {
       default = [];
       description = ''List of book marks to disaply on start page'';
       type = with types; listOf attrs;
-      example = { "c" = "~/.vimrc"; };
+      example = {"c" = "~/.vimrc";};
     };
 
     changeToDir = mkOption {
@@ -49,11 +55,26 @@ in {
 
     lists = mkOption {
       default = [
-        { type = "files"; header = ["MRU"]; }
-        { type = "dir"; header = ["MRU Current Directory"]; }
-        { type = "sessions"; header = ["Sessions"]; }
-        { type = "bookmarks"; header = ["Bookmarks"]; }
-        { type = "commands"; header = ["Commands"]; }
+        {
+          type = "files";
+          header = ["MRU"];
+        }
+        {
+          type = "dir";
+          header = ["MRU Current Directory"];
+        }
+        {
+          type = "sessions";
+          header = ["Sessions"];
+        }
+        {
+          type = "bookmarks";
+          header = ["Bookmarks"];
+        }
+        {
+          type = "commands";
+          header = ["Commands"];
+        }
       ];
       description = "Specify the lists and in what order they are displayed on startify.";
       type = with types; listOf attrs;
@@ -80,7 +101,7 @@ in {
     commands = mkOption {
       default = [];
       description = "Commands that are presented to the user on startify page";
-      type = with types; listOf (oneOf[str attrs (listOf str)]);
+      type = with types; listOf (oneOf [str attrs (listOf str)]);
     };
 
     filesNumber = mkOption {
@@ -176,10 +197,16 @@ in {
 
   config = mkIf (cfg.enable) {
     vim.startPlugins = with pkgs.neovimPlugins; [vim-startify];
-    
+
     vim.globals = {
-      "startify_custom_header" = if cfg.customHeader == [] then null else cfg.customHeader;
-      "startify_custom_footer" = if cfg.customFooter == [] then null else cfg.customFooter;
+      "startify_custom_header" =
+        if cfg.customHeader == []
+        then null
+        else cfg.customHeader;
+      "startify_custom_footer" =
+        if cfg.customFooter == []
+        then null
+        else cfg.customFooter;
       "startify_bookmarks" = cfg.bookmarks;
       "startify_lists" = cfg.lists;
       "startify_change_to_dir" = mkVimBool cfg.changeToDir;
@@ -197,7 +224,7 @@ in {
       "startify_use_env" = mkVimBool cfg.useEnv;
       "startify_session_before_save" = cfg.sessionBeforeSave;
       "startify_session_persistence" = mkVimBool cfg.sessionPersistence;
-      "startify_session_delete_buffers" = mkVimBool cfg.sessionDeleteBuffers; 
+      "startify_session_delete_buffers" = mkVimBool cfg.sessionDeleteBuffers;
       "startify_session_dir" = cfg.sessionDir;
       "startify_skiplist_server" = cfg.skipListServer;
       "startify_session_remove_lines" = cfg.sessionRemoveLines;
@@ -205,7 +232,5 @@ in {
       "startify_session_savecmds" = cfg.sessionSavecmds;
       "startify_session_sort" = mkVimBool cfg.sessionSort;
     };
-
-
   };
 }
