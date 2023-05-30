@@ -27,6 +27,7 @@ in {
     mint = mkEnableOption "Mint support";
     nickel = mkEnableOption "Nickel Language Support";
     nix = mkEnableOption "Nix Language Support";
+    nu = mkEnableOption "Nushell support";
     python = mkEnableOption "Python Support";
     rego = mkEnableOption "rego support";
     ruby = mkEnableOption "Ruby Support";
@@ -65,10 +66,12 @@ in {
         vim-cue
         vim-just
         vim-slim
+        copilot-vim
       ]
       ++ (lib.optional cfg.lightbulb nvim-lightbulb)
       ++ (lib.optional cfg.variableDebugPreviews nvim-dap-virtual-text)
       ++ (lib.optional cfg.nix vim-nix)
+      ++ (lib.optionals cfg.nu [null-ls-nvim nvim-nu])
       ++ (lib.optional cfg.crystal vim-crystal)
       ++ (lib.optional cfg.elixir elixir-nvim)
       ++ (lib.optional cfg.gleam gleam-vim)
@@ -78,10 +81,6 @@ in {
       ++ (lib.optional cfg.zig zig-vim);
 
     vim.configRC = ''
-      " Use <Tab> and <S-Tab> to navigate through popup menu
-      inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-      inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
       ${optionalString cfg.variableDebugPreviews ''
         let g:dap_virtual_text = v:true
       ''}
@@ -219,24 +218,6 @@ in {
           ['<C-b>'] = cmp.mapping(function(fallback)
             if luasnip.jumpable(-1) then
               luasnip.jump(-1)
-            else
-              fallback()
-            end
-          end, {'i', 's'}),
-          ['<Tab>'] = cmp.mapping(function(fallback)
-            local col = vim.fn.col('.') - 1
-
-            if cmp.visible() then
-              cmp.select_next_item(select_opts)
-            elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-              fallback()
-            else
-              cmp.complete()
-            end
-          end, {'i', 's'}),
-          ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item(select_opts)
             else
               fallback()
             end
@@ -473,6 +454,10 @@ in {
 
       ${optionalString cfg.nix ''
         setup_cmd("nil_ls", {"${pkgs.nil}/bin/nil"})
+      ''}
+
+      ${optionalString cfg.nu ''
+        require("nu").setup({})
       ''}
 
       ${optionalString cfg.ruby ''

@@ -3,8 +3,6 @@
   lib ? pkgs.lib,
   ...
 }: {config}: let
-  neovimPlugins = pkgs.neovimPlugins;
-
   vimOptions = lib.evalModules {
     modules = [{imports = [../modules];} config];
 
@@ -19,7 +17,7 @@ in
     configure = {
       customRC = vim.configRC;
 
-      packages.myVimPackage = with pkgs.vimPlugins; {
+      packages.myVimPackage = {
         start = vim.startPlugins;
         opt = vim.optPlugins;
       };

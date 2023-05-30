@@ -19,11 +19,11 @@
     "barbar-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1656467335,
-        "narHash": "sha256-71e7GWjhCe7AWOc7zlTDRPQa/3dG02N5YonA8AOC3gQ=",
+        "lastModified": 1674425099,
+        "narHash": "sha256-QAGvi3owVVgVy+81Kr34COKO7Aj3wYI5X1EtH0hqUS8=",
         "owner": "romgrk",
         "repo": "barbar.nvim",
-        "rev": "b3695e9825e33cd534d142383271557755370f3f",
+        "rev": "e9da670e3fd58598bd0d2cf7e32e1af24cb2fcca",
         "type": "github"
       },
       "original": {
@@ -109,6 +109,22 @@
       "original": {
         "owner": "saadparwaiz1",
         "repo": "cmp_luasnip",
+        "type": "github"
+      }
+    },
+    "copilot-vim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1682717291,
+        "narHash": "sha256-6xIOngHzmBrgNfl0JI5dUkRLGlq2Tf+HsUj5gha/Ppw=",
+        "owner": "github",
+        "repo": "copilot.vim",
+        "rev": "1358e8e45ecedc53daf971924a0541ddf6224faf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "github",
+        "repo": "copilot.vim",
         "type": "github"
       }
     },
@@ -281,17 +297,17 @@
       },
       "locked": {
         "dir": "contrib",
-        "lastModified": 1672330330,
-        "narHash": "sha256-eqiH/K8w0FZNHLBBMjiTSQjNQyONqcx3X+d85gPnFJg=",
+        "lastModified": 1685359478,
+        "narHash": "sha256-G51qD7GklEn0JrneKSSqDDx0Odi7W2FjdQc0ZDE9ZK4=",
         "owner": "neovim",
         "repo": "neovim",
-        "rev": "1fa917f9a1585e3b87d41edaf74415505d1bceac",
+        "rev": "7d4bba7aa7a4a3444919ea7a3804094c290395ef",
         "type": "github"
       },
       "original": {
         "dir": "contrib",
         "owner": "neovim",
-        "ref": "v0.8.2",
+        "ref": "v0.9.1",
         "repo": "neovim",
         "type": "github"
       }
@@ -334,16 +350,16 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1674971084,
-        "narHash": "sha256-YxBWj2t75Jun+NJUwr2vvtcfLwvGcazSo+pnNxpt+tU=",
+        "lastModified": 1685356226,
+        "narHash": "sha256-f2clSOdqi0SvY1WSgbnl2YgCZmoCXOxeUjYeXp8p2zI=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "22c4a7a4796a91c297a7e59078a84ec29515f86e",
+        "rev": "0f7f5ca1cdec8dea85bb4fa60378258171d019ad",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-22.11",
+        "ref": "nixos-23.05",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -377,6 +393,22 @@
       "original": {
         "owner": "arcticicestudio",
         "repo": "nord-vim",
+        "type": "github"
+      }
+    },
+    "null-ls-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1680311856,
+        "narHash": "sha256-JViLNL2LLzm+ZQYnR4HF3e2mBa7AbDK7jWn4ZhjKYbY=",
+        "owner": "jose-elias-alvarez",
+        "repo": "null-ls.nvim",
+        "rev": "defa0518762abb32279d601443344fb9773f9330",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jose-elias-alvarez",
+        "repo": "null-ls.nvim",
         "type": "github"
       }
     },
@@ -508,6 +540,22 @@
         "type": "github"
       }
     },
+    "nvim-nu": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1678214502,
+        "narHash": "sha256-Xbkt1Hf+3Rgd6PGaLj75ZCQ3lSQhbLCxN2QJd5hCk2k=",
+        "owner": "LhKipp",
+        "repo": "nvim-nu",
+        "rev": "f45f36a97fb0ea6e39f08cc2fac7a2fb3dc3999b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "LhKipp",
+        "repo": "nvim-nu",
+        "type": "github"
+      }
+    },
     "nvim-telescope": {
       "flake": false,
       "locked": {
@@ -629,6 +677,7 @@
         "cmp-nvim-lsp": "cmp-nvim-lsp",
         "cmp-path": "cmp-path",
         "cmp_luasnip": "cmp_luasnip",
+        "copilot-vim": "copilot-vim",
         "editorconfig-vim": "editorconfig-vim",
         "elixir-nvim": "elixir-nvim",
         "flake-utils": "flake-utils",
@@ -643,6 +692,7 @@
         "nixpkgs": "nixpkgs_2",
         "no-neck-pain": "no-neck-pain",
         "nord-vim": "nord-vim",
+        "null-ls-nvim": "null-ls-nvim",
         "nvim-blame-line": "nvim-blame-line",
         "nvim-cmp": "nvim-cmp",
         "nvim-dap": "nvim-dap",
@@ -651,6 +701,7 @@
         "nvim-jqx": "nvim-jqx",
         "nvim-lightbulb": "nvim-lightbulb",
         "nvim-lspconfig": "nvim-lspconfig",
+        "nvim-nu": "nvim-nu",
         "nvim-telescope": "nvim-telescope",
         "nvim-tree-lua": "nvim-tree-lua",
         "nvim-treesitter": "nvim-treesitter",

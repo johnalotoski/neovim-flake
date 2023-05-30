@@ -2,11 +2,11 @@
   description = "Manverus' NeoVim config";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
     flake-utils.url = "github:numtide/flake-utils";
 
     neovim = {
-      url = "github:neovim/neovim/v0.8.2?dir=contrib";
+      url = "github:neovim/neovim/v0.9.1?dir=contrib";
       inputs.flake-utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -234,6 +234,18 @@
       url = "github:shortcuts/no-neck-pain.nvim";
       flake = false;
     };
+    copilot-vim = {
+      url = "github:github/copilot.vim";
+      flake = false;
+    };
+    nvim-nu = {
+      url = "github:LhKipp/nvim-nu";
+      flake = false;
+    };
+    null-ls-nvim = {
+      url = "github:jose-elias-alvarez/null-ls.nvim";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -256,9 +268,8 @@
         overlays = [
           pluginOverlay
           (final: prev: {
-            statix = inputs.statix.defaultPackage."${system}";
-            neovim-nightly = neovim.defaultPackage."${system}";
-            inherit (inputs.nil.packages."${system}") nil;
+            statix = inputs.statix.defaultPackage.${system};
+            inherit (inputs.nil.packages.${system}) nil;
             tsserver = prev.nodePackages.typescript-language-server;
             vimls = prev.nodePackages.vim-language-server;
             yamlls = prev.nodePackages.yaml-language-server;
@@ -267,6 +278,14 @@
             htmlls = prev.nodePackages.vscode-html-languageserver-bin;
             jsonls = prev.nodePackages.vscode-json-languageserver-bin;
             bashls = prev.nodePackages.bash-language-server;
+
+            neovim-nightly =
+              neovim.defaultPackage.${system}.overrideAttrs
+              (_: {
+                patches = [
+                  "${inputs.nixpkgs}/pkgs/applications/editors/neovim/system_rplugin_manifest.patch"
+                ];
+              });
 
             efm-langserver = prev.buildGoModule rec {
               pname = "efm-langserver";
@@ -384,6 +403,7 @@
             mint = true;
             nickel = true;
             nix = true;
+            nu = true;
             python = true;
             rego = true;
             ruby = true;
