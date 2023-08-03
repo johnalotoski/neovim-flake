@@ -66,7 +66,7 @@ in {
     lineNumberMode = mkOption {
       default = "relNumber";
       description = "How line numbers are displayed. none, relative, number, relNumber";
-      type = with types; enum ["relative" "number" "relNumber" "none"];
+      type = with types; enum ["relative" "number" "relNumber" "none" "auto"];
     };
 
     preventJunkFiles = mkOption {
@@ -214,6 +214,14 @@ in {
           relative = "set relativenumber";
           number = "set number";
           relNumber = "set number relativenumber";
+          auto = ''
+            set number
+            augroup numbertoggle
+              autocmd!
+              autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
+              autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
+            augroup END
+          '';
         }
         .${cfg.lineNumberMode}
         or ""}
