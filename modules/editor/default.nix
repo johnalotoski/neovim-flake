@@ -87,6 +87,18 @@ in {
               \ }),
               \ }))
       ''}
+
+      ${optionalString config.vim.showTrailingWhitespace ''
+        highlight ExtraWhitespace ctermbg=red guibg=red
+        au ColorScheme * highlight ExtraWhitespace guibg=red
+        au BufEnter * match ExtraWhitespace /\s\+$/
+        au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+        au InsertLeave * match ExtraWhiteSpace /\s\+$/
+      ''}
+
+      ${optionalString config.vim.trimTrailingWhitespace ''
+        au BufWritePre * %s/\s\+$//e
+      ''}
     '';
 
     vim.luaConfigRC = ''
