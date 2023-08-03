@@ -375,8 +375,11 @@
           tabbar.barbar.enable = true;
           test.enable = true;
           theme.gruvbox.enable = true;
-          viAlias = true;
-          vimAlias = true;
+          viAlias = false;
+          vimAlias = false;
+          lineNumberMode = "number";
+          showTrailingWhitespace = true;
+          trimTrailingWhitespace = true;
 
           git = {
             enable = true;
