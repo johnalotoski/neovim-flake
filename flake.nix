@@ -302,7 +302,7 @@
             regols = prev.buildGoModule rec {
               pname = "regols";
               version = "0.1.0";
-              vendorSha256 = "sha256-JtZBhTXjFRcm+7oJii0eoJRyVJV+O0ad2xL3TDe+5Yo=";
+              vendorSha256 = "sha256-iyY8MycN/G6jj5hqb1ewyEkIMbTMJdILqHczxAYlxng=";
               src = prev.fetchFromGitHub {
                 owner = "kitagry";
                 repo = pname;
