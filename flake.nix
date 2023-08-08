@@ -357,8 +357,6 @@
           disableArrows = false;
           virtualedit = "all";
 
-          cnoremap = {"3636" = "<c-u>undo<CR>";};
-
           editor = {
             surround = true;
             colourPreview = true;
@@ -419,6 +417,35 @@
             vimscript = true;
             yaml = true;
             zig = true;
+          };
+
+          cnoremap = {"3636" = "<c-u>undo<CR>";};
+
+          # Barbar default mappings
+          nnoremap = {
+            # Move to previous/next
+            "<silent> <A-,>" = "<Cmd>BufferPrevious<CR>";
+            "<silent> <A-.>" = "<Cmd>BufferNext<CR>";
+
+            # Re-order to previous/next
+            "<silent> <A-<>" = "<Cmd>BufferMovePrevious<CR>";
+            "<silent> <A->>" = "<Cmd>BufferMoveNext<CR>";
+
+            # Pin/unpin buffer
+            "<silent> <A-p>" = "<Cmd>BufferPin<CR>";
+
+            # Close buffer
+            "<silent> <A-c>" = "<Cmd>BufferClose<CR>";
+
+            # Magic buffer-picking mode
+            "<silent> <C-p>" = "<Cmd>BufferPick<CR>";
+            "<silent> <C-A-p>" = "<Cmd>BufferPickDelete<CR>";
+
+            # Sort automatically by...
+            "<silent> <Space>bb" = "<Cmd>BufferOrderByBufferNumber<CR>";
+            "<silent> <Space>bd" = "<Cmd>BufferOrderByDirectory<CR>";
+            "<silent> <Space>bl" = "<Cmd>BufferOrderByLanguage<CR>";
+            "<silent> <Space>bw" = "<Cmd>BufferOrderByWindowNumber<CR>";
           };
         };
       };

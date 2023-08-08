@@ -9,7 +9,7 @@ with builtins; let
   cfg = config.vim.formatting.editorConfig;
 in {
   options.vim.formatting.editorConfig = {
-    enable = mkEnableOption "Enable barbar";
+    enable = mkEnableOption "Enable editorConfig";
   };
 
   config = mkIf cfg.enable {
