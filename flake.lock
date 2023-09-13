@@ -19,11 +19,11 @@
     "barbar-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1674425099,
-        "narHash": "sha256-QAGvi3owVVgVy+81Kr34COKO7Aj3wYI5X1EtH0hqUS8=",
+        "lastModified": 1693857332,
+        "narHash": "sha256-0yiwELt2t+XetOYlSw/ujkBKY+9y4u3FoSfNweNZauc=",
         "owner": "romgrk",
         "repo": "barbar.nvim",
-        "rev": "e9da670e3fd58598bd0d2cf7e32e1af24cb2fcca",
+        "rev": "f8d1b44bf56f754c9d9b4dd70fc041d94d676474",
         "type": "github"
       },
       "original": {
