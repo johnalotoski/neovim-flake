@@ -1,5 +1,5 @@
 {
-  description = "Manverus' NeoVim config";
+  description = "NeoVim config";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
