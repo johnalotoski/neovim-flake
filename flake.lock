@@ -724,6 +724,7 @@
         "vim-mint": "vim-mint",
         "vim-nickel": "vim-nickel",
         "vim-nix": "vim-nix",
+        "vim-ormolu": "vim-ormolu",
         "vim-slim": "vim-slim",
         "vim-startify": "vim-startify",
         "vim-surround": "vim-surround",
@@ -996,6 +997,22 @@
       "original": {
         "owner": "LnL7",
         "repo": "vim-nix",
+        "type": "github"
+      }
+    },
+    "vim-ormolu": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1606310238,
+        "narHash": "sha256-HXmp65oIr8LSPa8DgiRfMgveECF9qvTQIh82A3psWQ8=",
+        "owner": "sdiehl",
+        "repo": "vim-ormolu",
+        "rev": "edbeb0135692345b088182963e9b229fe2235ac0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sdiehl",
+        "repo": "vim-ormolu",
         "type": "github"
       }
     },
