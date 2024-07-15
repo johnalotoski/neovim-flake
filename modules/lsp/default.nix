@@ -46,15 +46,12 @@ in {
   config = mkIf cfg.enable {
     vim.startPlugins = with pkgs.neovimPlugins;
       [
-        pkgs.vimPlugins.nvim-treesitter.withAllGrammars
-
-        # nvim-treesitter
-        # nvim-treesitter-context
         cmp-buffer
         cmp-cmdline
         cmp_luasnip
         cmp-nvim-lsp
         cmp-path
+        copilot-vim
         lsp_signature
         LuaSnip
         no-neck-pain
@@ -62,11 +59,14 @@ in {
         nvim-dap
         nvim-jqx
         nvim-lspconfig
+        pkgs.vimPlugins.nvim-treesitter.withAllGrammars
+        # nvim-treesitter
+        # nvim-treesitter-context
         telescope-dap
         vim-cue
         vim-just
+        vim-ormolu
         vim-slim
-        copilot-vim
       ]
       ++ (lib.optional cfg.lightbulb nvim-lightbulb)
       ++ (lib.optional cfg.variableDebugPreviews nvim-dap-virtual-text)
@@ -86,6 +86,10 @@ in {
       ''}
 
       let g:completion_enable_auto_popup = 1
+
+      let g:ormolu_command="fourmolu"
+      let g:ormolu_options=["--no-cabal"]
+      let g:ormolu_suppress_stderr=1
     '';
 
     vim.nnoremap = {
@@ -497,7 +501,16 @@ in {
       ''}
 
       ${optionalString cfg.haskell ''
-        setup("hls")
+        lspconfig.hls.setup{
+          capabilities = capabilities;
+          filetypes = { "haskell", "lhaskell", "cabalproject" };
+          cmd = { "haskell-language-server", "--lsp" };
+          settings = {
+            haskell = {
+              formattingProvider = "fourmolu"
+            }
+          };
+        }
       ''}
 
       ${optionalString cfg.json ''
