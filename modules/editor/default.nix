@@ -57,6 +57,14 @@ in {
       default = "red";
     };
 
+    spell = mkEnableOption "Enable spelling on startup ";
+
+    spelllang = mkOption {
+      description = "Set the default spelling language";
+      type = types.str;
+      default = "en";
+    };
+
     surround = mkEnableOption "Enable vim-surround";
 
     trimTrailingWhitespace = mkOption {
@@ -163,6 +171,11 @@ in {
 
       ${optionalString cfg.retabTabs ''
         au BufWritePre * retab
+      ''}
+
+      ${optionalString cfg.spell ''
+        set spelllang=${cfg.spelllang}
+        set spell
       ''}
     '';
 

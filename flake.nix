@@ -371,6 +371,7 @@
             retabTabs = true;
             showTabs = true;
             showTrailingWhitespace = true;
+            spell = true;
             surround = true;
             trimTrailingWhitespace = true;
             whichKey = true;
