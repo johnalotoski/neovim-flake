@@ -368,7 +368,11 @@
             abolish = true;
             colourPreview = true;
             floaterm = true;
+            retabTabs = true;
+            showTabs = true;
+            showTrailingWhitespace = true;
             surround = true;
+            trimTrailingWhitespace = true;
             whichKey = true;
             wilder = true;
           };
@@ -377,12 +381,10 @@
           formatting.editorConfig.enable = true;
           fuzzyfind.telescope.enable = true;
           lineNumberMode = "number";
-          showTrailingWhitespace = true;
           statusline.lightline.enable = true;
           tabbar.barbar.enable = true;
           test.enable = true;
           theme.gruvbox.enable = true;
-          trimTrailingWhitespace = true;
           viAlias = false;
           vimAlias = false;
 

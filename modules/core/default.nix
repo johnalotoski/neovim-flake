@@ -64,18 +64,6 @@ in {
       type = types.attrs;
     };
 
-    showTrailingWhitespace = mkOption {
-      description = "Show trailing whitespace in red";
-      type = types.bool;
-      default = false;
-    };
-
-    trimTrailingWhitespace = mkOption {
-      description = "Trim trailing whitespace on save";
-      type = types.bool;
-      default = false;
-    };
-
     nnoremap =
       mkMappingOption {description = "Defines 'Normal mode' mappings";};
 

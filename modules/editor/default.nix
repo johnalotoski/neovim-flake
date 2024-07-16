@@ -9,14 +9,67 @@ with builtins; let
   cfg = config.vim.editor;
 in {
   options.vim.editor = {
-    indentGuide = mkEnableOption "Enable indent guides";
-    underlineCurrentWord = mkEnableOption "Underline the word under the cursor";
-    colourPreview = mkEnableOption "Enable colour previews";
-    whichKey = mkEnableOption "Enable Which key";
-    floaterm = mkEnableOption "Enable floaterm instead of built in";
-    surround = mkEnableOption "Enable vim-surround";
-    wilder = mkEnableOption "Enable wilder.nvim";
     abolish = mkEnableOption "Enable vim-abolish";
+
+    colourPreview = mkEnableOption "Enable colour previews";
+
+    floaterm = mkEnableOption "Enable floaterm instead of built in";
+
+    indentGuide = mkEnableOption "Enable indent guides";
+
+    retabTabs = mkOption {
+      description = "Retab tabs to convert to spaces automatically on save";
+      type = types.bool;
+      default = false;
+    };
+
+    showTabs = mkOption {
+      description = "Show tabs in the showTabsColor value";
+      type = types.bool;
+      default = false;
+    };
+
+    showTabsColor = mkOption {
+      description = ''
+        The highlight color to show tabs with if showTabs is enabled.
+        must be both cterm and gui color scheme compatible as shown by:
+          :help ctermbg
+          :help guibg
+      '';
+      type = types.str;
+      default = "magenta";
+    };
+
+    showTrailingWhitespace = mkOption {
+      description = "Show trailing whitespace in the showTrailingWhitespaceColor value";
+      type = types.bool;
+      default = false;
+    };
+
+    showTrailingWhitespaceColor = mkOption {
+      description = ''
+        The highlight color to show tabs with if showTrailingWhitespace is enabled.
+        must be both cterm and gui color scheme compatible as shown by:
+          :help ctermbg
+          :help guibg
+      '';
+      type = types.str;
+      default = "red";
+    };
+
+    surround = mkEnableOption "Enable vim-surround";
+
+    trimTrailingWhitespace = mkOption {
+      description = "Trim trailing whitespace on save";
+      type = types.bool;
+      default = false;
+    };
+
+    underlineCurrentWord = mkEnableOption "Underline the word under the cursor";
+
+    whichKey = mkEnableOption "Enable Which key";
+
+    wilder = mkEnableOption "Enable wilder.nvim";
   };
 
   config = {
@@ -88,16 +141,28 @@ in {
               \ }))
       ''}
 
-      ${optionalString config.vim.showTrailingWhitespace ''
-        highlight ExtraWhitespace ctermbg=red guibg=red
-        au ColorScheme * highlight ExtraWhitespace guibg=red
+      ${optionalString cfg.showTrailingWhitespace ''
+        highlight ExtraWhitespace ctermbg=${cfg.showTrailingWhitespaceColor} guibg=${cfg.showTrailingWhitespaceColor}
+        au ColorScheme * highlight ExtraWhitespace guibg=${cfg.showTrailingWhitespaceColor}
         au BufEnter * match ExtraWhitespace /\s\+$/
         au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
         au InsertLeave * match ExtraWhiteSpace /\s\+$/
       ''}
 
-      ${optionalString config.vim.trimTrailingWhitespace ''
+      ${optionalString cfg.showTabs ''
+        highlight Tabs ctermbg=${cfg.showTabsColor} guibg=${cfg.showTabsColor}
+        au ColorScheme * highlight Tabs guibg=${cfg.showTabsColor}
+        au BufEnter * 2match Tabs /\t\+/
+        au InsertEnter * 2match Tabs /\t\+/
+        au InsertLeave * 2match Tabs /\t\+/
+      ''}
+
+      ${optionalString cfg.trimTrailingWhitespace ''
         au BufWritePre * %s/\s\+$//e
+      ''}
+
+      ${optionalString cfg.retabTabs ''
+        au BufWritePre * retab
       ''}
     '';
 
