@@ -11,41 +11,51 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Nix language server
     nil.url = "github:oxalica/nil";
 
-    # Vim plugins
+    # -- Vim plugins
+    # Tab bar at the top of the editor
     barbar-nvim = {
       url = "github:romgrk/barbar.nvim";
       flake = false;
     };
+
     cmp-buffer = {
       url = "github:hrsh7th/cmp-buffer";
       flake = false;
     };
+
     cmp-cmdline = {
       url = "github:hrsh7th/cmp-cmdline";
       flake = false;
     };
+
     cmp_luasnip = {
       url = "github:saadparwaiz1/cmp_luasnip";
       flake = false;
     };
+
     cmp-nvim-lsp = {
       url = "github:hrsh7th/cmp-nvim-lsp";
       flake = false;
     };
+
     cmp-path = {
       url = "github:hrsh7th/cmp-path";
       flake = false;
     };
+
     copilot-vim = {
       url = "github:github/copilot.vim";
       flake = false;
     };
+
     editorconfig-vim = {
       url = "github:editorconfig/editorconfig-vim";
       flake = false;
     };
+
     elixir-nvim = {
       url = "github:mhanberg/elixir.nvim";
       flake = false;
@@ -54,198 +64,259 @@
       url = "github:mhartington/formatter.nvim";
       flake = false;
     };
+
     gleam-vim = {
       url = "github:gleam-lang/gleam.vim";
       flake = false;
     };
+
     gruvbox = {
       url = "github:morhetz/gruvbox";
       flake = false;
     };
+
     indent-blankline-nvim = {
       url = "github:lukas-reineke/indent-blankline.nvim";
       flake = false;
     };
+
     lightline-vim = {
       url = "github:itchyny/lightline.vim";
       flake = false;
     };
+
     lsp_signature = {
       url = "github:ray-x/lsp_signature.nvim";
       flake = false;
     };
+
     LuaSnip = {
       url = "github:L3MON4D3/LuaSnip";
       flake = false;
     };
+
     no-neck-pain = {
       url = "github:shortcuts/no-neck-pain.nvim";
       flake = false;
     };
+
     nord-vim = {
       url = "github:arcticicestudio/nord-vim";
       flake = false;
     };
+
     null-ls-nvim = {
       url = "github:jose-elias-alvarez/null-ls.nvim";
       flake = false;
     };
+
     nvim-blame-line = {
       url = "github:tveskag/nvim-blame-line";
       flake = false;
     };
+
     nvim-cmp = {
       url = "github:hrsh7th/nvim-cmp";
       flake = false;
     };
+
+    nvim-colorizer-lua = {
+      url = "github:norcalli/nvim-colorizer.lua";
+      flake = false;
+    };
+
     nvim-dap = {
       url = "github:mfussenegger/nvim-dap";
       flake = false;
     };
+
     nvim-dap-virtual-text = {
       url = "github:theHamsta/nvim-dap-virtual-text";
       flake = false;
     };
+
     nvim-idris2 = {
       url = "github:ShinKage/nvim-idris2";
       flake = false;
     };
+
     nvim-jqx = {
       url = "github:gennaro-tedesco/nvim-jqx";
       flake = false;
     };
+
     nvim-lightbulb = {
       url = "github:kosayoda/nvim-lightbulb";
       flake = false;
     };
+
     nvim-lspconfig = {
       url = "github:neovim/nvim-lspconfig";
       flake = false;
     };
+
     nvim-nu = {
       url = "github:LhKipp/nvim-nu";
       flake = false;
     };
+
     nvim-telescope = {
       url = "github:nvim-telescope/telescope.nvim";
       flake = false;
     };
+
     nvim-tree-lua = {
       url = "github:kyazdani42/nvim-tree.lua";
       flake = false;
     };
+
     nvim-treesitter-context = {
       url = "github:romgrk/nvim-treesitter-context";
       flake = false;
     };
+
     nvim-treesitter = {
       url = "github:nvim-treesitter/nvim-treesitter";
       flake = false;
     };
+
     nvim-web-devicons = {
       url = "github:kyazdani42/nvim-web-devicons";
       flake = false;
     };
+
     plenary-nvim = {
       url = "github:nvim-lua/plenary.nvim";
       flake = false;
     };
+
     popup-nvim = {
       url = "github:nvim-lua/popup.nvim";
       flake = false;
     };
+
     splice = {
       url = "github:sjl/splice.vim";
       flake = false;
     };
+
     telescope-dap = {
       url = "github:nvim-telescope/telescope-dap.nvim";
       flake = false;
     };
+
     vim-abolish = {
       url = "github:tpope/vim-abolish";
       flake = false;
     };
+
     vimagit = {
       url = "github:jreybert/vimagit";
       flake = false;
     };
+
     vim-crystal = {
       url = "github:vim-crystal/vim-crystal";
       flake = false;
     };
+
     vim-cue = {
       url = "github:jjo/vim-cue";
       flake = false;
     };
+
     vim-cursorword = {
       url = "github:itchyny/vim-cursorword";
       flake = false;
     };
+
     vim-dadbod-ui = {
       url = "github:kristijanhusak/vim-dadbod-ui";
       flake = false;
     };
+
     vim-dadbod = {
       url = "github:tpope/vim-dadbod";
       flake = false;
     };
+
     vim-floaterm = {
       url = "github:voldikss/vim-floaterm";
       flake = false;
     };
+
     vim-go = {
       url = "github:fatih/vim-go";
       flake = false;
     };
-    vim-hexokinase = {
-      url = "github:RRethy/vim-hexokinase";
-      flake = false;
-    };
+
+    # A syntax highlighter for Just
     vim-just = {
       url = "github:NoahTheDuke/vim-just";
       flake = false;
     };
+
+    # A syntax highlighter, file detection and indenter for Mint
     vim-mint = {
       url = "github:IrenejMarc/vim-mint";
       flake = false;
     };
+
+    # A syntax highlighter, file detection and indenter for Nickel
     vim-nickel = {
       url = "github:nickel-lang/vim-nickel";
       flake = false;
     };
+
+    # A syntax highlighter, file detection and indenter for Nix
     vim-nix = {
       url = "github:LnL7/vim-nix";
       flake = false;
     };
+
+    # A code formatter for Haskell
     vim-ormolu = {
       url = "github:sdiehl/vim-ormolu";
       flake = false;
     };
+
+    # A syntax highlighter for slim, a rails templating DSL
     vim-slim = {
       url = "github:slim-template/vim-slim";
       flake = false;
     };
+
+    # A start page for neovim with suggested actions
     vim-startify = {
       url = "github:mhinz/vim-startify";
       flake = false;
     };
+
+    # A set of hotkeys for actions surrounding text blobs
     vim-surround = {
       url = "github:tpope/vim-surround";
       flake = false;
     };
+
+    # A test suit wrapper for various languages
     vim-test = {
       url = "github:vim-test/vim-test";
       flake = false;
     };
+
+    # A pop up menu helper that to display keybindings, ex: leader key
     which-key-nvim = {
       url = "github:folke/which-key.nvim";
       flake = false;
     };
+
+    # A pop up helper for :CMD and /SEARCH in lower left
     wilder-nvim = {
       url = "github:gelguy/wilder.nvim";
       flake = false;
     };
+
+    # A code formatter for zig
     zig-vim = {
       url = "github:ziglang/zig.vim";
       flake = false;
@@ -366,7 +437,7 @@
 
           editor = {
             abolish = true;
-            colourPreview = true;
+            colorPreview = true;
             floaterm = true;
             retabTabs = true;
             showTabs = true;

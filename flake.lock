@@ -444,6 +444,22 @@
         "type": "github"
       }
     },
+    "nvim-colorizer-lua": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1715313687,
+        "narHash": "sha256-gjO89Sx335PqVgceM9DBfcVozNjovC8KML1OZCRNMGw=",
+        "owner": "norcalli",
+        "repo": "nvim-colorizer.lua",
+        "rev": "a065833f35a3a7cc3ef137ac88b5381da2ba302e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "norcalli",
+        "repo": "nvim-colorizer.lua",
+        "type": "github"
+      }
+    },
     "nvim-dap": {
       "flake": false,
       "locked": {
@@ -695,6 +711,7 @@
         "null-ls-nvim": "null-ls-nvim",
         "nvim-blame-line": "nvim-blame-line",
         "nvim-cmp": "nvim-cmp",
+        "nvim-colorizer-lua": "nvim-colorizer-lua",
         "nvim-dap": "nvim-dap",
         "nvim-dap-virtual-text": "nvim-dap-virtual-text",
         "nvim-idris2": "nvim-idris2",
@@ -719,7 +736,6 @@
         "vim-dadbod-ui": "vim-dadbod-ui",
         "vim-floaterm": "vim-floaterm",
         "vim-go": "vim-go",
-        "vim-hexokinase": "vim-hexokinase",
         "vim-just": "vim-just",
         "vim-mint": "vim-mint",
         "vim-nickel": "vim-nickel",
@@ -917,22 +933,6 @@
       "original": {
         "owner": "fatih",
         "repo": "vim-go",
-        "type": "github"
-      }
-    },
-    "vim-hexokinase": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1619312119,
-        "narHash": "sha256-lp5ywNLkcH6l/9kTxzAsJRdZUSD6qp1ufCJmnQIwX/s=",
-        "owner": "RRethy",
-        "repo": "vim-hexokinase",
-        "rev": "62324b43ea858e268fb70665f7d012ae67690f43",
-        "type": "github"
-      },
-      "original": {
-        "owner": "RRethy",
-        "repo": "vim-hexokinase",
         "type": "github"
       }
     },

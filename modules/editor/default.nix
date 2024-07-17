@@ -11,23 +11,15 @@ in {
   options.vim.editor = {
     abolish = mkEnableOption "Enable vim-abolish";
 
-    colourPreview = mkEnableOption "Enable colour previews";
+    colorPreview = mkEnableOption "Enable colour previews";
 
     floaterm = mkEnableOption "Enable floaterm instead of built in";
 
     indentGuide = mkEnableOption "Enable indent guides";
 
-    retabTabs = mkOption {
-      description = "Retab tabs to convert to spaces automatically on save";
-      type = types.bool;
-      default = false;
-    };
+    retabTabs = mkEnableOption "Retab tabs to convert to spaces automatically on save";
 
-    showTabs = mkOption {
-      description = "Show tabs in the showTabsColor value";
-      type = types.bool;
-      default = false;
-    };
+    showTabs = mkEnableOption "Show tabs in the showTabsColor value";
 
     showTabsColor = mkOption {
       description = ''
@@ -40,11 +32,7 @@ in {
       default = "magenta";
     };
 
-    showTrailingWhitespace = mkOption {
-      description = "Show trailing whitespace in the showTrailingWhitespaceColor value";
-      type = types.bool;
-      default = false;
-    };
+    showTrailingWhitespace = mkEnableOption "Show trailing whitespace in the showTrailingWhitespaceColor value";
 
     showTrailingWhitespaceColor = mkOption {
       description = ''
@@ -67,11 +55,7 @@ in {
 
     surround = mkEnableOption "Enable vim-surround";
 
-    trimTrailingWhitespace = mkOption {
-      description = "Trim trailing whitespace on save";
-      type = types.bool;
-      default = false;
-    };
+    trimTrailingWhitespace = mkEnableOption "Trim trailing whitespace on save";
 
     underlineCurrentWord = mkEnableOption "Underline the word under the cursor";
 
@@ -82,24 +66,26 @@ in {
 
   config = {
     vim.startPlugins = with pkgs.neovimPlugins;
-      (optional cfg.indentGuide indent-blankline-nvim)
+      (optional cfg.abolish vim-abolish)
+      ++ (optional cfg.floaterm vim-floaterm)
+      ++ (optional cfg.indentGuide indent-blankline-nvim)
+      ++ (optional cfg.colorPreview nvim-colorizer-lua)
+      ++ (optional cfg.surround vim-surround)
       ++ (optional cfg.underlineCurrentWord vim-cursorword)
       ++ (optional cfg.whichKey which-key-nvim)
-      ++ (optional cfg.floaterm vim-floaterm)
-      ++ (optional cfg.surround vim-surround)
-      ++ (optional cfg.wilder wilder-nvim)
-      ++ (optional cfg.abolish vim-abolish);
+      ++ (optional cfg.wilder wilder-nvim);
 
-    vim.nnoremap = {
-      "<leader>?" = "<cmd>WhichKey '<Space>'<cr>";
-      "<leader>p`" = "<cmd>FloatermNew<cr>";
-      "<leader>`j" = "<cmd>FloatermNext<cr>";
-      "<leader>`k" = "<cmd>FloatermPrev><cr>";
-    };
+    vim.nnoremap =
+      optionalAttrs cfg.floaterm {
+        "<leader>p`" = "<cmd>FloatermNew<cr>";
+        "<leader>`j" = "<cmd>FloatermNext<cr>";
+        "<leader>`k" = "<cmd>FloatermPrev><cr>";
+      }
+      // optionalAttrs cfg.whichKey {
+        "<leader>?" = "<cmd>WhichKey '<Space>'<cr>";
+      };
 
     vim.configRC = ''
-      "let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla'"
-
       function s:MkNonExDir(file, buf)
         if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
           let dir=fnamemodify(a:file, ':h')
@@ -180,8 +166,14 @@ in {
     '';
 
     vim.luaConfigRC = ''
-      local wk = require("which-key")
-      wk.setup { }
+      ${optionalString cfg.whichKey ''
+        local wk = require("which-key")
+        wk.setup { }
+      ''}
+
+      ${optionalString cfg.colorPreview ''
+        require 'colorizer'.setup()
+      ''}
 
       ${optionalString cfg.indentGuide ''
         -- define the highlight groups with only background colors (or leave odd empty to just show the normal background)
