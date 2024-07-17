@@ -206,6 +206,22 @@
         "type": "github"
       }
     },
+    "gitsigns-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1721142323,
+        "narHash": "sha256-iFVTd7nO4twq/S3qQpy4PZfHMpLDErJfJk63TmwL8t0=",
+        "owner": "lewis6991",
+        "repo": "gitsigns.nvim",
+        "rev": "f4928ba14eb6c667786ac7d69927f6aee6719f1e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lewis6991",
+        "repo": "gitsigns.nvim",
+        "type": "github"
+      }
+    },
     "gleam-vim": {
       "flake": false,
       "locked": {
@@ -698,6 +714,7 @@
         "elixir-nvim": "elixir-nvim",
         "flake-utils": "flake-utils",
         "formatter-nvim": "formatter-nvim",
+        "gitsigns-nvim": "gitsigns-nvim",
         "gleam-vim": "gleam-vim",
         "gruvbox": "gruvbox",
         "indent-blankline-nvim": "indent-blankline-nvim",

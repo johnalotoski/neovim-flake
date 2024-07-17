@@ -76,6 +76,12 @@
       flake = false;
     };
 
+    # Git integration for buffers
+    gitsigns-nvim = {
+      url = "github:lewis6991/gitsigns.nvim";
+      flake = false;
+    };
+
     # A language support plugin for Gleam
     # NOTE: "This plugin is not needed if you are using Neovim.  Instead..."
     gleam-vim = {

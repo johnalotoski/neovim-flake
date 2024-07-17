@@ -10,21 +10,21 @@ with builtins; let
 in {
   options.vim.git = {
     enable = mkEnableOption "Enable git support";
-    blameLine = mkOption {
-      default = true;
-      description = "Prints blame info of who edited the line you are on.";
-      type = types.bool;
-    };
+    blameLine = mkEnableOption "Prints blame info of who edited the line you are on.";
   };
 
   config = mkIf cfg.enable {
     vim.nnoremap = {"<leader>g" = "<cmd>MagitOnly<cr>";};
 
     vim.startPlugins = with pkgs.neovimPlugins;
-      [vimagit splice] ++ (optional cfg.blameLine nvim-blame-line);
+      [gitsigns-nvim splice vimagit] ++ (optional cfg.blameLine nvim-blame-line);
 
     vim.configRC = optionalString cfg.blameLine ''
       autocmd BufEnter * EnableBlameLine
+    '';
+
+    vim.luaConfigRC = ''
+      require('gitsigns').setup()
     '';
   };
 }
