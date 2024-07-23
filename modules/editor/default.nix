@@ -9,36 +9,83 @@ with builtins; let
   cfg = config.vim.editor;
 in {
   options.vim.editor = {
-    indentGuide = mkEnableOption "Enable indent guides";
-    underlineCurrentWord = mkEnableOption "Underline the word under the cursor";
-    colourPreview = mkEnableOption "Enable colour previews";
-    whichKey = mkEnableOption "Enable Which key";
-    floaterm = mkEnableOption "Enable floaterm instead of built in";
-    surround = mkEnableOption "Enable vim-surround";
-    wilder = mkEnableOption "Enable wilder.nvim";
     abolish = mkEnableOption "Enable vim-abolish";
+
+    colorPreview = mkEnableOption "Enable colour previews";
+
+    floaterm = mkEnableOption "Enable floaterm instead of built in";
+
+    indentGuide = mkEnableOption "Enable indent guides";
+
+    retabTabs = mkEnableOption "Retab tabs to convert to spaces automatically on save";
+
+    showTabs = mkEnableOption "Show tabs in the showTabsColor value";
+
+    showTabsColor = mkOption {
+      description = ''
+        The highlight color to show tabs with if showTabs is enabled.
+        must be both cterm and gui color scheme compatible as shown by:
+          :help ctermbg
+          :help guibg
+      '';
+      type = types.str;
+      default = "magenta";
+    };
+
+    showTrailingWhitespace = mkEnableOption "Show trailing whitespace in the showTrailingWhitespaceColor value";
+
+    showTrailingWhitespaceColor = mkOption {
+      description = ''
+        The highlight color to show tabs with if showTrailingWhitespace is enabled.
+        must be both cterm and gui color scheme compatible as shown by:
+          :help ctermbg
+          :help guibg
+      '';
+      type = types.str;
+      default = "red";
+    };
+
+    spell = mkEnableOption "Enable spelling on startup ";
+
+    spelllang = mkOption {
+      description = "Set the default spelling language";
+      type = types.str;
+      default = "en";
+    };
+
+    surround = mkEnableOption "Enable vim-surround";
+
+    trimTrailingWhitespace = mkEnableOption "Trim trailing whitespace on save";
+
+    underlineCurrentWord = mkEnableOption "Underline the word under the cursor";
+
+    whichKey = mkEnableOption "Enable Which key";
+
+    wilder = mkEnableOption "Enable wilder.nvim";
   };
 
   config = {
     vim.startPlugins = with pkgs.neovimPlugins;
-      (optional cfg.indentGuide indent-blankline-nvim)
+      (optional cfg.abolish vim-abolish)
+      ++ (optional cfg.floaterm vim-floaterm)
+      ++ (optional cfg.indentGuide indent-blankline-nvim)
+      ++ (optional cfg.colorPreview nvim-colorizer-lua)
+      ++ (optional cfg.surround vim-surround)
       ++ (optional cfg.underlineCurrentWord vim-cursorword)
       ++ (optional cfg.whichKey which-key-nvim)
-      ++ (optional cfg.floaterm vim-floaterm)
-      ++ (optional cfg.surround vim-surround)
-      ++ (optional cfg.wilder wilder-nvim)
-      ++ (optional cfg.abolish vim-abolish);
+      ++ (optional cfg.wilder wilder-nvim);
 
-    vim.nnoremap = {
-      "<leader>?" = "<cmd>WhichKey '<Space>'<cr>";
-      "<leader>p`" = "<cmd>FloatermNew<cr>";
-      "<leader>`j" = "<cmd>FloatermNext<cr>";
-      "<leader>`k" = "<cmd>FloatermPrev><cr>";
-    };
+    vim.nnoremap =
+      optionalAttrs cfg.floaterm {
+        "<leader>p`" = "<cmd>FloatermNew<cr>";
+        "<leader>`j" = "<cmd>FloatermNext<cr>";
+        "<leader>`k" = "<cmd>FloatermPrev><cr>";
+      }
+      // optionalAttrs cfg.whichKey {
+        "<leader>?" = "<cmd>WhichKey '<Space>'<cr>";
+      };
 
     vim.configRC = ''
-      "let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba,hsl,hsla'"
-
       function s:MkNonExDir(file, buf)
         if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
           let dir=fnamemodify(a:file, ':h')
@@ -88,22 +135,45 @@ in {
               \ }))
       ''}
 
-      ${optionalString config.vim.showTrailingWhitespace ''
-        highlight ExtraWhitespace ctermbg=red guibg=red
-        au ColorScheme * highlight ExtraWhitespace guibg=red
+      ${optionalString cfg.showTrailingWhitespace ''
+        highlight ExtraWhitespace ctermbg=${cfg.showTrailingWhitespaceColor} guibg=${cfg.showTrailingWhitespaceColor}
+        au ColorScheme * highlight ExtraWhitespace guibg=${cfg.showTrailingWhitespaceColor}
         au BufEnter * match ExtraWhitespace /\s\+$/
         au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
         au InsertLeave * match ExtraWhiteSpace /\s\+$/
       ''}
 
-      ${optionalString config.vim.trimTrailingWhitespace ''
+      ${optionalString cfg.showTabs ''
+        highlight Tabs ctermbg=${cfg.showTabsColor} guibg=${cfg.showTabsColor}
+        au ColorScheme * highlight Tabs guibg=${cfg.showTabsColor}
+        au BufEnter * 2match Tabs /\t\+/
+        au InsertEnter * 2match Tabs /\t\+/
+        au InsertLeave * 2match Tabs /\t\+/
+      ''}
+
+      ${optionalString cfg.trimTrailingWhitespace ''
         au BufWritePre * %s/\s\+$//e
+      ''}
+
+      ${optionalString cfg.retabTabs ''
+        au BufWritePre * retab
+      ''}
+
+      ${optionalString cfg.spell ''
+        set spelllang=${cfg.spelllang}
+        set spell
       ''}
     '';
 
     vim.luaConfigRC = ''
-      local wk = require("which-key")
-      wk.setup { }
+      ${optionalString cfg.whichKey ''
+        local wk = require("which-key")
+        wk.setup { }
+      ''}
+
+      ${optionalString cfg.colorPreview ''
+        require 'colorizer'.setup()
+      ''}
 
       ${optionalString cfg.indentGuide ''
         -- define the highlight groups with only background colors (or leave odd empty to just show the normal background)

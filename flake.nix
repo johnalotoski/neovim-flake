@@ -11,241 +11,370 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Nix language server
     nil.url = "github:oxalica/nil";
 
-    # Vim plugins
+    # -- Vim plugins
+    # Tab bar at the top of the editor
     barbar-nvim = {
       url = "github:romgrk/barbar.nvim";
       flake = false;
     };
+
+    # nvim-cmp source for buffer words
     cmp-buffer = {
       url = "github:hrsh7th/cmp-buffer";
       flake = false;
     };
+
+    # nvim-cmp source for vim's cmdline
     cmp-cmdline = {
       url = "github:hrsh7th/cmp-cmdline";
       flake = false;
     };
+
+    # luasnip completion source for nvim-cmp
     cmp_luasnip = {
       url = "github:saadparwaiz1/cmp_luasnip";
       flake = false;
     };
+
+    # nvim-cmp source for neovim builtin LSP client
     cmp-nvim-lsp = {
       url = "github:hrsh7th/cmp-nvim-lsp";
       flake = false;
     };
+
+    # nvim-cmp source for path
     cmp-path = {
       url = "github:hrsh7th/cmp-path";
       flake = false;
     };
+
+    # Neovim plugin for GitHub Copilot
     copilot-vim = {
       url = "github:github/copilot.vim";
       flake = false;
     };
+
+    # EditorConfig plugin for Vim
+    # NOTE: Neovim 0.9 and above comes with its own Lua-based implementation
     editorconfig-vim = {
       url = "github:editorconfig/editorconfig-vim";
       flake = false;
     };
+
+    # A language support plugin for Elixir
     elixir-nvim = {
       url = "github:mhanberg/elixir.nvim";
       flake = false;
     };
+
+    # A format runner for Neovim
     formatter-nvim = {
       url = "github:mhartington/formatter.nvim";
       flake = false;
     };
+
+    # Git integration for buffers
+    gitsigns-nvim = {
+      url = "github:lewis6991/gitsigns.nvim";
+      flake = false;
+    };
+
+    # A language support plugin for Gleam
+    # NOTE: "This plugin is not needed if you are using Neovim.  Instead..."
     gleam-vim = {
       url = "github:gleam-lang/gleam.vim";
       flake = false;
     };
+
+    # Retro groove color scheme for Vim
     gruvbox = {
       url = "github:morhetz/gruvbox";
       flake = false;
     };
+
+    # A plugin for adding indent guides for Neovim
     indent-blankline-nvim = {
       url = "github:lukas-reineke/indent-blankline.nvim";
       flake = false;
     };
+
+    # A light and configurable statusline/tabline plugin for Vim
     lightline-vim = {
       url = "github:itchyny/lightline.vim";
       flake = false;
     };
+
+    # A plugin to add LSP signatures
     lsp_signature = {
       url = "github:ray-x/lsp_signature.nvim";
       flake = false;
     };
+
+    # A snippet Engine for Neovim written in Lua
     LuaSnip = {
       url = "github:L3MON4D3/LuaSnip";
       flake = false;
     };
+
+    # A plugin to center the currently focused buffer to the middle of the screen
     no-neck-pain = {
       url = "github:shortcuts/no-neck-pain.nvim";
       flake = false;
     };
+
+    # An arctic, north-bluish clean and elegant Vim theme
     nord-vim = {
       url = "github:arcticicestudio/nord-vim";
       flake = false;
     };
+
+    # A language server to inject LSP diagnostics, code actions, and more via Lua
+    # DEPRECATED and replaced by nvimtools/none-ls.nvim
     null-ls-nvim = {
       url = "github:jose-elias-alvarez/null-ls.nvim";
       flake = false;
     };
+
+    # A git blame line viewing plugin
     nvim-blame-line = {
       url = "github:tveskag/nvim-blame-line";
       flake = false;
     };
+
+    # A Lua completion plugin
     nvim-cmp = {
       url = "github:hrsh7th/nvim-cmp";
       flake = false;
     };
+
+    # A high performance Neovim colorizer
+    nvim-colorizer-lua = {
+      url = "github:norcalli/nvim-colorizer.lua";
+      flake = false;
+    };
+
+    # Debug Adapter Protocol client implementation for Neovim
     nvim-dap = {
       url = "github:mfussenegger/nvim-dap";
       flake = false;
     };
+
+    # A debug plugin to add virtual-text to nvim-dap
     nvim-dap-virtual-text = {
       url = "github:theHamsta/nvim-dap-virtual-text";
       flake = false;
     };
+
+    # A language support plugin for Nu
+    # DEPRECATED for idris2-nvim
     nvim-idris2 = {
       url = "github:ShinKage/nvim-idris2";
       flake = false;
     };
+
+    # A json preview and browsing plugin
     nvim-jqx = {
       url = "github:gennaro-tedesco/nvim-jqx";
       flake = false;
     };
+
+    # A VSCode 💡 for neovim's built-in LSP.
     nvim-lightbulb = {
       url = "github:kosayoda/nvim-lightbulb";
       flake = false;
     };
+
+    # Quickstart configs for Nvim LSP
     nvim-lspconfig = {
       url = "github:neovim/nvim-lspconfig";
       flake = false;
     };
+
+    # A language support plugin for Nu
     nvim-nu = {
       url = "github:LhKipp/nvim-nu";
       flake = false;
     };
+
+    # A find, filter, preview, pick fuzzy finder
     nvim-telescope = {
       url = "github:nvim-telescope/telescope.nvim";
       flake = false;
     };
+
+    # A file explorer tree plugin
     nvim-tree-lua = {
       url = "github:kyazdani42/nvim-tree.lua";
       flake = false;
     };
+
+    # A context display plugin
     nvim-treesitter-context = {
       url = "github:romgrk/nvim-treesitter-context";
       flake = false;
     };
+
+    # An interface plugin for treesitter language parser
     nvim-treesitter = {
       url = "github:nvim-treesitter/nvim-treesitter";
       flake = false;
     };
+
+    # An icons plugin, with light and dark variants
     nvim-web-devicons = {
       url = "github:kyazdani42/nvim-web-devicons";
       flake = false;
     };
+
+    # A Lua functions library for neovim
     plenary-nvim = {
       url = "github:nvim-lua/plenary.nvim";
       flake = false;
     };
+
+    # A vim popup implementation for neovim
+    # DEPRECATED and now included in plenary.nvim
     popup-nvim = {
       url = "github:nvim-lua/popup.nvim";
       flake = false;
     };
+
+    # A three-way merge managing plugin
     splice = {
       url = "github:sjl/splice.vim";
       flake = false;
     };
+
+    # A debug to telescope integration plugin
     telescope-dap = {
       url = "github:nvim-telescope/telescope-dap.nvim";
       flake = false;
     };
+
+    # An abbreviation, coercion and substitution plugin
     vim-abolish = {
       url = "github:tpope/vim-abolish";
       flake = false;
     };
+
+    # A git integration plugin
     vimagit = {
       url = "github:jreybert/vimagit";
       flake = false;
     };
+
+    # A feature rich vim plugin for Crystal
     vim-crystal = {
       url = "github:vim-crystal/vim-crystal";
       flake = false;
     };
+
+    # A syntax highlighter for CUE
     vim-cue = {
       url = "github:jjo/vim-cue";
       flake = false;
     };
+
+    # A same-word underlining plugin
     vim-cursorword = {
       url = "github:itchyny/vim-cursorword";
       flake = false;
     };
+
+    # A database interaction UI plugin
     vim-dadbod-ui = {
       url = "github:kristijanhusak/vim-dadbod-ui";
       flake = false;
     };
+
+    # A database interaction plugin
     vim-dadbod = {
       url = "github:tpope/vim-dadbod";
       flake = false;
     };
+
+    # A floating terminal implementation
     vim-floaterm = {
       url = "github:voldikss/vim-floaterm";
       flake = false;
     };
+
+    # A feature rich vim plugin for go
     vim-go = {
       url = "github:fatih/vim-go";
       flake = false;
     };
-    vim-hexokinase = {
-      url = "github:RRethy/vim-hexokinase";
-      flake = false;
-    };
+
+    # A syntax highlighter for Just
     vim-just = {
       url = "github:NoahTheDuke/vim-just";
       flake = false;
     };
+
+    # A syntax highlighter, file detection and indenter for Mint
     vim-mint = {
       url = "github:IrenejMarc/vim-mint";
       flake = false;
     };
+
+    # A syntax highlighter, file detection and indenter for Nickel
     vim-nickel = {
       url = "github:nickel-lang/vim-nickel";
       flake = false;
     };
+
+    # A syntax highlighter, file detection and indenter for Nix
     vim-nix = {
       url = "github:LnL7/vim-nix";
       flake = false;
     };
+
+    # A code formatter for Haskell
     vim-ormolu = {
       url = "github:sdiehl/vim-ormolu";
       flake = false;
     };
+
+    # A syntax highlighter for slim, a rails templating DSL
     vim-slim = {
       url = "github:slim-template/vim-slim";
       flake = false;
     };
+
+    # A start page for neovim with suggested actions
     vim-startify = {
       url = "github:mhinz/vim-startify";
       flake = false;
     };
+
+    # A set of hotkeys for actions surrounding text blobs
     vim-surround = {
       url = "github:tpope/vim-surround";
       flake = false;
     };
+
+    # A test suit wrapper for various languages
     vim-test = {
       url = "github:vim-test/vim-test";
       flake = false;
     };
+
+    # A pop up menu helper that to display keybindings, ex: leader key
     which-key-nvim = {
       url = "github:folke/which-key.nvim";
       flake = false;
     };
+
+    # A pop up helper for :CMD and /SEARCH in lower left
     wilder-nvim = {
       url = "github:gelguy/wilder.nvim";
       flake = false;
     };
+
+    # A code formatter for zig
     zig-vim = {
       url = "github:ziglang/zig.vim";
       flake = false;
@@ -290,6 +419,7 @@
               };
             };
 
+            # Elixir language server
             elixirls = prev.fetchzip {
               url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.11.0/elixir-ls.zip";
               hash = "sha256-Q1c+HMK9mhIX4bK9OddfckiR3gpxu9bITI5ED8FCHmI=";
@@ -307,6 +437,7 @@
                 ];
               });
 
+            # OPA Rego language server
             regols = prev.buildGoModule rec {
               pname = "regols";
               version = "0.1.0";
@@ -366,9 +497,19 @@
 
           editor = {
             abolish = true;
-            colourPreview = true;
+            colorPreview = true;
             floaterm = true;
+
+            # Might be nice to have starting from toggled off state
+            indentGuide = false;
+
+            retabTabs = true;
+            showTabs = true;
+            showTrailingWhitespace = true;
+            spell = true;
             surround = true;
+            trimTrailingWhitespace = true;
+            underlineCurrentWord = true;
             whichKey = true;
             wilder = true;
           };
@@ -377,17 +518,17 @@
           formatting.editorConfig.enable = true;
           fuzzyfind.telescope.enable = true;
           lineNumberMode = "number";
-          showTrailingWhitespace = true;
           statusline.lightline.enable = true;
           tabbar.barbar.enable = true;
           test.enable = true;
           theme.gruvbox.enable = true;
-          trimTrailingWhitespace = true;
-          viAlias = false;
-          vimAlias = false;
+          viAlias = true;
+          vimAlias = true;
 
           git = {
             enable = true;
+
+            # Appears to no longer work
             blameLine = false;
           };
 
