@@ -522,8 +522,8 @@
           tabbar.barbar.enable = true;
           test.enable = true;
           theme.gruvbox.enable = true;
-          viAlias = false;
-          vimAlias = false;
+          viAlias = true;
+          vimAlias = true;
 
           git = {
             enable = true;
