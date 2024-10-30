@@ -2,14 +2,10 @@
   description = "NeoVim config";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-utils.url = "github:numtide/flake-utils";
 
-    neovim = {
-      url = "github:neovim/neovim/v0.9.1?dir=contrib";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    neovim.url = "github:nix-community/neovim-nightly-overlay";
 
     # Nix language server
     nil.url = "github:oxalica/nil";
@@ -17,7 +13,7 @@
     # -- Vim plugins
     # Tab bar at the top of the editor
     barbar-nvim = {
-      url = "github:romgrk/barbar.nvim";
+      url = "github:romgrk/barbar.nvim/v1.9.1";
       flake = false;
     };
 
@@ -66,7 +62,7 @@
 
     # A language support plugin for Elixir
     elixir-nvim = {
-      url = "github:mhanberg/elixir.nvim";
+      url = "github:mhanberg/elixir.nvim/v0.16.1";
       flake = false;
     };
 
@@ -189,7 +185,7 @@
 
     # Quickstart configs for Nvim LSP
     nvim-lspconfig = {
-      url = "github:neovim/nvim-lspconfig";
+      url = "github:neovim/nvim-lspconfig/v1.0.0";
       flake = false;
     };
 
@@ -213,13 +209,13 @@
 
     # A context display plugin
     nvim-treesitter-context = {
-      url = "github:romgrk/nvim-treesitter-context";
+      url = "github:nvim-treesitter/nvim-treesitter-context";
       flake = false;
     };
 
     # An interface plugin for treesitter language parser
     nvim-treesitter = {
-      url = "github:nvim-treesitter/nvim-treesitter";
+      url = "github:nvim-treesitter/nvim-treesitter/v0.9.3";
       flake = false;
     };
 
@@ -410,7 +406,7 @@
             efm-langserver = prev.buildGoModule rec {
               pname = "efm-langserver";
               version = "0.0.36";
-              vendorSha256 = "sha256-tca+1SRrFyvU8ttHmfMFiGXd1A8rQSEWm1Mc2qp0EfI=";
+              vendorHash = "sha256-tca+1SRrFyvU8ttHmfMFiGXd1A8rQSEWm1Mc2qp0EfI=";
               src = prev.fetchFromGitHub {
                 owner = "mattn";
                 repo = pname;
@@ -421,27 +417,21 @@
 
             # Elixir language server
             elixirls = prev.fetchzip {
-              url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.11.0/elixir-ls.zip";
-              hash = "sha256-Q1c+HMK9mhIX4bK9OddfckiR3gpxu9bITI5ED8FCHmI=";
+              url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.24.1/elixir-ls-v0.24.1.zip";
+              hash = "sha256-68guwWL+oq3iXTxjqmNO0Bst29nbNH9xwdsuu8oUFz4=";
               stripRoot = false;
             };
 
             htmlls = prev.nodePackages.vscode-html-languageserver-bin;
             jsonls = prev.nodePackages.vscode-json-languageserver-bin;
 
-            neovim-nightly =
-              neovim.defaultPackage.${system}.overrideAttrs
-              (_: {
-                patches = [
-                  "${inputs.nixpkgs}/pkgs/applications/editors/neovim/system_rplugin_manifest.patch"
-                ];
-              });
+            neovim-nightly = neovim.packages.${system}.default;
 
             # OPA Rego language server
             regols = prev.buildGoModule rec {
               pname = "regols";
               version = "0.1.0";
-              vendorSha256 = "sha256-iyY8MycN/G6jj5hqb1ewyEkIMbTMJdILqHczxAYlxng=";
+              vendorHash = "sha256-iyY8MycN/G6jj5hqb1ewyEkIMbTMJdILqHczxAYlxng=";
               src = prev.fetchFromGitHub {
                 owner = "kitagry";
                 repo = pname;
@@ -544,7 +534,7 @@
             elixir = true;
             gleam = true;
             go = true;
-            haskell = true;
+            haskellLspConfig = true;
             html = true;
             idris2 = true;
             json = true;
