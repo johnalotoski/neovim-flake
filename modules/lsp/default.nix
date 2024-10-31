@@ -572,6 +572,17 @@ in {
           projectionist = {enable = true},
         })
       ''}
+
+      -- This enforces TS features when some languages won't automatically do it
+      -- Example: gleam, https://github.com/nvim-treesitter/nvim-treesitter/issues/6602
+      ${builtins.concatStringsSep "\n\n" (map (
+        feat: ''
+          vim.api.nvim_create_autocmd({"BufEnter"}, {
+              pattern = {"*"},
+              command = "TSBufEnable ${feat}",
+          })
+        ''
+      ) ["highlight" "indent" "incremental_selection"])}
     '';
   };
 }
