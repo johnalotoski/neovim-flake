@@ -20,10 +20,11 @@ in {
     elixir = mkEnableOption "Elixir support";
     gleam = mkEnableOption "Gleam";
     go = mkEnableOption "Go Language Support";
-    haskell = mkEnableOption "Haskell support";
+    haskellLspConfig = mkEnableOption "Haskell support via nvim-lspconfig plugin";
+    haskellTools = mkEnableOption "Haskell support via haskell-tools plugin";
     html = mkEnableOption "HTML support";
-    idris2 = mkEnableOption "Idris2 Support";
     json = mkEnableOption "JSON";
+    lightbulb = mkEnableOption "Light Bulb";
     mint = mkEnableOption "Mint support";
     nickel = mkEnableOption "Nickel Language Support";
     nix = mkEnableOption "Nix Language Support";
@@ -36,15 +37,16 @@ in {
     terraform = mkEnableOption "Terraform Support";
     tex = mkEnableOption "TeX support";
     typescript = mkEnableOption "Typescript/Javascript Support";
+    variableDebugPreviews = mkEnableOption "variable previews";
     vimscript = mkEnableOption "Vim Script Support";
     yaml = mkEnableOption "YAML support";
     zig = mkEnableOption "Zig support";
-    lightbulb = mkEnableOption "Light Bulb";
-    variableDebugPreviews = mkEnableOption "variable previews";
   };
 
   config = mkIf cfg.enable {
-    vim.startPlugins = with pkgs.neovimPlugins;
+    vim.startPlugins = assert assertMsg (!(cfg.haskellLspConfig && cfg.haskellTools))
+    "Both config.vim.lsp.haskellLspConfig and config.vim.lsp.HaskellTools cannot be enabled at the same time due to plugin conflicts.";
+    with pkgs.neovimPlugins;
       [
         cmp-buffer
         cmp-cmdline
@@ -59,25 +61,23 @@ in {
         nvim-dap
         nvim-jqx
         nvim-lspconfig
-        pkgs.vimPlugins.nvim-treesitter.withAllGrammars
-        # nvim-treesitter
-        # nvim-treesitter-context
+        pkgs.nvim-treesitter-withAllGrammars
         telescope-dap
         vim-cue
         vim-just
         vim-ormolu
         vim-slim
       ]
-      ++ (lib.optional cfg.lightbulb nvim-lightbulb)
-      ++ (lib.optional cfg.variableDebugPreviews nvim-dap-virtual-text)
-      ++ (lib.optional cfg.nix vim-nix)
-      ++ (lib.optionals cfg.nu [null-ls-nvim nvim-nu])
       ++ (lib.optional cfg.crystal vim-crystal)
       ++ (lib.optional cfg.elixir elixir-nvim)
-      ++ (lib.optional cfg.gleam gleam-vim)
       ++ (lib.optional cfg.go vim-go)
+      ++ (lib.optional cfg.haskellTools haskell-tools)
+      ++ (lib.optional cfg.lightbulb nvim-lightbulb)
       ++ (lib.optional cfg.mint vim-mint)
       ++ (lib.optional cfg.nickel vim-nickel)
+      ++ (lib.optional cfg.nix vim-nix)
+      ++ (lib.optionals cfg.nu [null-ls-nvim nvim-nu])
+      ++ (lib.optional cfg.variableDebugPreviews nvim-dap-virtual-text)
       ++ (lib.optional cfg.zig zig-vim);
 
     vim.configRC = ''
@@ -109,7 +109,7 @@ in {
       "[d" = "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>";
       "]d" = "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>";
 
-      "<leader>q" = "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>";
+      "<leader>q" = "<cmd>lua vim.diagnostic.setloclist()<CR>";
 
       "<f10>" = "<cmd>lua require('dap').step_over()<cr>";
       "<f11>" = "<cmd>lua require('dap').step_into()<cr>";
@@ -269,7 +269,7 @@ in {
       })
 
       -- Setup lspconfig.
-      local capabilities = require('cmp_nvim_lsp').update_capabilities(
+      local capabilities = require('cmp_nvim_lsp').default_capabilities(
         vim.lsp.protocol.make_client_capabilities()
       )
 
@@ -462,6 +462,7 @@ in {
 
       ${optionalString cfg.nu ''
         require("nu").setup({})
+        require("null-ls").setup({})
       ''}
 
       ${optionalString cfg.ruby ''
@@ -477,7 +478,7 @@ in {
       ''}
 
       ${optionalString cfg.typescript ''
-        setup_cmd("tsserver", {'${pkgs.tsserver}/bin/typescript-language-server', '--stdio'})
+        setup_cmd("ts_ls", {'${pkgs.tsserver}/bin/typescript-language-server', '--stdio'})
       ''}
 
       ${optionalString cfg.vimscript ''
@@ -500,7 +501,7 @@ in {
         setup_cmd("html", {'${pkgs.htmlls}/bin/html-languageserver', '--stdio'})
       ''}
 
-      ${optionalString cfg.haskell ''
+      ${optionalString cfg.haskellLspConfig ''
         lspconfig.hls.setup{
           capabilities = capabilities;
           filetypes = { "haskell", "lhaskell", "cabalproject" };
@@ -511,6 +512,25 @@ in {
             }
           };
         }
+      ''}
+
+      ${optionalString cfg.haskellTools ''
+        local ht = require('haskell-tools')
+        local bufnr = vim.api.nvim_get_current_buf()
+        local opts = { noremap = true, silent = true, buffer = bufnr, }
+        local wk = require("which-key")
+
+        wk.add({
+          { "<leader>h", group = "Haskell" },
+            { "<leader>he", ht.lsp_buf_eval_all, desc = "Haskell eval snippets" },
+            { "<leader>hl", vim.lsp.codelens.run, desc = "Haskell codelens" },
+
+          { "<leader>hr", group = "Haskell Repl" },
+            { "<leader>hrf", function() ht.repl.toggle(vim.api.nvim_buf_get_name(0)) end, desc = "Haskell repl current file" },
+            { "<leader>hrq", ht.repl.quit, desc = "Haskell repl quit" },
+            { "<leader>hrt", ht.repl.toogle, desc = "Haskell repl toggle" },
+            { "<leader>hs", ht.hoogle.hoogle_signature, desc = "Hoogle signature search" },
+        })
       ''}
 
       ${optionalString cfg.json ''
@@ -537,10 +557,6 @@ in {
         setup("mint")
       ''}
 
-      ${optionalString cfg.idris2 ''
-        setup("idris2_lsp")
-      ''}
-
       ${optionalString cfg.zig ''
         setup("zls")
       ''}
@@ -550,24 +566,12 @@ in {
       ''}
 
       ${optionalString cfg.elixir ''
-        local elixir = require("elixir")
-        elixir.setup({
-          settings = elixir.settings({
-            fetchDeps = true,
-            suggestSpecs = true,
-          })
+        require("elixir").setup({
+          nextls = {enable = false},
+          elixirls = {enable = true},
+          projectionist = {enable = true},
         })
-        setup_cmd("elixirls", {"${pkgs.elixirls}/language_server.sh"})
       ''}
-
-        ${builtins.concatStringsSep "\n\n" (map (
-        feat: ''
-          vim.api.nvim_create_autocmd({ "BufEnter"}, {
-              pattern = { "*" },
-              command = "TSBufEnable ${feat}",
-          })
-        ''
-      ) ["highlight" "indent" "incremental_selection"])}
     '';
   };
 }

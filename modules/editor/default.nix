@@ -67,9 +67,9 @@ in {
   config = {
     vim.startPlugins = with pkgs.neovimPlugins;
       (optional cfg.abolish vim-abolish)
+      ++ (optional cfg.colorPreview nvim-colorizer-lua)
       ++ (optional cfg.floaterm vim-floaterm)
       ++ (optional cfg.indentGuide indent-blankline-nvim)
-      ++ (optional cfg.colorPreview nvim-colorizer-lua)
       ++ (optional cfg.surround vim-surround)
       ++ (optional cfg.underlineCurrentWord vim-cursorword)
       ++ (optional cfg.whichKey which-key-nvim)

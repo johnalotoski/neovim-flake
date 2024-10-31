@@ -5,7 +5,6 @@
   ...
 }: {
   imports = [
-    ./editorconfig.nix
     ./format.nix
   ];
 }
