@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
     neovim.url = "github:nix-community/neovim-nightly-overlay";
@@ -13,7 +14,7 @@
     # -- Vim plugins
     # Tab bar at the top of the editor
     barbar-nvim = {
-      url = "github:romgrk/barbar.nvim/v1.9.1";
+      url = "github:romgrk/barbar.nvim";
       flake = false;
     };
 
@@ -50,13 +51,6 @@
     # Neovim plugin for GitHub Copilot
     copilot-vim = {
       url = "github:github/copilot.vim";
-      flake = false;
-    };
-
-    # EditorConfig plugin for Vim
-    # NOTE: Neovim 0.9 and above comes with its own Lua-based implementation
-    editorconfig-vim = {
-      url = "github:editorconfig/editorconfig-vim";
       flake = false;
     };
 
@@ -134,9 +128,10 @@
     };
 
     # A language server to inject LSP diagnostics, code actions, and more via Lua
-    # DEPRECATED and replaced by nvimtools/none-ls.nvim
+    # TODO: migrate non-lsp actions to lsp
+    # Example: https://nullvoxpopuli.com/2023-03-13-null-ls
     null-ls-nvim = {
-      url = "github:jose-elias-alvarez/null-ls.nvim";
+      url = "github:nvimtools/none-ls.nvim";
       flake = false;
     };
 
@@ -167,13 +162,6 @@
     # A debug plugin to add virtual-text to nvim-dap
     nvim-dap-virtual-text = {
       url = "github:theHamsta/nvim-dap-virtual-text";
-      flake = false;
-    };
-
-    # A language support plugin for Nu
-    # DEPRECATED for idris2-nvim
-    nvim-idris2 = {
-      url = "github:ShinKage/nvim-idris2";
       flake = false;
     };
 
@@ -210,18 +198,6 @@
     # A file explorer tree plugin
     nvim-tree-lua = {
       url = "github:kyazdani42/nvim-tree.lua";
-      flake = false;
-    };
-
-    # A context display plugin
-    nvim-treesitter-context = {
-      url = "github:nvim-treesitter/nvim-treesitter-context";
-      flake = false;
-    };
-
-    # An interface plugin for treesitter language parser
-    nvim-treesitter = {
-      url = "github:nvim-treesitter/nvim-treesitter/v0.9.3";
       flake = false;
     };
 
@@ -411,20 +387,20 @@
 
             efm-langserver = prev.buildGoModule rec {
               pname = "efm-langserver";
-              version = "0.0.36";
-              vendorHash = "sha256-tca+1SRrFyvU8ttHmfMFiGXd1A8rQSEWm1Mc2qp0EfI=";
+              version = "0.0.53";
+              vendorHash = "sha256-0YkUak6+dpxvXn6nVVn33xrTEthWqnC9MhMLm/yjFMA=";
               src = prev.fetchFromGitHub {
                 owner = "mattn";
                 repo = pname;
                 rev = "v${version}";
-                sha256 = "sha256-X2z49KmJiKh1QtcDBZcqNiMhq5deVamS47w6gyVq7Oo=";
+                sha256 = "sha256-Csm+2C9hP+dTXliADUquAb1nC+8f5j1rJ+66cqWDrCk=";
               };
             };
 
             # Elixir language server
             elixirls = prev.fetchzip {
               url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.24.1/elixir-ls-v0.24.1.zip";
-              hash = "sha256-68guwWL+oq3iXTxjqmNO0Bst29nbNH9xwdsuu8oUFz4=";
+              hash = "sha256-18guwWL+oq3iXTxjqmNO0Bst29nbNH9xwdsuu8oUFz4=";
               stripRoot = false;
             };
 
@@ -433,16 +409,18 @@
 
             neovim-nightly = neovim.packages.${system}.default;
 
+            nvim-treesitter-withAllGrammars = inputs.nixpkgs-unstable.legacyPackages.${system}.vimPlugins.nvim-treesitter.withAllGrammars;
+
             # OPA Rego language server
             regols = prev.buildGoModule rec {
               pname = "regols";
-              version = "0.1.0";
-              vendorHash = "sha256-iyY8MycN/G6jj5hqb1ewyEkIMbTMJdILqHczxAYlxng=";
+              version = "0.2.4";
+              vendorHash = "sha256-yJYWVQq6pbLPdmK4BVse6moMkurlmt6TBd6/vYM1xcU=";
               src = prev.fetchFromGitHub {
                 owner = "kitagry";
                 repo = pname;
                 rev = "v${version}";
-                sha256 = "sha256-2MTetTWHJAiSWPcEFJ/p0xptAWDKNXwTq68RywUO+Ls=";
+                sha256 = "sha256-1L9ehqTMN9KHlvE7FBccVAXA7f3NNsLXJaTkOChT8Xo=";
               };
             };
 
@@ -511,7 +489,6 @@
           };
 
           filetree.nvimTreeLua = {enable = true;};
-          formatting.editorConfig.enable = true;
           fuzzyfind.telescope.enable = true;
           lineNumberMode = "number";
           statusline.lightline.enable = true;
@@ -543,7 +520,6 @@
             haskellLspConfig = false;
             haskellTools = true;
             html = true;
-            idris2 = true;
             json = true;
             lightbulb = true;
             mint = true;

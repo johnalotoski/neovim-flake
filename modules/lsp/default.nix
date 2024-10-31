@@ -23,7 +23,6 @@ in {
     haskellLspConfig = mkEnableOption "Haskell support via nvim-lspconfig plugin";
     haskellTools = mkEnableOption "Haskell support via haskell-tools plugin";
     html = mkEnableOption "HTML support";
-    idris2 = mkEnableOption "Idris2 Support";
     json = mkEnableOption "JSON";
     lightbulb = mkEnableOption "Light Bulb";
     mint = mkEnableOption "Mint support";
@@ -62,9 +61,7 @@ in {
         nvim-dap
         nvim-jqx
         nvim-lspconfig
-        pkgs.vimPlugins.nvim-treesitter.withAllGrammars
-        # nvim-treesitter
-        # nvim-treesitter-context
+        pkgs.nvim-treesitter-withAllGrammars
         telescope-dap
         vim-cue
         vim-just
@@ -466,6 +463,7 @@ in {
 
       ${optionalString cfg.nu ''
         require("nu").setup({})
+        require("null-ls").setup({})
       ''}
 
       ${optionalString cfg.ruby ''
@@ -558,10 +556,6 @@ in {
 
       ${optionalString cfg.mint ''
         setup("mint")
-      ''}
-
-      ${optionalString cfg.idris2 ''
-        setup("idris2_lsp")
       ''}
 
       ${optionalString cfg.zig ''
