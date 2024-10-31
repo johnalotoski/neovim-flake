@@ -15,7 +15,6 @@ in {
   config = mkIf cfg.enable {
     vim.startPlugins = with pkgs.neovimPlugins; [
       nvim-telescope
-      popup-nvim
       plenary-nvim
     ];
 

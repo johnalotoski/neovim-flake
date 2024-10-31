@@ -72,13 +72,6 @@
       flake = false;
     };
 
-    # A language support plugin for Gleam
-    # NOTE: "This plugin is not needed if you are using Neovim.  Instead..."
-    gleam-vim = {
-      url = "github:gleam-lang/gleam.vim";
-      flake = false;
-    };
-
     # Retro groove color scheme for Vim
     gruvbox = {
       url = "github:morhetz/gruvbox";
@@ -96,6 +89,13 @@
       url = "github:mrcjkb/haskell-tools.nvim";
       flake = false;
     };
+
+    # TODO: A regexp parser reguired by LuaSnip for some extended fns
+    # Ref: https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
+    # jsregexp = {
+    #   url = "github:kmarius/jsregexp";
+    #   flake = false;
+    # };
 
     # A light and configurable statusline/tabline plugin for Vim
     lightline-vim = {
@@ -179,7 +179,7 @@
 
     # Quickstart configs for Nvim LSP
     nvim-lspconfig = {
-      url = "github:neovim/nvim-lspconfig/v1.0.0";
+      url = "github:neovim/nvim-lspconfig";
       flake = false;
     };
 
@@ -210,13 +210,6 @@
     # A Lua functions library for neovim
     plenary-nvim = {
       url = "github:nvim-lua/plenary.nvim";
-      flake = false;
-    };
-
-    # A vim popup implementation for neovim
-    # DEPRECATED and now included in plenary.nvim
-    popup-nvim = {
-      url = "github:nvim-lua/popup.nvim";
       flake = false;
     };
 

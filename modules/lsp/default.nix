@@ -70,7 +70,6 @@ in {
       ]
       ++ (lib.optional cfg.crystal vim-crystal)
       ++ (lib.optional cfg.elixir elixir-nvim)
-      ++ (lib.optional cfg.gleam gleam-vim)
       ++ (lib.optional cfg.go vim-go)
       ++ (lib.optional cfg.haskellTools haskell-tools)
       ++ (lib.optional cfg.lightbulb nvim-lightbulb)
