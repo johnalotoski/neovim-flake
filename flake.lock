@@ -379,6 +379,22 @@
         "type": "github"
       }
     },
+    "haskell-tools": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1729988518,
+        "narHash": "sha256-3pkXcPlOL113Hm9yVUjJbuXVHw+P3gJxm65fzTIvIII=",
+        "owner": "mrcjkb",
+        "repo": "haskell-tools.nvim",
+        "rev": "4a7516d44e073dfbc3c3df4af06d72fbce019474",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mrcjkb",
+        "repo": "haskell-tools.nvim",
+        "type": "github"
+      }
+    },
     "hercules-ci-effects": {
       "inputs": {
         "flake-parts": "flake-parts_2",
@@ -655,11 +671,11 @@
     "nvim-dap": {
       "flake": false,
       "locked": {
-        "lastModified": 1656530616,
-        "narHash": "sha256-+Ae0eaRmRHz9K7bG704Yt07Ft+prVXO+qnH2HDrxBmk=",
+        "lastModified": 1727540183,
+        "narHash": "sha256-zN0GTcnUBDfSmvmZd9kBrgW/k3aqbzUlVzgf7wNih40=",
         "owner": "mfussenegger",
         "repo": "nvim-dap",
-        "rev": "f4a3be57f61893cffa1e22aa5e1e7bded495fcf2",
+        "rev": "7ff6936010b7222fea2caea0f67ed77f1b7c60dd",
         "type": "github"
       },
       "original": {
@@ -671,11 +687,11 @@
     "nvim-dap-virtual-text": {
       "flake": false,
       "locked": {
-        "lastModified": 1656274008,
-        "narHash": "sha256-5E80Gu9t3mpJucg1ojgRN9PkQbq+yzni3PZEWB5JPNI=",
+        "lastModified": 1728061710,
+        "narHash": "sha256-5v9siuGGM7WEyP0uEwnHWjrHShYBZS56bM5r1YxrCec=",
         "owner": "theHamsta",
         "repo": "nvim-dap-virtual-text",
-        "rev": "a36982259216afd710f55bcdc220477c74b5bc35",
+        "rev": "52638640ae309cacdaff785fdbb854437bd1ee5c",
         "type": "github"
       },
       "original": {
@@ -895,6 +911,7 @@
         "gitsigns-nvim": "gitsigns-nvim",
         "gleam-vim": "gleam-vim",
         "gruvbox": "gruvbox",
+        "haskell-tools": "haskell-tools",
         "indent-blankline-nvim": "indent-blankline-nvim",
         "lightline-vim": "lightline-vim",
         "lsp_signature": "lsp_signature",
@@ -1294,11 +1311,11 @@
     "which-key-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1651651877,
-        "narHash": "sha256-UoV9H3oVJL1BPmuG+/eU4cG1s7thOrcrPyat9npBxm0=",
+        "lastModified": 1727856297,
+        "narHash": "sha256-crECQnWpptz1A/hOndHPEduK6MqWQH8kyf58h+4snHo=",
         "owner": "folke",
         "repo": "which-key.nvim",
-        "rev": "bd4411a2ed4dd8bb69c125e339d837028a6eea71",
+        "rev": "8badb359f7ab8711e2575ef75dfe6fbbd87e4821",
         "type": "github"
       },
       "original": {

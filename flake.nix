@@ -97,6 +97,12 @@
       flake = false;
     };
 
+    # A plugin for advanced haskell lsp support
+    haskell-tools = {
+      url = "github:mrcjkb/haskell-tools.nvim";
+      flake = false;
+    };
+
     # A light and configurable statusline/tabline plugin for Vim
     lightline-vim = {
       url = "github:itchyny/lightline.vim";
@@ -534,7 +540,8 @@
             elixir = true;
             gleam = true;
             go = true;
-            haskellLspConfig = true;
+            haskellLspConfig = false;
+            haskellTools = true;
             html = true;
             idris2 = true;
             json = true;

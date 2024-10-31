@@ -21,6 +21,7 @@ in {
     gleam = mkEnableOption "Gleam";
     go = mkEnableOption "Go Language Support";
     haskellLspConfig = mkEnableOption "Haskell support via nvim-lspconfig plugin";
+    haskellTools = mkEnableOption "Haskell support via haskell-tools plugin";
     html = mkEnableOption "HTML support";
     idris2 = mkEnableOption "Idris2 Support";
     json = mkEnableOption "JSON";
@@ -44,7 +45,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    vim.startPlugins = with pkgs.neovimPlugins;
+    vim.startPlugins = assert assertMsg (!(cfg.haskellLspConfig && cfg.haskellTools))
+    "Both config.vim.lsp.haskellLspConfig and config.vim.lsp.HaskellTools cannot be enabled at the same time due to plugin conflicts.";
+    with pkgs.neovimPlugins;
       [
         cmp-buffer
         cmp-cmdline
@@ -72,6 +75,7 @@ in {
       ++ (lib.optional cfg.elixir elixir-nvim)
       ++ (lib.optional cfg.gleam gleam-vim)
       ++ (lib.optional cfg.go vim-go)
+      ++ (lib.optional cfg.haskellTools haskell-tools)
       ++ (lib.optional cfg.lightbulb nvim-lightbulb)
       ++ (lib.optional cfg.mint vim-mint)
       ++ (lib.optional cfg.nickel vim-nickel)
@@ -109,7 +113,7 @@ in {
       "[d" = "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>";
       "]d" = "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>";
 
-      "<leader>q" = "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>";
+      "<leader>q" = "<cmd>lua vim.diagnostic.setloclist()<CR>";
 
       "<f10>" = "<cmd>lua require('dap').step_over()<cr>";
       "<f11>" = "<cmd>lua require('dap').step_into()<cr>";
@@ -511,6 +515,25 @@ in {
             }
           };
         }
+      ''}
+
+      ${optionalString cfg.haskellTools ''
+        local ht = require('haskell-tools')
+        local bufnr = vim.api.nvim_get_current_buf()
+        local opts = { noremap = true, silent = true, buffer = bufnr, }
+        local wk = require("which-key")
+
+        wk.add({
+          { "<leader>h", group = "Haskell" },
+            { "<leader>he", ht.lsp_buf_eval_all, desc = "Haskell eval snippets" },
+            { "<leader>hl", vim.lsp.codelens.run, desc = "Haskell codelens" },
+
+          { "<leader>hr", group = "Haskell Repl" },
+            { "<leader>hrf", function() ht.repl.toggle(vim.api.nvim_buf_get_name(0)) end, desc = "Haskell repl current file" },
+            { "<leader>hrq", ht.repl.quit, desc = "Haskell repl quit" },
+            { "<leader>hrt", ht.repl.toogle, desc = "Haskell repl toggle" },
+            { "<leader>hs", ht.hoogle.hoogle_signature, desc = "Hoogle signature search" },
+        })
       ''}
 
       ${optionalString cfg.json ''
