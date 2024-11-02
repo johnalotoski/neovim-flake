@@ -145,6 +145,22 @@
         "type": "github"
       }
     },
+    "fidget-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1730221432,
+        "narHash": "sha256-fQBrkHV54TaOeLYQJ1DE+lr7SFDPN1yqSlzhFm26NAY=",
+        "owner": "j-hui",
+        "repo": "fidget.nvim",
+        "rev": "e2a175c2abe2d4f65357da1c98c59a5cfb2b543f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "j-hui",
+        "repo": "fidget.nvim",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -828,6 +844,7 @@
         "cmp_luasnip": "cmp_luasnip",
         "copilot-vim": "copilot-vim",
         "elixir-nvim": "elixir-nvim",
+        "fidget-nvim": "fidget-nvim",
         "flake-utils": "flake-utils",
         "formatter-nvim": "formatter-nvim",
         "gitsigns-nvim": "gitsigns-nvim",

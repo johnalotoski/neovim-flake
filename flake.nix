@@ -60,6 +60,12 @@
       flake = false;
     };
 
+    # An lsp status indicator for Neovim
+    fidget-nvim = {
+      url = "github:j-hui/fidget.nvim";
+      flake = false;
+    };
+
     # A format runner for Neovim
     formatter-nvim = {
       url = "github:mhartington/formatter.nvim";
@@ -368,7 +374,12 @@
 
       pkgs = import nixpkgs {
         inherit system;
-        # config = {allowUnfree = true;};
+
+        config = {
+          # allowBroken = true;
+          # allowUnfree = true;
+        };
+
         overlays = [
           pluginOverlay
           (final: prev: {
@@ -451,7 +462,10 @@
       };
 
       devShells.default = pkgs.mkShell {
-        nativeBuildInputs = [pkgs.treefmt pkgs.alejandra];
+        nativeBuildInputs = with pkgs; [
+          treefmt
+          alejandra
+        ];
       };
 
       packages.neovim = neovimBuilder {
@@ -508,6 +522,7 @@
             css = true;
             docker = true;
             elixir = true;
+            fidget = true;
             gleam = true;
             go = true;
             haskellLspConfig = false;

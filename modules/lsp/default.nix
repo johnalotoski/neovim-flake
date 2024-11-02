@@ -18,6 +18,7 @@ in {
     css = mkEnableOption "CSS support";
     docker = mkEnableOption "Docker support";
     elixir = mkEnableOption "Elixir support";
+    fidget = mkEnableOption "Fidget LSP Status support";
     gleam = mkEnableOption "Gleam";
     go = mkEnableOption "Go Language Support";
     haskellLspConfig = mkEnableOption "Haskell support via nvim-lspconfig plugin";
@@ -70,6 +71,7 @@ in {
       ]
       ++ (lib.optional cfg.crystal vim-crystal)
       ++ (lib.optional cfg.elixir elixir-nvim)
+      ++ (lib.optional cfg.fidget fidget-nvim)
       ++ (lib.optional cfg.go vim-go)
       ++ (lib.optional cfg.haskellTools haskell-tools)
       ++ (lib.optional cfg.lightbulb nvim-lightbulb)
@@ -92,37 +94,46 @@ in {
       let g:ormolu_suppress_stderr=1
     '';
 
-    vim.nnoremap = {
-      "<f2>" = "<cmd>lua vim.lsp.buf.rename()<cr>";
-      "<leader>lR" = "<cmd>lua vim.lsp.buf.rename()<cr>";
-      "<leader>lr" = "<cmd>lua require('telescope.builtin').lsp_references()<CR>";
-      "<leader>lA" = "<cmd>lua vim.lsp.buf.code_action()<CR>";
+    vim.nnoremap =
+      {
+        "<f2>" = "<cmd>lua vim.lsp.buf.rename()<cr>";
+        "<leader>lR" = "<cmd>lua vim.lsp.buf.rename()<cr>";
+        "<leader>lr" = "<cmd>lua require('telescope.builtin').lsp_references()<CR>";
+        "<leader>lA" = "<cmd>lua vim.lsp.buf.code_action()<CR>";
 
-      "<leader>lD" = "<cmd>lua require('telescope.builtin').lsp_definitions()<cr>";
-      "<leader>lI" = "<cmd>lua require('telescope.builtin').lsp_implementations()<cr>";
-      "<leader>le" = "<cmd>lua require('telescope.builtin').diagnostics({bufnr=0})<cr>";
-      "<leader>lE" = "<cmd>lua require('telescope.builtin').diagnostics()<cr>";
-      "<leader>bk" = "<cmd>lua vim.lsp.buf.signature_help()<CR>";
-      "<leader>bK" = "<cmd>lua vim.lsp.buf.hover()<CR>";
-      "<leader>bf" = "<cmd>lua vim.lsp.buf.format({ async = true })<CR>";
+        "<leader>lD" = "<cmd>lua require('telescope.builtin').lsp_definitions()<cr>";
+        "<leader>lI" = "<cmd>lua require('telescope.builtin').lsp_implementations()<cr>";
+        "<leader>le" = "<cmd>lua require('telescope.builtin').diagnostics({bufnr=0})<cr>";
+        "<leader>lE" = "<cmd>lua require('telescope.builtin').diagnostics()<cr>";
+        "<leader>bk" = "<cmd>lua vim.lsp.buf.signature_help()<CR>";
+        "<leader>bK" = "<cmd>lua vim.lsp.buf.hover()<CR>";
+        "<leader>bf" = "<cmd>lua vim.lsp.buf.format({ async = true })<CR>";
 
-      "[d" = "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>";
-      "]d" = "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>";
+        "[d" = "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>";
+        "]d" = "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>";
 
-      "<leader>q" = "<cmd>lua vim.diagnostic.setloclist()<CR>";
+        "<leader>q" = "<cmd>lua vim.diagnostic.setloclist()<CR>";
 
-      "<f10>" = "<cmd>lua require('dap').step_over()<cr>";
-      "<f11>" = "<cmd>lua require('dap').step_into()<cr>";
-      "<f12>" = "<cmd>lua require('dap').step_out()<cr>";
-      "<f5>" = "<cmd>lua require('dap').continue()<cr>";
-      "<f9>" = "<cmd>lua require('dap').repl.open()";
+        "<f10>" = "<cmd>lua require('dap').step_over()<cr>";
+        "<f11>" = "<cmd>lua require('dap').step_into()<cr>";
+        "<f12>" = "<cmd>lua require('dap').step_out()<cr>";
+        "<f5>" = "<cmd>lua require('dap').continue()<cr>";
+        "<f9>" = "<cmd>lua require('dap').repl.open()";
 
-      "<leader>dc" = "<cmd>Telescope dap commands<cr>";
-      "<leader>db" = "<cmd>Telescope dap list_breakpoints<cr>";
-      "<leader>dv" = "<cmd>Telescope dap variables<cr>";
-      "<leader>df" = "<cmd>Telescope dap frames<cr>";
-      "<leader>dt" = "<cmd>lua require('dap').toggle_breakpoint()<cr>";
-    };
+        "<leader>dc" = "<cmd>Telescope dap commands<cr>";
+        "<leader>db" = "<cmd>Telescope dap list_breakpoints<cr>";
+        "<leader>dv" = "<cmd>Telescope dap variables<cr>";
+        "<leader>df" = "<cmd>Telescope dap frames<cr>";
+        "<leader>dt" = "<cmd>lua require('dap').toggle_breakpoint()<cr>";
+      }
+      // optionalAttrs cfg.haskellTools {
+        "<leader>hc" = "<cmd>lua vim.lsp.codelens.run()<CR>";
+        "<leader>he" = "<cmd>lua require('haskell-tools').lsp.buf_eval_all()<CR>";
+        "<leader>hrf" = "<cmd>lua (function() require('haskell-tools').repl.toggle(vim.api.nvim_buf_get_name(0)) end)()<CR>";
+        "<leader>hrq" = "<cmd>lua require('haskell-tools').repl.quit()<CR>";
+        "<leader>hrt" = "<cmd>lua require('haskell-tools').repl.toggle()<CR>";
+        "<leader>hs" = "<cmd>lua require('haskell-tools').hoogle.hoogle_signature()<CR>";
+      };
 
     vim.globals = {};
 
@@ -501,6 +512,10 @@ in {
         setup_cmd("html", {'${pkgs.htmlls}/bin/html-languageserver', '--stdio'})
       ''}
 
+      ${optionalString cfg.fidget ''
+        require("fidget").setup()
+      ''}
+
       ${optionalString cfg.haskellLspConfig ''
         lspconfig.hls.setup{
           capabilities = capabilities;
@@ -514,36 +529,17 @@ in {
         }
       ''}
 
-      ${optionalString cfg.haskellTools ''
-        local ht = require('haskell-tools')
-        local bufnr = vim.api.nvim_get_current_buf()
-        local opts = { noremap = true, silent = true, buffer = bufnr, }
-        local wk = require("which-key")
-
-        vim.keymap.set("n", "<leader>hc", vim.lsp.codelens.run, { desc = "codeLens" })
-        vim.keymap.set("n", "<leader>he", ht.lsp.buf_eval_all, { desc = "evalSnippets", noremap = true, silent = true, buffer = bufnr })
-        vim.keymap.set("n", "<leader>hrf", function() ht.repl.toggle(vim.api.nvim_buf_get_name(0)) end, { desc = "currentFile" })
-        vim.keymap.set("n", "<leader>hrq", ht.repl.quit, { desc = "quit" })
-        vim.keymap.set("n", "<leader>hrt", ht.repl.toggle, { desc = "toggle" })
-
-        wk.add({
+      ${optionalString (cfg.haskellTools && config.vim.editor.whichKey) ''
+        require("which-key").add({
           { "<leader>h", group = "Haskell" },
-          -- { "<leader>he", ht.lsp.buf_eval_all(), desc = "evalSnippets" },
           { "<leader>hr", group = "Repl" },
-          { "<leader>hs", ht.hoogle.hoogle_signature(), desc = "hoogleSearch" },
+          { "<leader>hc", desc = "codeLens" },
+          { "<leader>he", desc = "evalSnippets" },
+          { "<leader>hrf", desc = "currentFile" },
+          { "<leader>hrq", desc = "quit" },
+          { "<leader>hrt", desc = "toggle" },
+          { "<leader>hs", desc = "hoogleSearch" },
         })
-
-        -- wk.add({
-        --   { "<leader>h", group = "Haskell" },
-        --   { "<leader>he", ht.lsp_buf_eval_all, desc = "Haskell eval snippets" },
-        --   { "<leader>hl", vim.lsp.codelens.run, desc = "Haskell codelens" },
-
-        --   { "<leader>hr", group = "Haskell Repl" },
-        --   { "<leader>hrf", function() ht.repl.toggle(vim.api.nvim_buf_get_name(0)) end, desc = "Haskell repl current file" },
-        --   { "<leader>hrq", ht.repl.quit, desc = "Haskell repl quit" },
-        --   { "<leader>hrt", ht.repl.toogle, desc = "Haskell repl toggle" },
-        --   { "<leader>hs", ht.hoogle.hoogle_signature, desc = "Hoogle signature search" },
-        -- })
       ''}
 
       ${optionalString cfg.json ''
