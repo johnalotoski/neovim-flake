@@ -520,17 +520,30 @@ in {
         local opts = { noremap = true, silent = true, buffer = bufnr, }
         local wk = require("which-key")
 
+        vim.keymap.set("n", "<leader>hc", vim.lsp.codelens.run, { desc = "codeLens" })
+        vim.keymap.set("n", "<leader>he", ht.lsp.buf_eval_all, { desc = "evalSnippets", noremap = true, silent = true, buffer = bufnr })
+        vim.keymap.set("n", "<leader>hrf", function() ht.repl.toggle(vim.api.nvim_buf_get_name(0)) end, { desc = "currentFile" })
+        vim.keymap.set("n", "<leader>hrq", ht.repl.quit, { desc = "quit" })
+        vim.keymap.set("n", "<leader>hrt", ht.repl.toggle, { desc = "toggle" })
+
         wk.add({
           { "<leader>h", group = "Haskell" },
-            { "<leader>he", ht.lsp_buf_eval_all, desc = "Haskell eval snippets" },
-            { "<leader>hl", vim.lsp.codelens.run, desc = "Haskell codelens" },
-
-          { "<leader>hr", group = "Haskell Repl" },
-            { "<leader>hrf", function() ht.repl.toggle(vim.api.nvim_buf_get_name(0)) end, desc = "Haskell repl current file" },
-            { "<leader>hrq", ht.repl.quit, desc = "Haskell repl quit" },
-            { "<leader>hrt", ht.repl.toogle, desc = "Haskell repl toggle" },
-            { "<leader>hs", ht.hoogle.hoogle_signature, desc = "Hoogle signature search" },
+          -- { "<leader>he", ht.lsp.buf_eval_all(), desc = "evalSnippets" },
+          { "<leader>hr", group = "Repl" },
+          { "<leader>hs", ht.hoogle.hoogle_signature(), desc = "hoogleSearch" },
         })
+
+        -- wk.add({
+        --   { "<leader>h", group = "Haskell" },
+        --   { "<leader>he", ht.lsp_buf_eval_all, desc = "Haskell eval snippets" },
+        --   { "<leader>hl", vim.lsp.codelens.run, desc = "Haskell codelens" },
+
+        --   { "<leader>hr", group = "Haskell Repl" },
+        --   { "<leader>hrf", function() ht.repl.toggle(vim.api.nvim_buf_get_name(0)) end, desc = "Haskell repl current file" },
+        --   { "<leader>hrq", ht.repl.quit, desc = "Haskell repl quit" },
+        --   { "<leader>hrt", ht.repl.toogle, desc = "Haskell repl toggle" },
+        --   { "<leader>hs", ht.hoogle.hoogle_signature, desc = "Hoogle signature search" },
+        -- })
       ''}
 
       ${optionalString cfg.json ''

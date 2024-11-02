@@ -20,12 +20,9 @@ in {
 
     vim.nnoremap = {
       "<leader>ff" = "<cmd>Telescope find_files<cr>";
-      "<leader>pf" = "<cmd>Telescope find_files<cr>";
       "<leader>fg" = "<cmd>Telescope live_grep<cr>";
-      "<leader>p/" = "<cmd>Telescope live_grep<cr>";
       "<leader>fb" = "<cmd>Telescope buffers<cr>";
       "<leader>fh" = "<cmd>Telescope help_tags<cr>";
-      "<C-p>" = "<cmd>Telescope find_files<cr>";
     };
   };
 }

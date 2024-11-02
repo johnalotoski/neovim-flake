@@ -465,7 +465,7 @@
           editor = {
             abolish = true;
             colorPreview = true;
-            floaterm = true;
+            floaterm = false;
 
             # Might be nice to have starting from toggled off state
             indentGuide = false;
