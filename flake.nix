@@ -579,10 +579,10 @@
             "<silent> <C-A-p>" = "<Cmd>BufferPickDelete<CR>";
 
             # Sort automatically by...
-            "<silent> <Space>bb" = "<Cmd>BufferOrderByBufferNumber<CR>";
-            "<silent> <Space>bd" = "<Cmd>BufferOrderByDirectory<CR>";
-            "<silent> <Space>bl" = "<Cmd>BufferOrderByLanguage<CR>";
-            "<silent> <Space>bw" = "<Cmd>BufferOrderByWindowNumber<CR>";
+            "<silent> <leader>bb" = "<Cmd>BufferOrderByBufferNumber<CR>";
+            "<silent> <leader>bd" = "<Cmd>BufferOrderByDirectory<CR>";
+            "<silent> <leader>bl" = "<Cmd>BufferOrderByLanguage<CR>";
+            "<silent> <leader>bw" = "<Cmd>BufferOrderByWindowNumber<CR>";
           };
         };
       };

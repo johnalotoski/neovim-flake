@@ -605,7 +605,6 @@ in {
 
       ${optionalString config.vim.editor.whichKey ''
         require("which-key").add({
-
           { "<leader>l", group = "Lua" },
           { "<leader>lA", desc = "action" },
           { "<leader>lD", desc = "definitions" },
@@ -620,9 +619,23 @@ in {
           { "<leader>lg]", desc = "gotoNext (]d)", proxy = "]d" },
 
           { "<leader>b", group = "Buffers" },
+          { "<leader>ba", "<Cmd>BufferPrevious<CR>", desc = "bufPrev <A-,>" },
+          { "<leader>bA", "<Cmd>BufferMovePrev<CR>", desc = "bufMovePrev <A-<>" },
+          { "<leader>bb", desc = "orderByBufNum" },
+          { "<leader>bB", group = "BufList", expand = function() return require("which-key.extras").expand.buf() end },
+          { "<leader>bc", "<Cmd>BufferClose<CR>", desc = "bufClose <A-c>" },
+          { "<leader>bd", desc = "orderByDir" },
+          { "<leader>bD", "<Cmd>BufferClose<CR>", desc = "bufDel <C-A-p>" },
+          { "<leader>bf", desc = "format" },
           { "<leader>bk", desc = "signatureHelp" },
           { "<leader>bK", desc = "hover" },
-          { "<leader>bf", desc = "format" },
+          { "<leader>bl", desc = "orderByLang" },
+          { "<leader>bt", "<Cmd>BufferPin<CR>", desc = "bufPin <A-p>" },
+          { "<leader>bT", "<Cmd>BufferPick<CR>", desc = "bufPick <C-p>" },
+          { "<leader>bw", desc = "orderByWinNum" },
+          { "<leader>bW", group = "WinList", expand = function() return require("which-key.extras").expand.win() end },
+          { "<leader>bz", "<Cmd>BufferNext<CR>", desc = "bufNext <A-.>" },
+          { "<leader>bZ", "<Cmd>BufferMoveNext<CR>", desc = "bufMoveNext <A->>" },
           { "<leader>b<f2>", desc = "rename", proxy = "<f2>" },
 
           { "<leader>d", group = "Debug" },

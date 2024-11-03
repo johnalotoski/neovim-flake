@@ -75,15 +75,11 @@ in {
       ++ (optional cfg.whichKey which-key-nvim)
       ++ (optional cfg.wilder wilder-nvim);
 
-    vim.nnoremap =
-      optionalAttrs cfg.floaterm {
-        "<leader>p`" = "<cmd>FloatermNew<CR>";
-        "<leader>`j" = "<cmd>FloatermNext<CR>";
-        "<leader>`k" = "<cmd>FloatermPrev><CR>";
-      }
-      // optionalAttrs cfg.whichKey {
-        "<leader>?" = "<cmd>WhichKey '<Space>'<CR>";
-      };
+    vim.nnoremap = optionalAttrs cfg.floaterm {
+      "<leader>p`" = "<cmd>FloatermNew<CR>";
+      "<leader>`j" = "<cmd>FloatermNext<CR>";
+      "<leader>`k" = "<cmd>FloatermPrev><CR>";
+    };
 
     vim.configRC = ''
       function s:MkNonExDir(file, buf)
