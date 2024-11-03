@@ -18,7 +18,7 @@ in {
     ];
 
     vim.nnoremap = {
-      "<leader>t" = "<cmd>TestSuite<cr>";
+      "<leader>T" = "<cmd>TestSuite<CR>";
     };
 
     vim.configRC = ''

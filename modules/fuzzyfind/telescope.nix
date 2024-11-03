@@ -18,11 +18,21 @@ in {
       plenary-nvim
     ];
 
+    vim.luaConfigRC = optionalString config.vim.editor.whichKey ''
+      require("which-key").add({
+        { "<leader>f", group = "Telescope" },
+        { "<leader>fb", desc = "buffers" },
+        { "<leader>ff", desc = "findFiles" },
+        { "<leader>fg", desc = "grepFiles" },
+        { "<leader>fh", desc = "helpTags" },
+      })
+    '';
+
     vim.nnoremap = {
-      "<leader>ff" = "<cmd>Telescope find_files<cr>";
-      "<leader>fg" = "<cmd>Telescope live_grep<cr>";
-      "<leader>fb" = "<cmd>Telescope buffers<cr>";
-      "<leader>fh" = "<cmd>Telescope help_tags<cr>";
+      "<leader>ff" = "<cmd>Telescope find_files<CR>";
+      "<leader>fg" = "<cmd>Telescope live_grep<CR>";
+      "<leader>fb" = "<cmd>Telescope buffers<CR>";
+      "<leader>fh" = "<cmd>Telescope help_tags<CR>";
     };
   };
 }

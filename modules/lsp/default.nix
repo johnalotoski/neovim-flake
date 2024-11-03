@@ -38,7 +38,7 @@ in {
     terraform = mkEnableOption "Terraform Support";
     tex = mkEnableOption "TeX support";
     typescript = mkEnableOption "Typescript/Javascript Support";
-    variableDebugPreviews = mkEnableOption "variable previews";
+    variableDebugPreviews = mkEnableOption "Variable previews";
     vimscript = mkEnableOption "Vim Script Support";
     yaml = mkEnableOption "YAML support";
     zig = mkEnableOption "Zig support";
@@ -96,43 +96,73 @@ in {
 
     vim.nnoremap =
       {
-        "<f2>" = "<cmd>lua vim.lsp.buf.rename()<cr>";
-        "<leader>lR" = "<cmd>lua vim.lsp.buf.rename()<cr>";
-        "<leader>lr" = "<cmd>lua require('telescope.builtin').lsp_references()<CR>";
+        # Lua mappings
         "<leader>lA" = "<cmd>lua vim.lsp.buf.code_action()<CR>";
+        "<leader>lD" = "<cmd>lua require('telescope.builtin').lsp_definitions()<CR>";
+        "<leader>le" = "<cmd>lua require('telescope.builtin').diagnostics({bufnr=0})<CR>";
+        "<leader>lE" = "<cmd>lua require('telescope.builtin').diagnostics()<CR>";
+        "<leader>lI" = "<cmd>lua require('telescope.builtin').lsp_implementations()<CR>";
+        "<leader>lr" = "<cmd>lua require('telescope.builtin').lsp_references()<CR>";
+        "<leader>lR" = "<cmd>lua vim.lsp.buf.rename()<CR>";
+        "<leader>ls" = "<cmd>lua vim.diagnostic.setloclist()<CR>";
+        "[d" = "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>";
+        "]d" = "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>";
 
-        "<leader>lD" = "<cmd>lua require('telescope.builtin').lsp_definitions()<cr>";
-        "<leader>lI" = "<cmd>lua require('telescope.builtin').lsp_implementations()<cr>";
-        "<leader>le" = "<cmd>lua require('telescope.builtin').diagnostics({bufnr=0})<cr>";
-        "<leader>lE" = "<cmd>lua require('telescope.builtin').diagnostics()<cr>";
+        # Buffer mappings
+        "<f2>" = "<cmd>lua vim.lsp.buf.rename()<CR>";
         "<leader>bk" = "<cmd>lua vim.lsp.buf.signature_help()<CR>";
         "<leader>bK" = "<cmd>lua vim.lsp.buf.hover()<CR>";
         "<leader>bf" = "<cmd>lua vim.lsp.buf.format({ async = true })<CR>";
 
-        "[d" = "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>";
-        "]d" = "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>";
+        # Dap mappings
+        "<f10>" = "<cmd>lua require('dap').step_over()<CR>";
+        "<f11>" = "<cmd>lua require('dap').step_into()<CR>";
+        "<f12>" = "<cmd>lua require('dap').step_out()<CR>";
+        "<f5>" = "<cmd>lua require('dap').continue()<CR>";
+        "<f9>" = "<cmd>lua require('dap').repl.open()<CR>";
 
-        "<leader>q" = "<cmd>lua vim.diagnostic.setloclist()<CR>";
+        # Telescope dap mappings
+        "<leader>dc" = "<cmd>Telescope dap commands<CR>";
+        "<leader>db" = "<cmd>Telescope dap list_breakpoints<CR>";
+        "<leader>dv" = "<cmd>Telescope dap variables<CR>";
+        "<leader>df" = "<cmd>Telescope dap frames<CR>";
+        "<leader>dt" = "<cmd>lua require('dap').toggle_breakpoint()<CR>";
 
-        "<f10>" = "<cmd>lua require('dap').step_over()<cr>";
-        "<f11>" = "<cmd>lua require('dap').step_into()<cr>";
-        "<f12>" = "<cmd>lua require('dap').step_out()<cr>";
-        "<f5>" = "<cmd>lua require('dap').continue()<cr>";
-        "<f9>" = "<cmd>lua require('dap').repl.open()";
-
-        "<leader>dc" = "<cmd>Telescope dap commands<cr>";
-        "<leader>db" = "<cmd>Telescope dap list_breakpoints<cr>";
-        "<leader>dv" = "<cmd>Telescope dap variables<cr>";
-        "<leader>df" = "<cmd>Telescope dap frames<cr>";
-        "<leader>dt" = "<cmd>lua require('dap').toggle_breakpoint()<cr>";
+        # Misc
+        "<leader>t" = "<cmd>terminal<CR>";
       }
       // optionalAttrs cfg.haskellTools {
         "<leader>hc" = "<cmd>lua vim.lsp.codelens.run()<CR>";
         "<leader>he" = "<cmd>lua require('haskell-tools').lsp.buf_eval_all()<CR>";
+        "<leader>hh" = "<cmd>lua vim.lsp.buf.hover()<CR>";
+        "<leader>hH" = "<cmd>checkhealth haskell-tools<CR>";
+        "<leader>hll0" = "<cmd>Haskell log setLevel off<CR>";
+        "<leader>hll1" = "<cmd>Haskell log setLevel error<CR>";
+        "<leader>hll2" = "<cmd>Haskell log setLevel warn<CR>";
+        "<leader>hll3" = "<cmd>Haskell log setLevel info<CR>";
+        "<leader>hll4" = "<cmd>Haskell log setLevel debug<CR>";
+        "<leader>hll5" = "<cmd>Haskell log setLevel trace<CR>";
+        "<leader>hlh" = "<cmd>Haskell log openHlsLog<CR>";
+        "<leader>hlt" = "<cmd>Haskell log openLog<CR>";
+        "<leader>hLr" = "<cmd>Hls restart<CR>";
+        "<leader>hLs" = "<cmd>Hls start<CR>";
+        "<leader>hLS" = "<cmd>Hls stop<CR>";
+        "<leader>hpc" = "<cmd>Haskell packageCabal<CR>";
+        "<leader>hpp" = "<cmd>Haskell projectFile<CR>";
+        "<leader>hpy" = "<cmd>Haskell packageYaml<CR>";
         "<leader>hrf" = "<cmd>lua (function() require('haskell-tools').repl.toggle(vim.api.nvim_buf_get_name(0)) end)()<CR>";
+        "<leader>hri" = "<cmd>Haskell repl cword_info<CR>";
         "<leader>hrq" = "<cmd>lua require('haskell-tools').repl.quit()<CR>";
-        "<leader>hrt" = "<cmd>lua require('haskell-tools').repl.toggle()<CR>";
+        "<leader>hrr" = "<cmd>Haskell repl reload<CR>";
+        "<leader>hrt" = "<cmd>Haskell repl cword_type<CR>";
+        "<leader>hrT" = "<cmd>lua require('haskell-tools').repl.toggle()<CR>";
         "<leader>hs" = "<cmd>lua require('haskell-tools').hoogle.hoogle_signature()<CR>";
+        "<leader>htf" = "<cmd>Telescope ht package_hsfiles<CR>";
+        "<leader>htF" = "<cmd>Telescope ht package_files<CR>";
+        "<leader>htg" = "<cmd>Telescope ht package_hsgrep<CR>";
+        "<leader>htG" = "<cmd>Telescope ht package_grep<CR>";
+        "<leader>htt" = "<cmd>Telescope tags<CR>";
+        "<leader>htT" = "<cmd>Telescope current_buffer_tags<CR>";
       };
 
     vim.globals = {};
@@ -529,17 +559,8 @@ in {
         }
       ''}
 
-      ${optionalString (cfg.haskellTools && config.vim.editor.whichKey) ''
-        require("which-key").add({
-          { "<leader>h", group = "Haskell" },
-          { "<leader>hr", group = "Repl" },
-          { "<leader>hc", desc = "codeLens" },
-          { "<leader>he", desc = "evalSnippets" },
-          { "<leader>hrf", desc = "currentFile" },
-          { "<leader>hrq", desc = "quit" },
-          { "<leader>hrt", desc = "toggle" },
-          { "<leader>hs", desc = "hoogleSearch" },
-        })
+      ${optionalString (cfg.haskellTools && config.vim.fuzzyfind.telescope.enable) ''
+        require('telescope').load_extension('ht')
       ''}
 
       ${optionalString cfg.json ''
@@ -579,6 +600,83 @@ in {
           nextls = {enable = false},
           elixirls = {enable = true},
           projectionist = {enable = true},
+        })
+      ''}
+
+      ${optionalString config.vim.editor.whichKey ''
+        require("which-key").add({
+
+          { "<leader>l", group = "Lua" },
+          { "<leader>lA", desc = "action" },
+          { "<leader>lD", desc = "definitions" },
+          { "<leader>le", desc = "diagnostics" },
+          { "<leader>lE", desc = "diagnosticsAll" },
+          { "<leader>lI", desc = "implementations" },
+          { "<leader>lr", desc = "references" },
+          { "<leader>lR", desc = "rename" },
+          { "<leader>ls", desc = "setLocList" },
+          { "<leader>lg", group = "goto" },
+          { "<leader>lg[", desc = "gotoPrev ([d)", proxy = "[d" },
+          { "<leader>lg]", desc = "gotoNext (]d)", proxy = "]d" },
+
+          { "<leader>b", group = "Buffers" },
+          { "<leader>bk", desc = "signatureHelp" },
+          { "<leader>bK", desc = "hover" },
+          { "<leader>bf", desc = "format" },
+          { "<leader>b<f2>", desc = "rename", proxy = "<f2>" },
+
+          { "<leader>d", group = "Debug" },
+          { "<leader>dc", desc = "commands" },
+          { "<leader>db", desc = "breakpoints" },
+          { "<leader>dv", desc = "variables" },
+          { "<leader>df", desc = "frames" },
+          { "<leader>dt", desc = "toggleBreakpoint" },
+          { "<leader>d<f10>", desc = "stepOver", proxy = "<f10>" },
+          { "<leader>d<f11>", desc = "stepInto", proxy = "<f11>" },
+          { "<leader>d<f12>", desc = "stepOut", proxy = "<f12>" },
+          { "<leader>d<f5>", desc = "continue", proxy = "<f5>" },
+          { "<leader>d<f9>", desc = "repl", proxy = "<f9>" },
+
+          ${optionalString cfg.haskellTools ''
+          { "<leader>h", group = "Haskell" },
+          { "<leader>hc", desc = "codeLens" },
+          { "<leader>he", desc = "evalSnippets" },
+          { "<leader>hh", desc = "hover" },
+          { "<leader>hH", desc = "healthcheck" },
+          { "<leader>hl", group = "Logs" },
+          { "<leader>hlh", desc = "openHlsLog" },
+          { "<leader>hll", group = "HaskellTools LogLevel" },
+          { "<leader>hll0", desc = "off" },
+          { "<leader>hll1", desc = "error" },
+          { "<leader>hll2", desc = "warn" },
+          { "<leader>hll3", desc = "info" },
+          { "<leader>hll4", desc = "debug" },
+          { "<leader>hll5", desc = "trace" },
+          { "<leader>hlt", desc = "openHtLog" },
+          { "<leader>hL", group = "HLS" },
+          { "<leader>hLr", desc = "restart" },
+          { "<leader>hLs", desc = "start" },
+          { "<leader>hLS", desc = "stop" },
+          { "<leader>hp", group = "ProjectFiles" },
+          { "<leader>hpc", desc = "packageCabal" },
+          { "<leader>hpp", desc = "projectFile" },
+          { "<leader>hpy", desc = "packageYaml" },
+          { "<leader>hr", group = "Repl" },
+          { "<leader>hrf", desc = "currentFile" },
+          { "<leader>hri", desc = "cursorWordInfo" },
+          { "<leader>hrq", desc = "quit" },
+          { "<leader>hrr", desc = "reload" },
+          { "<leader>hrt", desc = "cursorWordType" },
+          { "<leader>hrT", desc = "toggle" },
+          { "<leader>hs", desc = "hoogleSearch" },
+          { "<leader>ht",  group = "Haskell Telescope" },
+          { "<leader>htf", desc = "findPkgHsFiles(hasBug)" },
+          { "<leader>htF", desc = "findPkgFiles" },
+          { "<leader>htg", desc = "grepPkgHsFiles" },
+          { "<leader>htG", desc = "grepPkgFiles" },
+          { "<leader>htt", desc = "tags" },
+          { "<leader>htT", desc = "currentBufferTags" },
+        ''}
         })
       ''}
 

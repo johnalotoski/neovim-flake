@@ -214,6 +214,7 @@
     };
 
     # A Lua functions library for neovim
+    # Required by nvim-telescope
     plenary-nvim = {
       url = "github:nvim-lua/plenary.nvim";
       flake = false;
@@ -465,6 +466,10 @@
         nativeBuildInputs = with pkgs; [
           treefmt
           alejandra
+
+          # Plugin enhancement deps
+          fd
+          ripgrep
         ];
       };
 
@@ -479,6 +484,9 @@
           editor = {
             abolish = true;
             colorPreview = true;
+
+            # Floaterm causes intermittent checkhealth issues due to race condition as of:
+            # Ref: https://github.com/voldikss/vim-floaterm/commit/4e28c8dd0271e10a5f55142fb6fe9b1599ee6160
             floaterm = false;
 
             # Might be nice to have starting from toggled off state

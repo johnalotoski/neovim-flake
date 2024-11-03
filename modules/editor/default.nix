@@ -77,12 +77,12 @@ in {
 
     vim.nnoremap =
       optionalAttrs cfg.floaterm {
-        "<leader>p`" = "<cmd>FloatermNew<cr>";
-        "<leader>`j" = "<cmd>FloatermNext<cr>";
-        "<leader>`k" = "<cmd>FloatermPrev><cr>";
+        "<leader>p`" = "<cmd>FloatermNew<CR>";
+        "<leader>`j" = "<cmd>FloatermNext<CR>";
+        "<leader>`k" = "<cmd>FloatermPrev><CR>";
       }
       // optionalAttrs cfg.whichKey {
-        "<leader>?" = "<cmd>WhichKey '<Space>'<cr>";
+        "<leader>?" = "<cmd>WhichKey '<Space>'<CR>";
       };
 
     vim.configRC = ''
@@ -168,7 +168,9 @@ in {
     vim.luaConfigRC = ''
       ${optionalString cfg.whichKey ''
         local wk = require("which-key")
-        wk.setup { }
+        wk.setup {
+          preset = "modern"
+        }
       ''}
 
       ${optionalString cfg.colorPreview ''

@@ -14,8 +14,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    vim.nnoremap = {"<leader>g" = "<cmd>MagitOnly<cr>";};
-
     vim.startPlugins = with pkgs.neovimPlugins;
       [gitsigns-nvim splice vimagit] ++ (optional cfg.blameLine nvim-blame-line);
 
@@ -25,6 +23,12 @@ in {
 
     vim.luaConfigRC = ''
       require('gitsigns').setup()
+
+      ${optionalString config.vim.editor.whichKey ''
+        require("which-key").add({
+          { "<leader>M", desc = "magit" },
+        })
+      ''}
     '';
   };
 }

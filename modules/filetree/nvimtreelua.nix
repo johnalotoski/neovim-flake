@@ -457,7 +457,6 @@ in {
     ];
 
     vim.nnoremap = {
-      "<leader>pt" = "<cmd>NvimTreeToggle<cr>";
       "<leader>ft" = "<cmd>NvimTreeToggle<cr>";
     };
 
