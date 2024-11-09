@@ -447,14 +447,12 @@ in {
       then 1
       else 0;
   in {
-    vim.startPlugins = with pkgs.neovimPlugins; [
-      nvim-tree-lua
-      (
-        if cfg.devIcons
-        then nvim-web-devicons
-        else null
-      )
-    ];
+    vim.startPlugins = with pkgs.neovimPlugins;
+      [
+        nvim-tree-lua
+      ]
+      ++ optionals cfg.devIcons
+      [nvim-web-devicons mini-nvim mini-icons];
 
     vim.nnoremap = {
       "<leader>ft" = "<cmd>NvimTreeToggle<cr>";
@@ -470,8 +468,12 @@ in {
       "nvim_tree_group_empty" = mkVimBool cfg.groupEmptyFolders;
     };
 
-    vim.luaConfigRC = ''
-      require('nvim-tree').setup ${optionsToLua cfg.setup}
-    '';
+    vim.luaConfigRC =
+      ''
+        require('nvim-tree').setup ${optionsToLua cfg.setup}
+      ''
+      + optionalString cfg.devIcons ''
+        require('mini.icons').setup()
+      '';
   });
 }

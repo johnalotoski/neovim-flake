@@ -63,6 +63,7 @@ in {
         nvim-jqx
         nvim-lspconfig
         pkgs.nvim-treesitter-withAllGrammars
+        symbols-outline
         telescope-dap
         vim-cue
         vim-just
@@ -127,6 +128,11 @@ in {
         "<leader>dv" = "<cmd>Telescope dap variables<CR>";
         "<leader>df" = "<cmd>Telescope dap frames<CR>";
         "<leader>dt" = "<cmd>lua require('dap').toggle_breakpoint()<CR>";
+
+        # Symbols Outline LSP mappings
+        "<leader>sc" = "<cmd>SymbolsOutlineClose<CR>";
+        "<leader>so" = "<cmd>SymbolsOutlineOpen<CR>";
+        "<leader>st" = "<cmd>SymbolsOutline<CR>";
 
         # Misc
         "<leader>t" = "<cmd>terminal<CR>";
@@ -325,6 +331,8 @@ in {
       )
 
       require("lsp_signature").setup {}
+
+      require("symbols-outline").setup()
 
       vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
         vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -690,6 +698,11 @@ in {
           { "<leader>htt", desc = "tags" },
           { "<leader>htT", desc = "currentBufferTags" },
         ''}
+
+          { "<leader>s", group = "Symbol Outline" },
+          { "<leader>sc", desc = "close" },
+          { "<leader>so", desc = "open" },
+          { "<leader>st", desc = "toggle" },
         })
       ''}
 

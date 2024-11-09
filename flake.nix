@@ -121,6 +121,18 @@
       flake = false;
     };
 
+    # Icon provider. Part of 'mini.nvim' library
+    mini-icons = {
+      url = "github:echasnovski/mini.icons";
+      flake = false;
+    };
+
+    # Library of 40+ independent Lua modules improving overall Neovim (version 0.8 and higher) experience with minimal effort
+    mini-nvim = {
+      url = "github:echasnovski/mini.nvim";
+      flake = false;
+    };
+
     # A plugin to center the currently focused buffer to the middle of the screen
     no-neck-pain = {
       url = "github:shortcuts/no-neck-pain.nvim";
@@ -223,6 +235,11 @@
     # A three-way merge managing plugin
     splice = {
       url = "github:sjl/splice.vim";
+      flake = false;
+    };
+
+    symbols-outline = {
+      url = "github:Vaengir/symbols-outline.nvim";
       flake = false;
     };
 

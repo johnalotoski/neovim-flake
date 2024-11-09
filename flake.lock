@@ -454,6 +454,38 @@
         "type": "github"
       }
     },
+    "mini-icons": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1727358837,
+        "narHash": "sha256-TKlRSir1sLlcMToJEaI1p4MHwZdkV1GEz/oXhnCbhjc=",
+        "owner": "echasnovski",
+        "repo": "mini.icons",
+        "rev": "a2742459f0ee32806c2438ca06b4d8b331f3f4d4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "echasnovski",
+        "repo": "mini.icons",
+        "type": "github"
+      }
+    },
+    "mini-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1731059546,
+        "narHash": "sha256-oAFSwb0mSx9TA/hv90nvLN6HcqO77EZ2MMZfG/dQRVs=",
+        "owner": "echasnovski",
+        "repo": "mini.nvim",
+        "rev": "998cfcf1fdd0a6830d0fc35f1c054a6f55de1e7f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "echasnovski",
+        "repo": "mini.nvim",
+        "type": "github"
+      }
+    },
     "neovim": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -853,6 +885,8 @@
         "indent-blankline-nvim": "indent-blankline-nvim",
         "lightline-vim": "lightline-vim",
         "lsp_signature": "lsp_signature",
+        "mini-icons": "mini-icons",
+        "mini-nvim": "mini-nvim",
         "neovim": "neovim",
         "nil": "nil",
         "nixpkgs": "nixpkgs_3",
@@ -874,6 +908,7 @@
         "nvim-web-devicons": "nvim-web-devicons",
         "plenary-nvim": "plenary-nvim",
         "splice": "splice",
+        "symbols-outline": "symbols-outline",
         "telescope-dap": "telescope-dap",
         "vim-abolish": "vim-abolish",
         "vim-crystal": "vim-crystal",
@@ -932,6 +967,22 @@
       "original": {
         "owner": "sjl",
         "repo": "splice.vim",
+        "type": "github"
+      }
+    },
+    "symbols-outline": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1721466328,
+        "narHash": "sha256-qAo8BOS6dN52s/O9Ud9StPv1v22UPhW4RbCEm6sJh04=",
+        "owner": "Vaengir",
+        "repo": "symbols-outline.nvim",
+        "rev": "ea67d483340ea3393bae46304e82bbe199858c70",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Vaengir",
+        "repo": "symbols-outline.nvim",
         "type": "github"
       }
     },
