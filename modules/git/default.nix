@@ -15,7 +15,7 @@ in {
 
   config = mkIf cfg.enable {
     vim.startPlugins = with pkgs.neovimPlugins;
-      [gitsigns-nvim splice vimagit] ++ (optional cfg.blameLine nvim-blame-line);
+      [gitsigns-nvim splice] ++ (optional cfg.blameLine nvim-blame-line);
 
     vim.configRC = optionalString cfg.blameLine ''
       autocmd BufEnter * EnableBlameLine
@@ -24,11 +24,11 @@ in {
     vim.luaConfigRC = ''
       require('gitsigns').setup()
 
-      ${optionalString config.vim.editor.whichKey ''
-        require("which-key").add({
-          { "<leader>M", desc = "magit" },
-        })
-      ''}
+      -- Add any additional which-key bindings here
+      -- ${optionalString config.vim.editor.whichKey ''
+        --   require("which-key").add({
+        --   })
+        -- ''}
     '';
   };
 }

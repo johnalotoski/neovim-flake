@@ -72,6 +72,13 @@
       flake = false;
     };
 
+    # Set of preconfigured snippets for different languages
+    # TODO: Integrate with LuaSnip
+    friendly-snippets = {
+      url = "github:rafamadriz/friendly-snippets";
+      flake = false;
+    };
+
     # Git integration for buffers
     gitsigns-nvim = {
       url = "github:lewis6991/gitsigns.nvim";
@@ -252,12 +259,6 @@
     # An abbreviation, coercion and substitution plugin
     vim-abolish = {
       url = "github:tpope/vim-abolish";
-      flake = false;
-    };
-
-    # A git integration plugin
-    vimagit = {
-      url = "github:jreybert/vimagit";
       flake = false;
     };
 

@@ -287,6 +287,22 @@
         "type": "github"
       }
     },
+    "friendly-snippets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1728273759,
+        "narHash": "sha256-H94Ryad0ZsSg/gioUgW+7sowij7GgtEUMNFi1IOZAys=",
+        "owner": "rafamadriz",
+        "repo": "friendly-snippets",
+        "rev": "de8fce94985873666bd9712ea3e49ee17aadb1ed",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rafamadriz",
+        "repo": "friendly-snippets",
+        "type": "github"
+      }
+    },
     "git-hooks": {
       "inputs": {
         "flake-compat": "flake-compat_2",
@@ -879,6 +895,7 @@
         "fidget-nvim": "fidget-nvim",
         "flake-utils": "flake-utils",
         "formatter-nvim": "formatter-nvim",
+        "friendly-snippets": "friendly-snippets",
         "gitsigns-nvim": "gitsigns-nvim",
         "gruvbox": "gruvbox",
         "haskell-tools": "haskell-tools",
@@ -927,7 +944,6 @@
         "vim-startify": "vim-startify",
         "vim-surround": "vim-surround",
         "vim-test": "vim-test",
-        "vimagit": "vimagit",
         "which-key-nvim": "which-key-nvim",
         "wilder-nvim": "wilder-nvim",
         "zig-vim": "zig-vim"
@@ -1301,22 +1317,6 @@
       "original": {
         "owner": "vim-test",
         "repo": "vim-test",
-        "type": "github"
-      }
-    },
-    "vimagit": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1711657676,
-        "narHash": "sha256-HievBzyVZke4AyCWAL9MlOw65X460cEEeOhwAL2brzs=",
-        "owner": "jreybert",
-        "repo": "vimagit",
-        "rev": "fc7eda97da4f8182c8abbe6ea7befbd789b8b935",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jreybert",
-        "repo": "vimagit",
         "type": "github"
       }
     },
