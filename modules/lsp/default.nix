@@ -118,8 +118,8 @@ in {
         -- For nvim-dap
         local dap = require('dap')
 
-        -- If debugging is required
-        -- vim.lsp.set_log_level("debug")
+        -- If debugging is required this would typically write to `~/.cache/nvim/lsp.log`
+        vim.lsp.set_log_level("debug")
 
         -- Used in the `setup` fn that follows
         local merge = function(a, b)
@@ -187,8 +187,12 @@ in {
 
         local cmp = require('cmp')
         local luasnip = require('luasnip')
-        local select_opts = {behavior = cmp.SelectBehavior.Select}
 
+        -- Load friendly-snippets
+        require('luasnip.loaders.from_vscode').lazy_load()
+
+        -- Ref: https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/types/cmp.lua
+        local select_opts = {behavior = cmp.SelectBehavior.Select}
 
         cmp.setup {
           snippet = {
@@ -263,13 +267,14 @@ in {
           -- If no priority is set, then order determines priority
           sources = cmp.config.sources {
             { name = 'path' },
-
             { name = 'nvim_lsp' },
             { name = 'buffer' },
             { name = 'luasnip' },
           },
 
+          -- Make the completion menus a little prettier
           window = {
+            completion = cmp.config.window.bordered(),
             documentation = cmp.config.window.bordered()
           },
 
@@ -314,33 +319,43 @@ in {
           vim.lsp.protocol.make_client_capabilities()
         )
 
+        -- Give `vim.lsp.buf.hover()` a nice border
         vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
           vim.lsp.handlers.hover,
           {border = 'rounded'}
         )
 
+        -- Give `vim.lsp.buf.signature_help()` a nice border
         vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
           vim.lsp.handlers.signature_help,
           {border = 'rounded'}
         )
 
-        require("lsp_signature").setup {}
+        require("lsp_signature").setup({
+          bind = true,
+          handler_opts = {
+            border = "rounded"
+          }
+        })
 
         require("symbols-outline").setup()
 
+        -- LSP diagnostics handler
         vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
           vim.lsp.diagnostic.on_publish_diagnostics, {
             -- Enable underline, use default values
             underline = true,
+
             -- Enable virtual text, override spacing to 2
             virtual_text = {
               spacing = 2,
               prefix = '~',
             },
-            -- Use a function to dynamically turn signs off
-            -- and on, using buffer local variables
+
+            -- Use a function to dynamically turn signs off and on, using buffer local variables
             signs = function(bufnr, client_id)
               local ok, result = pcall(vim.api.nvim_buf_get_var, bufnr, 'show_signs')
+
               -- No buffer local variable set, so just enable by default
               if not ok then
                 return true
@@ -348,29 +363,56 @@ in {
 
               return result
             end,
+
             -- Disable a feature
             update_in_insert = false,
           }
         )
 
+        -- Support LSP diagnostic format
         local function split_on(s, delimiter)
           local result = {}
           local from = 1
           local delim_from, delim_to = string.find(s, delimiter, from)
+
           while delim_from do
             table.insert(result, string.sub(s, from, delim_from - 1))
             from = delim_to + 1
             delim_from, delim_to = string.find(s, delimiter, from)
           end
+
           table.insert(result, string.sub(s, from))
           return result
         end
 
-        local diagnostic_foramt = function(diagnostic)
+        -- Define LSP diagnostic format
+        local diagnostic_format = function(diagnostic)
           return string.format("%s: %s", diagnostic.source, split_on(diagnostic.message, "\n")[1])
         end
 
-        vim.diagnostic.config({ virtual_text = { format = diagnostic_foramt }, severity_sort = true })
+        -- Set the diagnostic config
+        vim.diagnostic.config {
+          jump = { float = true },
+          severity_sort = true,
+          underline = true,
+          virtual_text = { format = diagnostic_format },
+
+          signs = {
+            text = {
+              [vim.diagnostic.severity.ERROR] = "",
+              [vim.diagnostic.severity.WARN] = "",
+              [vim.diagnostic.severity.INFO] = "󰋼",
+              [vim.diagnostic.severity.HINT] = "󰌵",
+            },
+          },
+
+          float = {
+            border = "rounded",
+            format = function(d)
+              return ("%s (%s) [%s]"):format(d.message, d.source, d.code or d.user_data.lsp.code)
+            end,
+          },
+        }
 
         vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]]
 
@@ -391,26 +433,26 @@ in {
         ''}
 
         ${optionalString cfg.lightbulb ''
-          require('nvim-lightbulb').update_lightbulb {
+          require("nvim-lightbulb").setup({
+            autocmd = {
+              enabled = true,
+              updatetime = 10,
+            },
+
+            code_lenses = true,
+            float = { enabled = false },
+            virtual_text = { enable = false },
+
             sign = {
               enabled = true,
+              hl = "LightBulbSign",
+              lens_text = "🔎",
               priority = 10,
-            },
-            float = {
-              enabled = false,
-              text = "💡",
-              win_opts = {},
-            },
-            virtual_text = {
-              enable = false,
               text = "💡",
             },
-            status_text = {
-              enabled = false,
-              text = "💡",
-              text_unavailable = ""
-            }
-          }
+
+            status_text = { enabled = false }
+          })
         ''}
 
         ${optionalString cfg.nickel ''
