@@ -7,7 +7,6 @@
 with lib;
 with builtins; let
   cfg = config.vim.filetree.nvimTreeLua;
-  pp = v: builtins.trace (builtins.toJSON v) v;
   indent = n: builtins.concatStringsSep "" (builtins.genList (a: " ") n);
   nl = "\n";
 
@@ -141,6 +140,7 @@ in {
       type = types.bool;
     };
 
+    # TODO: Some of these options are deprecated and likely some new options are missing; update these
     setup = mkOption {
       description = "all options that are configured in the setup hook";
       default = {};
@@ -158,17 +158,17 @@ in {
             type = types.bool;
           };
 
-          open_on_setup = mkOption {
-            default = false;
-            description = "will automatically open the tree when running setup if current buffer is a directory, is empty or is unnamed.";
-            type = types.bool;
-          };
+          # open_on_setup = mkOption {
+          #   default = false;
+          #   description = "will automatically open the tree when running setup if current buffer is a directory, is empty or is unnamed.";
+          #   type = types.bool;
+          # };
 
-          ignore_ft_on_setup = mkOption {
-            description = "list of filetypes that will make open_on_setup not open. You can use this option if you don't want the tree to open in some scenarios (eg using vim startify).";
-            type = types.listOf types.str;
-            default = [];
-          };
+          # ignore_ft_on_setup = mkOption {
+          #   description = "list of filetypes that will make open_on_setup not open. You can use this option if you don't want the tree to open in some scenarios (eg using vim startify).";
+          #   type = types.listOf types.str;
+          #   default = [];
+          # };
 
           open_on_tab = mkOption {
             description = "opens the tree automatically when switching tabpage or opening a new tabpage if the tree was previously open.";
@@ -338,11 +338,11 @@ in {
             default = {};
             type = types.submodule {
               options = {
-                hide_root_folder = mkOption {
-                  description = "hide the path of the current working directory on top of the tree";
-                  type = types.bool;
-                  default = false;
-                };
+                # hide_root_folder = mkOption {
+                #   description = "hide the path of the current working directory on top of the tree";
+                #   type = types.bool;
+                #   default = false;
+                # };
 
                 width = mkOption {
                   description = "width of the window, can be either a `%` string or a number representing columns. Only works with |view.side| `left` or `right`";
@@ -350,11 +350,11 @@ in {
                   default = 30;
                 };
 
-                height = mkOption {
-                  description = "height of the window, can be either a `%` string or a number representing rows. Only works with |view.side| `top` or `bottom`";
-                  type = types.oneOf [types.str types.ints.positive];
-                  default = 30;
-                };
+                # height = mkOption {
+                #   description = "height of the window, can be either a `%` string or a number representing rows. Only works with |view.side| `top` or `bottom`";
+                #   type = types.oneOf [types.str types.ints.positive];
+                #   default = 30;
+                # };
 
                 side = mkOption {
                   description = "side of the tree, can be one of 'left' | 'right' | 'bottom' | 'top' Note that bottom/top are not working correctly yet.";
@@ -374,25 +374,25 @@ in {
                   default = false;
                 };
 
-                mappings = mkOption {
-                  description = "configuration options for keymaps";
-                  default = {};
-                  type = types.submodule {
-                    options = {
-                      custom_only = mkOption {
-                        description = "will use only the provided user mappings and not the default otherwise, extends the default mappings with the provided user mappings";
-                        type = types.bool;
-                        default = false;
-                      };
+                # mappings = mkOption {
+                #   description = "configuration options for keymaps";
+                #   default = {};
+                #   type = types.submodule {
+                #     options = {
+                #       custom_only = mkOption {
+                #         description = "will use only the provided user mappings and not the default otherwise, extends the default mappings with the provided user mappings";
+                #         type = types.bool;
+                #         default = false;
+                #       };
 
-                      list = mkOption {
-                        description = "a list of keymaps that will extend or override the default keymaps";
-                        type = types.attrsOf types.str;
-                        default = {};
-                      };
-                    };
-                  };
-                };
+                #       list = mkOption {
+                #         description = "a list of keymaps that will extend or override the default keymaps";
+                #         type = types.attrsOf types.str;
+                #         default = {};
+                #       };
+                #     };
+                #   };
+                # };
               };
             };
           };
@@ -447,17 +447,14 @@ in {
       then 1
       else 0;
   in {
-    vim.startPlugins = with pkgs.neovimPlugins; [
-      nvim-tree-lua
-      (
-        if cfg.devIcons
-        then nvim-web-devicons
-        else null
-      )
-    ];
+    vim.startPlugins = with pkgs.neovimPlugins;
+      [
+        nvim-tree-lua
+      ]
+      ++ optionals cfg.devIcons
+      [nvim-web-devicons mini-nvim mini-icons];
 
     vim.nnoremap = {
-      "<leader>pt" = "<cmd>NvimTreeToggle<cr>";
       "<leader>ft" = "<cmd>NvimTreeToggle<cr>";
     };
 
@@ -471,8 +468,12 @@ in {
       "nvim_tree_group_empty" = mkVimBool cfg.groupEmptyFolders;
     };
 
-    vim.luaConfigRC = ''
-      require('nvim-tree').setup ${optionsToLua cfg.setup}
-    '';
+    vim.luaConfigRC =
+      ''
+        require('nvim-tree').setup ${optionsToLua cfg.setup}
+      ''
+      + optionalString cfg.devIcons ''
+        require('mini.icons').setup()
+      '';
   });
 }

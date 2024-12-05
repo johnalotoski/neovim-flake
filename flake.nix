@@ -2,14 +2,11 @@
   description = "NeoVim config";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
-    neovim = {
-      url = "github:neovim/neovim/v0.9.1?dir=contrib";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    neovim.url = "github:nix-community/neovim-nightly-overlay";
 
     # Nix language server
     nil.url = "github:oxalica/nil";
@@ -57,16 +54,15 @@
       flake = false;
     };
 
-    # EditorConfig plugin for Vim
-    # NOTE: Neovim 0.9 and above comes with its own Lua-based implementation
-    editorconfig-vim = {
-      url = "github:editorconfig/editorconfig-vim";
+    # A language support plugin for Elixir
+    elixir-nvim = {
+      url = "github:mhanberg/elixir.nvim/v0.16.1";
       flake = false;
     };
 
-    # A language support plugin for Elixir
-    elixir-nvim = {
-      url = "github:mhanberg/elixir.nvim";
+    # An lsp status indicator for Neovim
+    fidget-nvim = {
+      url = "github:j-hui/fidget.nvim";
       flake = false;
     };
 
@@ -76,16 +72,16 @@
       flake = false;
     };
 
-    # Git integration for buffers
-    gitsigns-nvim = {
-      url = "github:lewis6991/gitsigns.nvim";
+    # Set of preconfigured snippets for different languages
+    # TODO: Integrate with LuaSnip
+    friendly-snippets = {
+      url = "github:rafamadriz/friendly-snippets";
       flake = false;
     };
 
-    # A language support plugin for Gleam
-    # NOTE: "This plugin is not needed if you are using Neovim.  Instead..."
-    gleam-vim = {
-      url = "github:gleam-lang/gleam.vim";
+    # Git integration for buffers
+    gitsigns-nvim = {
+      url = "github:lewis6991/gitsigns.nvim";
       flake = false;
     };
 
@@ -100,6 +96,19 @@
       url = "github:lukas-reineke/indent-blankline.nvim";
       flake = false;
     };
+
+    # A plugin for advanced haskell lsp support
+    haskell-tools = {
+      url = "github:mrcjkb/haskell-tools.nvim";
+      flake = false;
+    };
+
+    # TODO: A regexp parser reguired by LuaSnip for some extended fns
+    # Ref: https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
+    # jsregexp = {
+    #   url = "github:kmarius/jsregexp";
+    #   flake = false;
+    # };
 
     # A light and configurable statusline/tabline plugin for Vim
     lightline-vim = {
@@ -119,6 +128,18 @@
       flake = false;
     };
 
+    # Icon provider. Part of 'mini.nvim' library
+    mini-icons = {
+      url = "github:echasnovski/mini.icons";
+      flake = false;
+    };
+
+    # Library of 40+ independent Lua modules improving overall Neovim (version 0.8 and higher) experience with minimal effort
+    mini-nvim = {
+      url = "github:echasnovski/mini.nvim";
+      flake = false;
+    };
+
     # A plugin to center the currently focused buffer to the middle of the screen
     no-neck-pain = {
       url = "github:shortcuts/no-neck-pain.nvim";
@@ -132,9 +153,10 @@
     };
 
     # A language server to inject LSP diagnostics, code actions, and more via Lua
-    # DEPRECATED and replaced by nvimtools/none-ls.nvim
+    # TODO: migrate non-lsp actions to lsp
+    # Example: https://nullvoxpopuli.com/2023-03-13-null-ls
     null-ls-nvim = {
-      url = "github:jose-elias-alvarez/null-ls.nvim";
+      url = "github:nvimtools/none-ls.nvim";
       flake = false;
     };
 
@@ -165,13 +187,6 @@
     # A debug plugin to add virtual-text to nvim-dap
     nvim-dap-virtual-text = {
       url = "github:theHamsta/nvim-dap-virtual-text";
-      flake = false;
-    };
-
-    # A language support plugin for Nu
-    # DEPRECATED for idris2-nvim
-    nvim-idris2 = {
-      url = "github:ShinKage/nvim-idris2";
       flake = false;
     };
 
@@ -211,18 +226,6 @@
       flake = false;
     };
 
-    # A context display plugin
-    nvim-treesitter-context = {
-      url = "github:romgrk/nvim-treesitter-context";
-      flake = false;
-    };
-
-    # An interface plugin for treesitter language parser
-    nvim-treesitter = {
-      url = "github:nvim-treesitter/nvim-treesitter";
-      flake = false;
-    };
-
     # An icons plugin, with light and dark variants
     nvim-web-devicons = {
       url = "github:kyazdani42/nvim-web-devicons";
@@ -230,21 +233,20 @@
     };
 
     # A Lua functions library for neovim
+    # Required by nvim-telescope
     plenary-nvim = {
       url = "github:nvim-lua/plenary.nvim";
-      flake = false;
-    };
-
-    # A vim popup implementation for neovim
-    # DEPRECATED and now included in plenary.nvim
-    popup-nvim = {
-      url = "github:nvim-lua/popup.nvim";
       flake = false;
     };
 
     # A three-way merge managing plugin
     splice = {
       url = "github:sjl/splice.vim";
+      flake = false;
+    };
+
+    symbols-outline = {
+      url = "github:Vaengir/symbols-outline.nvim";
       flake = false;
     };
 
@@ -257,12 +259,6 @@
     # An abbreviation, coercion and substitution plugin
     vim-abolish = {
       url = "github:tpope/vim-abolish";
-      flake = false;
-    };
-
-    # A git integration plugin
-    vimagit = {
-      url = "github:jreybert/vimagit";
       flake = false;
     };
 
@@ -397,7 +393,12 @@
 
       pkgs = import nixpkgs {
         inherit system;
-        # config = {allowUnfree = true;};
+
+        config = {
+          # allowBroken = true;
+          # allowUnfree = true;
+        };
+
         overlays = [
           pluginOverlay
           (final: prev: {
@@ -409,44 +410,40 @@
 
             efm-langserver = prev.buildGoModule rec {
               pname = "efm-langserver";
-              version = "0.0.36";
-              vendorSha256 = "sha256-tca+1SRrFyvU8ttHmfMFiGXd1A8rQSEWm1Mc2qp0EfI=";
+              version = "0.0.53";
+              vendorHash = "sha256-0YkUak6+dpxvXn6nVVn33xrTEthWqnC9MhMLm/yjFMA=";
               src = prev.fetchFromGitHub {
                 owner = "mattn";
                 repo = pname;
                 rev = "v${version}";
-                sha256 = "sha256-X2z49KmJiKh1QtcDBZcqNiMhq5deVamS47w6gyVq7Oo=";
+                sha256 = "sha256-Csm+2C9hP+dTXliADUquAb1nC+8f5j1rJ+66cqWDrCk=";
               };
             };
 
             # Elixir language server
             elixirls = prev.fetchzip {
-              url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.11.0/elixir-ls.zip";
-              hash = "sha256-Q1c+HMK9mhIX4bK9OddfckiR3gpxu9bITI5ED8FCHmI=";
+              url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.24.1/elixir-ls-v0.24.1.zip";
+              hash = "sha256-18guwWL+oq3iXTxjqmNO0Bst29nbNH9xwdsuu8oUFz4=";
               stripRoot = false;
             };
 
             htmlls = prev.nodePackages.vscode-html-languageserver-bin;
             jsonls = prev.nodePackages.vscode-json-languageserver-bin;
 
-            neovim-nightly =
-              neovim.defaultPackage.${system}.overrideAttrs
-              (_: {
-                patches = [
-                  "${inputs.nixpkgs}/pkgs/applications/editors/neovim/system_rplugin_manifest.patch"
-                ];
-              });
+            neovim-nightly = neovim.packages.${system}.default;
+
+            nvim-treesitter-withAllGrammars = inputs.nixpkgs-unstable.legacyPackages.${system}.vimPlugins.nvim-treesitter.withAllGrammars;
 
             # OPA Rego language server
             regols = prev.buildGoModule rec {
               pname = "regols";
-              version = "0.1.0";
-              vendorSha256 = "sha256-iyY8MycN/G6jj5hqb1ewyEkIMbTMJdILqHczxAYlxng=";
+              version = "0.2.4";
+              vendorHash = "sha256-yJYWVQq6pbLPdmK4BVse6moMkurlmt6TBd6/vYM1xcU=";
               src = prev.fetchFromGitHub {
                 owner = "kitagry";
                 repo = pname;
                 rev = "v${version}";
-                sha256 = "sha256-2MTetTWHJAiSWPcEFJ/p0xptAWDKNXwTq68RywUO+Ls=";
+                sha256 = "sha256-1L9ehqTMN9KHlvE7FBccVAXA7f3NNsLXJaTkOChT8Xo=";
               };
             };
 
@@ -484,7 +481,14 @@
       };
 
       devShells.default = pkgs.mkShell {
-        nativeBuildInputs = [pkgs.treefmt pkgs.alejandra];
+        nativeBuildInputs = with pkgs; [
+          treefmt
+          alejandra
+
+          # Plugin enhancement deps
+          fd
+          ripgrep
+        ];
       };
 
       packages.neovim = neovimBuilder {
@@ -498,7 +502,10 @@
           editor = {
             abolish = true;
             colorPreview = true;
-            floaterm = true;
+
+            # Floaterm causes intermittent checkhealth issues due to race condition as of:
+            # Ref: https://github.com/voldikss/vim-floaterm/commit/4e28c8dd0271e10a5f55142fb6fe9b1599ee6160
+            floaterm = false;
 
             # Might be nice to have starting from toggled off state
             indentGuide = false;
@@ -515,7 +522,6 @@
           };
 
           filetree.nvimTreeLua = {enable = true;};
-          formatting.editorConfig.enable = true;
           fuzzyfind.telescope.enable = true;
           lineNumberMode = "number";
           statusline.lightline.enable = true;
@@ -542,11 +548,12 @@
             css = true;
             docker = true;
             elixir = true;
+            fidget = true;
             gleam = true;
             go = true;
-            haskell = true;
+            haskellLspConfig = false;
+            haskellTools = true;
             html = true;
-            idris2 = true;
             json = true;
             lightbulb = true;
             mint = true;
@@ -590,10 +597,10 @@
             "<silent> <C-A-p>" = "<Cmd>BufferPickDelete<CR>";
 
             # Sort automatically by...
-            "<silent> <Space>bb" = "<Cmd>BufferOrderByBufferNumber<CR>";
-            "<silent> <Space>bd" = "<Cmd>BufferOrderByDirectory<CR>";
-            "<silent> <Space>bl" = "<Cmd>BufferOrderByLanguage<CR>";
-            "<silent> <Space>bw" = "<Cmd>BufferOrderByWindowNumber<CR>";
+            "<silent> <leader>bb" = "<Cmd>BufferOrderByBufferNumber<CR>";
+            "<silent> <leader>bd" = "<Cmd>BufferOrderByDirectory<CR>";
+            "<silent> <leader>bl" = "<Cmd>BufferOrderByLanguage<CR>";
+            "<silent> <leader>bw" = "<Cmd>BufferOrderByWindowNumber<CR>";
           };
         };
       };
