@@ -166,7 +166,11 @@ in {
             },
           },
 
-          indent = { enable = true, },
+          indent = {
+            enable = true,
+            -- Nix indentation causes vertical Shift-I inserts with comments to fail
+            disable = { "nix" },
+          },
 
           parser_install_dir = vim.env.HOME .. "/.local/share/nvim/site/parser",
 
