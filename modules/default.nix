@@ -15,7 +15,7 @@
     ./filetree
     ./git
     ./tabbar
-    ./formating
+    ./formatting
     ./editor
     ./database
     ./test
