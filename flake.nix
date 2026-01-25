@@ -177,7 +177,7 @@
 
     # A high performance Neovim colorizer
     nvim-colorizer-lua = {
-      url = "github:norcalli/nvim-colorizer.lua";
+      url = "github:catgoose/nvim-colorizer.lua";
       flake = false;
     };
 
@@ -426,7 +426,7 @@
             # Elixir language server
             elixirls = prev.fetchzip {
               url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.24.1/elixir-ls-v0.24.1.zip";
-              hash = "sha256-18guwWL+oq3iXTxjqmNO0Bst29nbNH9xwdsuu8oUFz4=";
+              hash = "sha256-68guwWL+oq3iXTxjqmNO0Bst29nbNH9xwdsuu8oUFz4=";
               stripRoot = false;
             };
 

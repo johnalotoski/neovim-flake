@@ -119,7 +119,7 @@ in {
         local dap = require('dap')
 
         -- If debugging is required this would typically write to `~/.cache/nvim/lsp.log`
-        vim.lsp.set_log_level("debug")
+        vim.lsp.log.set_level("debug")
 
         -- Used in the `setup` fn that follows
         local merge = function(a, b)
@@ -396,7 +396,11 @@ in {
 
         -- Set the diagnostic config
         vim.diagnostic.config {
-          jump = { float = true },
+          jump = {
+            on_jump = function()
+              vim.diagnostic.open_float()
+            end
+          },
           severity_sort = true,
           underline = true,
           virtual_text = { format = diagnostic_format },
