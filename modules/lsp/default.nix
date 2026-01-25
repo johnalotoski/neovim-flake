@@ -129,12 +129,12 @@ in {
           return merged
         end
 
-        -- Convienence `setup fn`
+        -- Convenience `setup fn`
         local setup = function(name, args)
           return lspconfig[name].setup(merge({capabilities = capabilities}, (args or {})))
         end
 
-        -- Convienence `setup_cmd` fn
+        -- Convenience `setup_cmd` fn
         local setup_cmd = function(name, cmd)
           return setup(name, { cmd = cmd })
         end
@@ -645,7 +645,10 @@ in {
         ${optionalString cfg.elixir ''
           require("elixir").setup({
             nextls = {enable = false},
-            elixirls = {enable = true},
+            elixirls = {
+              enable = true,
+              cmd = "${pkgs.elixirls}/language_server.sh",
+            },
             projectionist = {enable = true},
           })
         ''}

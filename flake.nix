@@ -2,7 +2,7 @@
   description = "NeoVim config";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
@@ -10,6 +10,9 @@
 
     # Nix language server
     nil.url = "github:oxalica/nil";
+
+    # Nix linter
+    statix.url = "github:nerdypepper/statix";
 
     # -- Vim plugins
     # Tab bar at the top of the editor
@@ -103,7 +106,7 @@
       flake = false;
     };
 
-    # TODO: A regexp parser reguired by LuaSnip for some extended fns
+    # TODO: A regexp parser required by LuaSnip for some extended fns
     # Ref: https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     # jsregexp = {
     #   url = "github:kmarius/jsregexp";
@@ -447,7 +450,7 @@
               };
             };
 
-            statix = inputs.statix.defaultPackage.${system};
+            statix = inputs.statix.packages.${system}.default;
             tsserver = prev.nodePackages.typescript-language-server;
             vimls = prev.nodePackages.vim-language-server;
             yamlls = prev.nodePackages.yaml-language-server;
@@ -460,19 +463,19 @@
       };
 
       inherit (lib) neovimBuilder;
-    in rec {
+    in {
       inherit neovimBuilder pkgs;
 
       apps = {
         nvim = {
           type = "app";
-          program = "${defaultPackage}/bin/nvim";
+          program = "${packages.neovim}/bin/nvim";
+        };
+        default = {
+          type = "app";
+          program = "${packages.neovim}/bin/nvim";
         };
       };
-
-      defaultApp = apps.nvim;
-
-      defaultPackage = packages.neovim;
 
       overlay = self: super: {
         inherit neovimBuilder;
@@ -604,5 +607,7 @@
           };
         };
       };
+
+      packages.default = packages.neovim;
     });
 }
