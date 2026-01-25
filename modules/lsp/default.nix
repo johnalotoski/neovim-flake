@@ -112,6 +112,10 @@ in {
         };
 
       luaConfigRC = ''
+        -- Suppress lspconfig deprecation warnings
+        local deprecated_original = vim.deprecate
+        vim.deprecate = function() end
+
         -- For nvim-lspconfig
         local lspconfig = require('lspconfig')
 
