@@ -388,11 +388,14 @@
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: let
       plugins =
-        pkgs.lib.subtractLists
-        ["nixpkgs" "flake-utils" "neovim" "nil"]
+        nixpkgs.lib.subtractLists
+        ["nixpkgs" "flake-utils" "neovim" "nil" "statix" "nixpkgs-unstable"]
         (builtins.attrNames inputs);
 
-      pluginOverlay = lib.buildPluginOverlay;
+      # Complete overlay with all plugins and dependencies
+      completeOverlay = import ./lib/buildOverlay.nix {
+        inherit inputs plugins system;
+      };
 
       pkgs = import nixpkgs {
         inherit system;
@@ -403,58 +406,7 @@
         };
 
         overlays = [
-          pluginOverlay
-          (final: prev: {
-            inherit (inputs.nil.packages.${system}) nil;
-
-            bashls = prev.nodePackages.bash-language-server;
-            cssls = prev.vscode-langservers-extracted;
-            dockerls = prev.dockerfile-language-server;
-
-            efm-langserver = prev.buildGoModule rec {
-              pname = "efm-langserver";
-              version = "0.0.53";
-              vendorHash = "sha256-0YkUak6+dpxvXn6nVVn33xrTEthWqnC9MhMLm/yjFMA=";
-              src = prev.fetchFromGitHub {
-                owner = "mattn";
-                repo = pname;
-                rev = "v${version}";
-                sha256 = "sha256-Csm+2C9hP+dTXliADUquAb1nC+8f5j1rJ+66cqWDrCk=";
-              };
-            };
-
-            # Elixir language server
-            elixirls = prev.fetchzip {
-              url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.24.1/elixir-ls-v0.24.1.zip";
-              hash = "sha256-68guwWL+oq3iXTxjqmNO0Bst29nbNH9xwdsuu8oUFz4=";
-              stripRoot = false;
-            };
-
-            htmlls = prev.vscode-langservers-extracted;
-            jsonls = prev.vscode-langservers-extracted;
-
-            neovim-nightly = neovim.packages.${system}.default;
-
-            nvim-treesitter-withAllGrammars = inputs.nixpkgs-unstable.legacyPackages.${system}.vimPlugins.nvim-treesitter.withAllGrammars;
-
-            # OPA Rego language server
-            regols = prev.buildGoModule rec {
-              pname = "regols";
-              version = "0.2.4";
-              vendorHash = "sha256-yJYWVQq6pbLPdmK4BVse6moMkurlmt6TBd6/vYM1xcU=";
-              src = prev.fetchFromGitHub {
-                owner = "kitagry";
-                repo = pname;
-                rev = "v${version}";
-                sha256 = "sha256-1L9ehqTMN9KHlvE7FBccVAXA7f3NNsLXJaTkOChT8Xo=";
-              };
-            };
-
-            statix = inputs.statix.packages.${system}.default;
-            tsserver = prev.nodePackages.typescript-language-server;
-            vimls = prev.nodePackages.vim-language-server;
-            yamlls = prev.nodePackages.yaml-language-server;
-          })
+          completeOverlay
         ];
       };
 
@@ -464,7 +416,7 @@
 
       inherit (lib) neovimBuilder;
     in rec {
-      inherit neovimBuilder pkgs;
+      inherit lib neovimBuilder pkgs;
 
       apps = {
         nvim = {
@@ -479,8 +431,10 @@
 
       overlay = self: super: {
         inherit neovimBuilder;
+        inherit (lib) buildNeovim;
         inherit (packages) neovim;
-        inherit (pkgs)
+        inherit
+          (pkgs)
           bashls
           cssls
           dockerls
@@ -496,7 +450,8 @@
           statix
           tsserver
           vimls
-          yamlls;
+          yamlls
+          ;
       };
 
       devShells.default = pkgs.mkShell {
@@ -510,8 +465,16 @@
         ];
       };
 
-      packages.neovim = (neovimBuilder { inherit pkgs; neovimPackage = neovim.packages.${system}.default; }) { config = {}; };
+      packages =
+        {
+          neovim = neovimBuilder {
+            inherit pkgs;
+            neovimPackage = neovim.packages.${system}.default;
+            config = {};
+          };
 
-      packages.default = packages.neovim;
+          default = packages.neovim;
+        }
+        // pkgs.neovimPlugins;
     });
 }
