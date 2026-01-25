@@ -480,7 +480,23 @@
       overlay = self: super: {
         inherit neovimBuilder;
         inherit (packages) neovim;
-        inherit (pkgs) neovimPlugins;
+        inherit (pkgs)
+          bashls
+          cssls
+          dockerls
+          efm-langserver
+          elixirls
+          htmlls
+          jsonls
+          neovim-nightly
+          neovimPlugins
+          nil
+          nvim-treesitter-withAllGrammars
+          regols
+          statix
+          tsserver
+          vimls
+          yamlls;
       };
 
       devShells.default = pkgs.mkShell {
@@ -494,119 +510,7 @@
         ];
       };
 
-      packages.neovim = neovimBuilder {
-        config.vim = {
-          dashboard.startify.customHeader = ["Welcome to NeoVim"];
-          dashboard.startify.enable = true;
-          database.enable = true;
-          disableArrows = false;
-          virtualedit = "all";
-
-          editor = {
-            abolish = true;
-            colorPreview = true;
-
-            # Floaterm causes intermittent checkhealth issues due to race condition as of:
-            # Ref: https://github.com/voldikss/vim-floaterm/commit/4e28c8dd0271e10a5f55142fb6fe9b1599ee6160
-            floaterm = false;
-
-            # Might be nice to have starting from toggled off state
-            indentGuide = false;
-
-            retabTabs = true;
-            showTabs = true;
-            showTrailingWhitespace = true;
-            spell = true;
-            surround = true;
-            trimTrailingWhitespace = true;
-            underlineCurrentWord = true;
-            whichKey = true;
-            wilder = true;
-          };
-
-          filetree.nvimTreeLua = {enable = true;};
-          fuzzyfind.telescope.enable = true;
-          lineNumberMode = "number";
-          statusline.lightline.enable = true;
-          tabbar.barbar.enable = true;
-          test.enable = true;
-          theme.gruvbox.enable = true;
-          viAlias = true;
-          vimAlias = true;
-
-          git = {
-            enable = true;
-
-            # Appears to no longer work
-            blameLine = false;
-          };
-
-          lsp = {
-            enable = true;
-
-            bash = true;
-            clang = true;
-            cmake = true;
-            crystal = true;
-            css = true;
-            docker = true;
-            elixir = true;
-            fidget = true;
-            gleam = true;
-            go = true;
-            haskellLspConfig = false;
-            haskellTools = true;
-            html = true;
-            json = true;
-            lightbulb = true;
-            mint = true;
-            nickel = true;
-            nix = true;
-            nu = true;
-            python = true;
-            rego = true;
-            ruby = true;
-            rust = true;
-            shellcheck = true;
-            terraform = true;
-            tex = true;
-            typescript = true;
-            variableDebugPreviews = true;
-            vimscript = true;
-            yaml = true;
-            zig = true;
-          };
-
-          cnoremap = {"3636" = "<c-u>undo<CR>";};
-
-          # Barbar default mappings
-          nnoremap = {
-            # Move to previous/next
-            "<silent> <A-,>" = "<Cmd>BufferPrevious<CR>";
-            "<silent> <A-.>" = "<Cmd>BufferNext<CR>";
-
-            # Re-order to previous/next
-            "<silent> <A-<>" = "<Cmd>BufferMovePrevious<CR>";
-            "<silent> <A->>" = "<Cmd>BufferMoveNext<CR>";
-
-            # Pin/unpin buffer
-            "<silent> <A-p>" = "<Cmd>BufferPin<CR>";
-
-            # Close buffer
-            "<silent> <A-c>" = "<Cmd>BufferClose<CR>";
-
-            # Magic buffer-picking mode
-            "<silent> <C-p>" = "<Cmd>BufferPick<CR>";
-            "<silent> <C-A-p>" = "<Cmd>BufferPickDelete<CR>";
-
-            # Sort automatically by...
-            "<silent> <leader>bb" = "<Cmd>BufferOrderByBufferNumber<CR>";
-            "<silent> <leader>bd" = "<Cmd>BufferOrderByDirectory<CR>";
-            "<silent> <leader>bl" = "<Cmd>BufferOrderByLanguage<CR>";
-            "<silent> <leader>bw" = "<Cmd>BufferOrderByWindowNumber<CR>";
-          };
-        };
-      };
+      packages.neovim = (neovimBuilder { inherit pkgs; neovimPackage = neovim.packages.${system}.default; }) { config = {}; };
 
       packages.default = packages.neovim;
     });

@@ -5,6 +5,6 @@
   ...
 }: {
   inherit (pkgs.lib);
-  neovimBuilder = import ./neovimBuilder.nix {inherit pkgs;};
+  neovimBuilder = import ./neovimBuilder.nix;
   buildPluginOverlay = import ./buildPlugin.nix {inherit inputs plugins;};
 }
