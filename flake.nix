@@ -408,8 +408,8 @@
             inherit (inputs.nil.packages.${system}) nil;
 
             bashls = prev.nodePackages.bash-language-server;
-            cssls = prev.nodePackages.vscode-css-languageserver-bin;
-            dockerls = prev.nodePackages.dockerfile-language-server-nodejs;
+            cssls = prev.vscode-langservers-extracted;
+            dockerls = prev.dockerfile-language-server;
 
             efm-langserver = prev.buildGoModule rec {
               pname = "efm-langserver";
@@ -430,8 +430,8 @@
               stripRoot = false;
             };
 
-            htmlls = prev.nodePackages.vscode-html-languageserver-bin;
-            jsonls = prev.nodePackages.vscode-json-languageserver-bin;
+            htmlls = prev.vscode-langservers-extracted;
+            jsonls = prev.vscode-langservers-extracted;
 
             neovim-nightly = neovim.packages.${system}.default;
 
@@ -463,7 +463,7 @@
       };
 
       inherit (lib) neovimBuilder;
-    in {
+    in rec {
       inherit neovimBuilder pkgs;
 
       apps = {

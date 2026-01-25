@@ -582,11 +582,11 @@ in {
         ''}
 
         ${optionalString cfg.css ''
-          setup_cmd("cssls", {'${pkgs.cssls}/bin/css-languageserver', '--stdio'})
+          setup_cmd("cssls", {'${pkgs.cssls}/bin/vscode-css-language-server', '--stdio'})
         ''}
 
         ${optionalString cfg.html ''
-          setup_cmd("html", {'${pkgs.htmlls}/bin/html-languageserver', '--stdio'})
+          setup_cmd("html", {'${pkgs.htmlls}/bin/vscode-html-language-server', '--stdio'})
         ''}
 
         ${optionalString cfg.fidget ''
@@ -611,7 +611,7 @@ in {
         ''}
 
         ${optionalString cfg.json ''
-          setup_cmd("jsonls", {'${pkgs.jsonls}/bin/json-languageserver', '--stdio'})
+          setup_cmd("jsonls", {'${pkgs.jsonls}/bin/vscode-json-language-server', '--stdio'})
         ''}
 
         ${optionalString cfg.tex ''
@@ -627,7 +627,7 @@ in {
         ''}
 
         ${optionalString cfg.python ''
-          setup_cmd("pyright", {"${pkgs.nodePackages.pyright}/bin/pyright-langserver", "--stdio"})
+          setup_cmd("pyright", {"${pkgs.pyright}/bin/pyright-langserver", "--stdio"})
         ''}
 
         ${optionalString cfg.mint ''
