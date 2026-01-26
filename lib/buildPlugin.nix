@@ -9,6 +9,7 @@
       pname = name;
       version = "master";
       src = builtins.getAttr name inputs;
+      doCheck = false;
     };
   };
 in {

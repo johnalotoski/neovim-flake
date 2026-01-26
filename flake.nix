@@ -2,7 +2,7 @@
   description = "NeoVim config";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
@@ -10,6 +10,9 @@
 
     # Nix language server
     nil.url = "github:oxalica/nil";
+
+    # Nix linter
+    statix.url = "github:nerdypepper/statix";
 
     # -- Vim plugins
     # Tab bar at the top of the editor
@@ -103,7 +106,7 @@
       flake = false;
     };
 
-    # TODO: A regexp parser reguired by LuaSnip for some extended fns
+    # TODO: A regexp parser required by LuaSnip for some extended fns
     # Ref: https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#transformations
     # jsregexp = {
     #   url = "github:kmarius/jsregexp";
@@ -174,7 +177,7 @@
 
     # A high performance Neovim colorizer
     nvim-colorizer-lua = {
-      url = "github:norcalli/nvim-colorizer.lua";
+      url = "github:catgoose/nvim-colorizer.lua";
       flake = false;
     };
 
@@ -381,15 +384,19 @@
     nixpkgs,
     flake-utils,
     neovim,
+    self,
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: let
       plugins =
-        pkgs.lib.subtractLists
-        ["nixpkgs" "flake-utils" "neovim" "nil"]
+        nixpkgs.lib.subtractLists
+        ["nixpkgs" "flake-utils" "neovim" "nil" "statix" "nixpkgs-unstable"]
         (builtins.attrNames inputs);
 
-      pluginOverlay = lib.buildPluginOverlay;
+      # Complete overlay with all plugins and dependencies
+      completeOverlay = import ./lib/buildOverlay.nix {
+        inherit inputs plugins system;
+      };
 
       pkgs = import nixpkgs {
         inherit system;
@@ -400,84 +407,51 @@
         };
 
         overlays = [
-          pluginOverlay
-          (final: prev: {
-            inherit (inputs.nil.packages.${system}) nil;
-
-            bashls = prev.nodePackages.bash-language-server;
-            cssls = prev.nodePackages.vscode-css-languageserver-bin;
-            dockerls = prev.nodePackages.dockerfile-language-server-nodejs;
-
-            efm-langserver = prev.buildGoModule rec {
-              pname = "efm-langserver";
-              version = "0.0.53";
-              vendorHash = "sha256-0YkUak6+dpxvXn6nVVn33xrTEthWqnC9MhMLm/yjFMA=";
-              src = prev.fetchFromGitHub {
-                owner = "mattn";
-                repo = pname;
-                rev = "v${version}";
-                sha256 = "sha256-Csm+2C9hP+dTXliADUquAb1nC+8f5j1rJ+66cqWDrCk=";
-              };
-            };
-
-            # Elixir language server
-            elixirls = prev.fetchzip {
-              url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.24.1/elixir-ls-v0.24.1.zip";
-              hash = "sha256-18guwWL+oq3iXTxjqmNO0Bst29nbNH9xwdsuu8oUFz4=";
-              stripRoot = false;
-            };
-
-            htmlls = prev.nodePackages.vscode-html-languageserver-bin;
-            jsonls = prev.nodePackages.vscode-json-languageserver-bin;
-
-            neovim-nightly = neovim.packages.${system}.default;
-
-            nvim-treesitter-withAllGrammars = inputs.nixpkgs-unstable.legacyPackages.${system}.vimPlugins.nvim-treesitter.withAllGrammars;
-
-            # OPA Rego language server
-            regols = prev.buildGoModule rec {
-              pname = "regols";
-              version = "0.2.4";
-              vendorHash = "sha256-yJYWVQq6pbLPdmK4BVse6moMkurlmt6TBd6/vYM1xcU=";
-              src = prev.fetchFromGitHub {
-                owner = "kitagry";
-                repo = pname;
-                rev = "v${version}";
-                sha256 = "sha256-1L9ehqTMN9KHlvE7FBccVAXA7f3NNsLXJaTkOChT8Xo=";
-              };
-            };
-
-            statix = inputs.statix.defaultPackage.${system};
-            tsserver = prev.nodePackages.typescript-language-server;
-            vimls = prev.nodePackages.vim-language-server;
-            yamlls = prev.nodePackages.yaml-language-server;
-          })
+          completeOverlay
         ];
       };
 
       lib = import ./lib {
-        inherit pkgs plugins inputs;
+        inherit pkgs plugins inputs self;
       };
 
       inherit (lib) neovimBuilder;
     in rec {
-      inherit neovimBuilder pkgs;
+      inherit lib neovimBuilder pkgs;
 
       apps = {
         nvim = {
           type = "app";
-          program = "${defaultPackage}/bin/nvim";
+          program = "${packages.neovim}/bin/nvim";
+        };
+        default = {
+          type = "app";
+          program = "${packages.neovim}/bin/nvim";
         };
       };
-
-      defaultApp = apps.nvim;
-
-      defaultPackage = packages.neovim;
 
       overlay = self: super: {
         inherit neovimBuilder;
         inherit (packages) neovim;
-        inherit (pkgs) neovimPlugins;
+        inherit
+          (pkgs)
+          bashls
+          cssls
+          dockerls
+          efm-langserver
+          elixirls
+          htmlls
+          jsonls
+          neovim-nightly
+          neovimPlugins
+          nil
+          nvim-treesitter-withAllGrammars
+          regols
+          statix
+          tsserver
+          vimls
+          yamlls
+          ;
       };
 
       devShells.default = pkgs.mkShell {
@@ -491,118 +465,19 @@
         ];
       };
 
-      packages.neovim = neovimBuilder {
-        config.vim = {
-          dashboard.startify.customHeader = ["Welcome to NeoVim"];
-          dashboard.startify.enable = true;
-          database.enable = true;
-          disableArrows = false;
-          virtualedit = "all";
-
-          editor = {
-            abolish = true;
-            colorPreview = true;
-
-            # Floaterm causes intermittent checkhealth issues due to race condition as of:
-            # Ref: https://github.com/voldikss/vim-floaterm/commit/4e28c8dd0271e10a5f55142fb6fe9b1599ee6160
-            floaterm = false;
-
-            # Might be nice to have starting from toggled off state
-            indentGuide = false;
-
-            retabTabs = true;
-            showTabs = true;
-            showTrailingWhitespace = true;
-            spell = true;
-            surround = true;
-            trimTrailingWhitespace = true;
-            underlineCurrentWord = true;
-            whichKey = true;
-            wilder = true;
+      packages =
+        {
+          neovim = neovimBuilder {
+            inherit pkgs;
+            neovimPackage = neovim.packages.${system}.default;
+            config = {};
           };
 
-          filetree.nvimTreeLua = {enable = true;};
-          fuzzyfind.telescope.enable = true;
-          lineNumberMode = "number";
-          statusline.lightline.enable = true;
-          tabbar.barbar.enable = true;
-          test.enable = true;
-          theme.gruvbox.enable = true;
-          viAlias = true;
-          vimAlias = true;
+          default = packages.neovim;
 
-          git = {
-            enable = true;
-
-            # Appears to no longer work
-            blameLine = false;
-          };
-
-          lsp = {
-            enable = true;
-
-            bash = true;
-            clang = true;
-            cmake = true;
-            crystal = true;
-            css = true;
-            docker = true;
-            elixir = true;
-            fidget = true;
-            gleam = true;
-            go = true;
-            haskellLspConfig = false;
-            haskellTools = true;
-            html = true;
-            json = true;
-            lightbulb = true;
-            mint = true;
-            nickel = true;
-            nix = true;
-            nu = true;
-            python = true;
-            rego = true;
-            ruby = true;
-            rust = true;
-            shellcheck = true;
-            terraform = true;
-            tex = true;
-            typescript = true;
-            variableDebugPreviews = true;
-            vimscript = true;
-            yaml = true;
-            zig = true;
-          };
-
-          cnoremap = {"3636" = "<c-u>undo<CR>";};
-
-          # Barbar default mappings
-          nnoremap = {
-            # Move to previous/next
-            "<silent> <A-,>" = "<Cmd>BufferPrevious<CR>";
-            "<silent> <A-.>" = "<Cmd>BufferNext<CR>";
-
-            # Re-order to previous/next
-            "<silent> <A-<>" = "<Cmd>BufferMovePrevious<CR>";
-            "<silent> <A->>" = "<Cmd>BufferMoveNext<CR>";
-
-            # Pin/unpin buffer
-            "<silent> <A-p>" = "<Cmd>BufferPin<CR>";
-
-            # Close buffer
-            "<silent> <A-c>" = "<Cmd>BufferClose<CR>";
-
-            # Magic buffer-picking mode
-            "<silent> <C-p>" = "<Cmd>BufferPick<CR>";
-            "<silent> <C-A-p>" = "<Cmd>BufferPickDelete<CR>";
-
-            # Sort automatically by...
-            "<silent> <leader>bb" = "<Cmd>BufferOrderByBufferNumber<CR>";
-            "<silent> <leader>bd" = "<Cmd>BufferOrderByDirectory<CR>";
-            "<silent> <leader>bl" = "<Cmd>BufferOrderByLanguage<CR>";
-            "<silent> <leader>bw" = "<Cmd>BufferOrderByWindowNumber<CR>";
-          };
-        };
-      };
+          # Expose neovim-nightly for downstream repos
+          neovim-nightly = pkgs.neovim-nightly;
+        }
+        // pkgs.neovimPlugins;
     });
 }

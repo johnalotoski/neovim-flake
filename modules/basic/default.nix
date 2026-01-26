@@ -208,7 +208,9 @@ in {
             set novisualbell
           '';
         }
-        .${cfg.bell}
+        .${
+          cfg.bell
+        }
         or ""}
       ${{
           relative = "set relativenumber";
@@ -223,7 +225,9 @@ in {
             augroup END
           '';
         }
-        .${cfg.lineNumberMode}
+        .${
+          cfg.lineNumberMode
+        }
         or ""}
       set virtualedit=${cfg.virtualedit}
     '';

@@ -52,7 +52,7 @@ in {
 
     treeWidth = mkOption {
       default = 30;
-      description = "Width of the tree in charecters";
+      description = "Width of the tree in characters";
       type = types.int;
     };
 
@@ -130,7 +130,7 @@ in {
 
     groupEmptyFolders = mkOption {
       default = true;
-      description = "compat empty folders trees into a single item";
+      description = "compact empty folders trees into a single item";
       type = types.bool;
     };
 

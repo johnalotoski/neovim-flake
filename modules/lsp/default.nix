@@ -112,6 +112,19 @@ in {
         };
 
       luaConfigRC = ''
+        -- Suppress the following deprecation warning until migration to the new system is complete:
+        --   The require('lspconfig') "framework" is deprecated, use vim.lsp.config (see :help lspconfig-nvim-0.11) instead.
+        do
+          local deprecate = vim.deprecate
+          vim.deprecate = function(name, alternative, version, plugin)
+            if type(name) == "string"
+              and name:match("require%('lspconfig'%)") then
+              return
+            end
+            return deprecate(name, alternative, version, plugin)
+          end
+        end
+
         -- For nvim-lspconfig
         local lspconfig = require('lspconfig')
 
@@ -119,7 +132,7 @@ in {
         local dap = require('dap')
 
         -- If debugging is required this would typically write to `~/.cache/nvim/lsp.log`
-        vim.lsp.set_log_level("debug")
+        vim.lsp.log.set_level("debug")
 
         -- Used in the `setup` fn that follows
         local merge = function(a, b)
@@ -129,12 +142,12 @@ in {
           return merged
         end
 
-        -- Convienence `setup fn`
+        -- Convenience `setup fn`
         local setup = function(name, args)
           return lspconfig[name].setup(merge({capabilities = capabilities}, (args or {})))
         end
 
-        -- Convienence `setup_cmd` fn
+        -- Convenience `setup_cmd` fn
         local setup_cmd = function(name, cmd)
           return setup(name, { cmd = cmd })
         end
@@ -344,35 +357,6 @@ in {
 
         require("symbols-outline").setup()
 
-        -- LSP diagnostics handler
-        vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-          vim.lsp.diagnostic.on_publish_diagnostics, {
-            -- Enable underline, use default values
-            underline = true,
-
-            -- Enable virtual text, override spacing to 2
-            virtual_text = {
-              spacing = 2,
-              prefix = '~',
-            },
-
-            -- Use a function to dynamically turn signs off and on, using buffer local variables
-            signs = function(bufnr, client_id)
-              local ok, result = pcall(vim.api.nvim_buf_get_var, bufnr, 'show_signs')
-
-              -- No buffer local variable set, so just enable by default
-              if not ok then
-                return true
-              end
-
-              return result
-            end,
-
-            -- Disable a feature
-            update_in_insert = false,
-          }
-        )
-
         -- Support LSP diagnostic format
         local function split_on(s, delimiter)
           local result = {}
@@ -396,7 +380,11 @@ in {
 
         -- Set the diagnostic config
         vim.diagnostic.config {
-          jump = { float = true },
+          jump = {
+            on_jump = function()
+              vim.diagnostic.open_float()
+            end
+          },
           severity_sort = true,
           underline = true,
           virtual_text = { format = diagnostic_format },
@@ -413,7 +401,8 @@ in {
           float = {
             border = "rounded",
             format = function(d)
-              return ("%s (%s) [%s]"):format(d.message, d.source, d.code or d.user_data.lsp.code)
+              local code = d.code or (d.user_data and d.user_data.lsp and d.user_data.lsp.code) or "unknown"
+              return ("%s (%s) [%s]"):format(d.message, d.source or "unknown", code)
             end,
           },
         }
@@ -582,11 +571,11 @@ in {
         ''}
 
         ${optionalString cfg.css ''
-          setup_cmd("cssls", {'${pkgs.cssls}/bin/css-languageserver', '--stdio'})
+          setup_cmd("cssls", {'${pkgs.cssls}/bin/vscode-css-language-server', '--stdio'})
         ''}
 
         ${optionalString cfg.html ''
-          setup_cmd("html", {'${pkgs.htmlls}/bin/html-languageserver', '--stdio'})
+          setup_cmd("html", {'${pkgs.htmlls}/bin/vscode-html-language-server', '--stdio'})
         ''}
 
         ${optionalString cfg.fidget ''
@@ -611,7 +600,7 @@ in {
         ''}
 
         ${optionalString cfg.json ''
-          setup_cmd("jsonls", {'${pkgs.jsonls}/bin/json-languageserver', '--stdio'})
+          setup_cmd("jsonls", {'${pkgs.jsonls}/bin/vscode-json-language-server', '--stdio'})
         ''}
 
         ${optionalString cfg.tex ''
@@ -627,7 +616,7 @@ in {
         ''}
 
         ${optionalString cfg.python ''
-          setup_cmd("pyright", {"${pkgs.nodePackages.pyright}/bin/pyright-langserver", "--stdio"})
+          setup_cmd("pyright", {"${pkgs.pyright}/bin/pyright-langserver", "--stdio"})
         ''}
 
         ${optionalString cfg.mint ''
@@ -645,7 +634,10 @@ in {
         ${optionalString cfg.elixir ''
           require("elixir").setup({
             nextls = {enable = false},
-            elixirls = {enable = true},
+            elixirls = {
+              enable = true,
+              cmd = "${pkgs.elixirls}/language_server.sh",
+            },
             projectionist = {enable = true},
           })
         ''}
@@ -768,8 +760,8 @@ in {
           "<leader>lr" = "<cmd>lua require('telescope.builtin').lsp_references()<CR>";
           "<leader>lR" = "<cmd>lua vim.lsp.buf.rename()<CR>";
           "<leader>ls" = "<cmd>lua vim.diagnostic.setloclist()<CR>";
-          "[d" = "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>";
-          "]d" = "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>";
+          "[d" = "<cmd>lua vim.diagnostic.goto_prev()<CR>";
+          "]d" = "<cmd>lua vim.diagnostic.goto_next()<CR>";
 
           # Buffer mappings
           "<f2>" = "<cmd>lua vim.lsp.buf.rename()<CR>";

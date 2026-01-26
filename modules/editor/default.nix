@@ -170,7 +170,7 @@ in {
       ''}
 
       ${optionalString cfg.colorPreview ''
-        require 'colorizer'.setup()
+        require("colorizer").setup()
       ''}
 
       ${optionalString cfg.indentGuide ''
