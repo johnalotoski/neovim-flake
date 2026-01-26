@@ -112,9 +112,18 @@ in {
         };
 
       luaConfigRC = ''
-        -- Suppress lspconfig deprecation warnings
-        local deprecated_original = vim.deprecate
-        vim.deprecate = function() end
+        -- Suppress the following deprecation warning until migration to the new system is complete:
+        --   The require('lspconfig') "framework" is deprecated, use vim.lsp.config (see :help lspconfig-nvim-0.11) instead.
+        do
+          local deprecate = vim.deprecate
+          vim.deprecate = function(name, alternative, version, plugin)
+            if type(name) == "string"
+              and name:match("require%('lspconfig'%)") then
+              return
+            end
+            return deprecate(name, alternative, version, plugin)
+          end
+        end
 
         -- For nvim-lspconfig
         local lspconfig = require('lspconfig')
