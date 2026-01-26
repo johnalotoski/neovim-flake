@@ -473,6 +473,9 @@
           };
 
           default = packages.neovim;
+
+          # Expose neovim-nightly for downstream repos
+          neovim-nightly = pkgs.neovim-nightly;
         }
         // pkgs.neovimPlugins;
     });

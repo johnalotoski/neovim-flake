@@ -1,9 +1,6 @@
 # What is this?
 This is my personal neovim config. Feel free to take bits of it to build your own or run it yourself.
 
-As this is my personal config I am bound to change it a lot so I recommend forking rather then pointing to
-this config.
-
 # How to use
 
 ## Running directly
@@ -88,29 +85,43 @@ The `neovimBuilder` function accepts the following parameters:
 - `pluginOverlay`: Plugin overlay (automatically provided by the flake, rarely needs to be customized)
 - `extraOverlay`: Additional overlay applied after `pluginOverlay` for overriding packages (default: `(final: prev: {})`)
 
-**Note**: The plugin overlay is automatically applied internally, so it doesn't need to be applied to pkgs before calling neovimBuilder.
+**Notes**:
+- The plugin overlay is automatically applied internally, so it doesn't need to be applied to pkgs before calling neovimBuilder.
+- The default `neovimPackage` is `pkgs.neovim-nightly`, which is provided by the flake's overlay. If not using the overlay, you can use `neovim-flake.packages.${system}.neovim-nightly` or `pkgs.neovim-unwrapped` from nixpkgs.
 
 Example with advanced options:
 
 ```nix
-neovimBuilder {
-  inherit pkgs;
-  config = {
-    config.vim = {
-      # Your configuration here
+{
+  inputs.neovim-flake.url = "github:johnalotoski/neovim-flake";
+
+  outputs = { self, nixpkgs, neovim-flake }:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      packages.${system}.default = neovim-flake.neovimBuilder.${system} {
+        inherit pkgs;
+        config = {
+          config.vim = {
+            # Your configuration here
+          };
+        };
+
+        # Option 1: Use neovim-nightly from the flake's packages (no overlay needed)
+        neovimPackage = neovim-flake.packages.${system}.neovim-nightly;
+
+        # Option 2: Use stable neovim from nixpkgs (requires -unwrapped suffix)
+        # neovimPackage = pkgs.neovim-unwrapped;
+
+        # Start with minimal config
+        includeDefaults = false;
+
+        extraSpecialArgs = {
+          myCustomArg = "value";
+        };
+      };
     };
-  };
-
-  # Use neovim.  Notice the regular package requires the `-unwrapped`
-  # suffix, but use of the nightly neovim package does.
-  neovimPackage = pkgs.neovim-unwrapped;
-
-  # Start with minimal config
-  includeDefaults = false;
-
-  extraSpecialArgs = {
-    myCustomArg = "value";
-  };
 }
 ```
 
@@ -166,32 +177,51 @@ neovimBuilder {
 }
 ```
 
-#### Strategy 3: Override via config.vim (for neovim package only)
+#### Strategy 3: Use neovimPackage parameter (for neovim package only)
 
 For just overriding the neovim package itself, use the `neovimPackage` parameter:
 
 ```nix
-neovimBuilder {
-  inherit pkgs;
-  # Use nightly neovim instead of stable
-  neovimPackage = pkgs.neovim-nightly;
-  config = { config.vim.lsp.rust = true; };
+{
+  inputs.neovim-flake.url = "github:johnalotoski/neovim-flake";
+
+  outputs = { self, nixpkgs, neovim-flake }:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      packages.${system}.default = neovim-flake.neovimBuilder.${system} {
+        inherit pkgs;
+        config = { config.vim.lsp.rust = true; };
+
+        # Use neovim-nightly from the flake's packages (no overlay needed)
+        neovimPackage = neovim-flake.packages.${system}.neovim-nightly;
+
+        # Or use stable neovim from nixpkgs
+        # neovimPackage = pkgs.neovim-unwrapped;
+      };
+    };
 }
 ```
 
 **Note**: The overlay respects your customizations by checking `prev.packageName` before providing defaults, so Strategy 1 works seamlessly.
 
-### Accessing individual plugins
+### Accessing individual packages
 
-All plugins are also exported individually via `packages`:
+All plugins and neovim-nightly are exported individually via `packages`:
 
 ```nix
 {
   inputs.neovim-flake.url = "github:johnalotoski/neovim-flake";
 
   outputs = { self, nixpkgs, neovim-flake }: {
+    # Access individual plugins
     packages.x86_64-linux.myPlugin =
       neovim-flake.packages.x86_64-linux.nvim-tree-lua;
+
+    # Access neovim-nightly
+    packages.x86_64-linux.nvim-nightly =
+      neovim-flake.packages.x86_64-linux.neovim-nightly;
   };
 }
 ```
