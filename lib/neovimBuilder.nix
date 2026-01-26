@@ -1,7 +1,7 @@
 {
   pkgs,
   lib ? pkgs.lib,
-  neovimPackage ? pkgs.neovim-unwrapped,
+  neovimPackage ? pkgs.neovim-nightly,
   config ? {},
   includeDefaults ? true,
   extraSpecialArgs ? {},

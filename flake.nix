@@ -431,7 +431,6 @@
 
       overlay = self: super: {
         inherit neovimBuilder;
-        inherit (lib) buildNeovim;
         inherit (packages) neovim;
         inherit
           (pkgs)

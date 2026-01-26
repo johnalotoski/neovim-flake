@@ -23,17 +23,4 @@
       });
 in {
   inherit neovimBuilder buildPluginOverlay completeOverlay;
-
-  # Helper for simple config override
-  buildNeovim = {
-    pkgs,
-    config ? {},
-    neovimPackage ? pkgs.neovim-unwrapped,
-    includeDefaults ? true,
-    extraSpecialArgs ? {},
-    extraOverlay ? (final: prev: {}),
-  }:
-    neovimBuilder {
-      inherit pkgs config neovimPackage includeDefaults extraSpecialArgs extraOverlay;
-    };
 }

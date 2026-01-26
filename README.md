@@ -18,32 +18,7 @@ nix run github:johnalotoski/neovim-flake
 
 ## Using as a library
 
-### In your flake (using neovimBuilder)
-
-```nix
-{
-  inputs.neovim-flake.url = "github:johnalotoski/neovim-flake";
-
-  outputs = { self, nixpkgs, neovim-flake }: {
-    packages.x86_64-linux.default =
-      neovim-flake.neovimBuilder.${system} {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        config = {
-          config.vim = {
-            theme.nord.enable = true;
-            theme.gruvbox.enable = false;
-            lsp.rust = true;
-            lsp.python = true;
-          };
-        };
-      };
-  };
-}
-```
-
-### In your flake (using buildNeovim helper)
-
-The `buildNeovim` helper provides a simpler API for common use cases:
+### In your flake
 
 ```nix
 {
@@ -55,13 +30,13 @@ The `buildNeovim` helper provides a simpler API for common use cases:
       pkgs = nixpkgs.legacyPackages.${system};
     in {
       packages.${system}.default =
-        neovim-flake.lib.${system}.buildNeovim {
+        neovim-flake.neovimBuilder.${system} {
           inherit pkgs;
           config = {
             config.vim = {
               theme.nord.enable = true;
               theme.gruvbox.enable = false;
-              lsp.haskellTools = true;
+              lsp.rust = true;
             };
           };
         };
@@ -83,7 +58,7 @@ The `buildNeovim` helper provides a simpler API for common use cases:
           nixpkgs.overlays = [ neovim-flake.overlay.x86_64-linux ];
 
           environment.systemPackages = [
-            (pkgs.buildNeovim {
+            (pkgs.neovimBuilder {
               inherit pkgs;
               config = {
                 config.vim = {
@@ -107,7 +82,7 @@ The `neovimBuilder` function accepts the following parameters:
 
 - `pkgs`: The nixpkgs package set (required)
 - `config`: Module configuration (default: `{}`)
-- `neovimPackage`: The neovim package to wrap (default: `pkgs.neovim-unwrapped`)
+- `neovimPackage`: The neovim package to wrap (default: `pkgs.neovim-nightly`)
 - `includeDefaults`: Whether to include default configuration (default: `true`)
 - `extraSpecialArgs`: Additional special arguments to pass to the module system (default: `{}`)
 - `pluginOverlay`: Plugin overlay (automatically provided by the flake, rarely needs to be customized)
@@ -126,9 +101,9 @@ neovimBuilder {
     };
   };
 
-  # Use nightly neovim.  Notice the nightly does not require the `-unwrapped`
-  # suffix, but use of the regular neovim package does.
-  neovimPackage = pkgs.neovim-nightly;
+  # Use neovim.  Notice the regular package requires the `-unwrapped`
+  # suffix, but use of the nightly neovim package does.
+  neovimPackage = pkgs.neovim-unwrapped;
 
   # Start with minimal config
   includeDefaults = false;
