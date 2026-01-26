@@ -2,6 +2,7 @@
   pkgs,
   inputs,
   plugins,
+  self,
   ...
 }: let
   neovimBuilderRaw = import ./neovimBuilder.nix;
@@ -19,6 +20,7 @@
   neovimBuilder = args:
     neovimBuilderRaw (args
       // {
+        inherit self;
         pluginOverlay = completeOverlay;
       });
 in {

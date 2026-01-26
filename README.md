@@ -88,6 +88,7 @@ The `neovimBuilder` function accepts the following parameters:
 **Notes**:
 - The plugin overlay is automatically applied internally, so it doesn't need to be applied to pkgs before calling neovimBuilder.
 - The default `neovimPackage` is `pkgs.neovim-nightly`, which is provided by the flake's overlay. If not using the overlay, you can use `neovim-flake.packages.${system}.neovim-nightly` or `pkgs.neovim-unwrapped` from nixpkgs.
+- If the default `neovimPackage` is used without the overlay, the default package becomes `neovim-flake.packages.${system}.neovim-nightly`.
 
 Example with advanced options:
 

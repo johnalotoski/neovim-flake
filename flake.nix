@@ -384,6 +384,7 @@
     nixpkgs,
     flake-utils,
     neovim,
+    self,
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: let
@@ -411,7 +412,7 @@
       };
 
       lib = import ./lib {
-        inherit pkgs plugins inputs;
+        inherit pkgs plugins inputs self;
       };
 
       inherit (lib) neovimBuilder;

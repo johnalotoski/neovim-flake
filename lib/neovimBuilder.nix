@@ -1,7 +1,8 @@
 {
+  self,
   pkgs,
   lib ? pkgs.lib,
-  neovimPackage ? pkgs.neovim-nightly,
+  neovimPackage ? pkgs.neovim-nightly or self.packages.${pkgs.stdenv.hostPlatform.system}.neovim-nightly,
   config ? {},
   includeDefaults ? true,
   extraSpecialArgs ? {},
