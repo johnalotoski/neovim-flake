@@ -357,35 +357,6 @@ in {
 
         require("symbols-outline").setup()
 
-        -- LSP diagnostics handler
-        vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-          vim.lsp.diagnostic.on_publish_diagnostics, {
-            -- Enable underline, use default values
-            underline = true,
-
-            -- Enable virtual text, override spacing to 2
-            virtual_text = {
-              spacing = 2,
-              prefix = '~',
-            },
-
-            -- Use a function to dynamically turn signs off and on, using buffer local variables
-            signs = function(bufnr, client_id)
-              local ok, result = pcall(vim.api.nvim_buf_get_var, bufnr, 'show_signs')
-
-              -- No buffer local variable set, so just enable by default
-              if not ok then
-                return true
-              end
-
-              return result
-            end,
-
-            -- Disable a feature
-            update_in_insert = false,
-          }
-        )
-
         -- Support LSP diagnostic format
         local function split_on(s, delimiter)
           local result = {}
@@ -430,7 +401,8 @@ in {
           float = {
             border = "rounded",
             format = function(d)
-              return ("%s (%s) [%s]"):format(d.message, d.source, d.code or d.user_data.lsp.code)
+              local code = d.code or (d.user_data and d.user_data.lsp and d.user_data.lsp.code) or "unknown"
+              return ("%s (%s) [%s]"):format(d.message, d.source or "unknown", code)
             end,
           },
         }
@@ -788,8 +760,8 @@ in {
           "<leader>lr" = "<cmd>lua require('telescope.builtin').lsp_references()<CR>";
           "<leader>lR" = "<cmd>lua vim.lsp.buf.rename()<CR>";
           "<leader>ls" = "<cmd>lua vim.diagnostic.setloclist()<CR>";
-          "[d" = "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>";
-          "]d" = "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>";
+          "[d" = "<cmd>lua vim.diagnostic.goto_prev()<CR>";
+          "]d" = "<cmd>lua vim.diagnostic.goto_next()<CR>";
 
           # Buffer mappings
           "<f2>" = "<cmd>lua vim.lsp.buf.rename()<CR>";
